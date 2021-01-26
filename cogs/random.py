@@ -39,6 +39,7 @@ class Random(commands.Cog):
             description = "*username / display name / bio*"
         )
 
+        # make fields for bios
         for x in bio_list:
             account_id = x["account_id"]
             username = functions.id_to_username(account_id)
