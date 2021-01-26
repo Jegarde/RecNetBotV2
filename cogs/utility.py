@@ -659,5 +659,111 @@ class Utility(commands.Cog):
         else:
             pass
 
+
+    # CMD-ROOMINFO
+    @commands.command(aliases=["rinfo"])
+    @commands.check(functions.beta_tester)
+    async def roominfo(self, ctx, room_name):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        print("Get room json")
+        room = functions.get_room_json(room_name)
+        
+        if room:
+            print("get room name")
+            r_name = room["Name"]
+            
+            # Roles
+            print("roles")
+            owner_username = functions.id_to_username(room["CreatorAccountId"])
+            owner_pfp = functions.id_to_pfp(room["CreatorAccountId"])
+            role_count = len(room["Roles"])
+            
+            # Placement
+            print("placement")
+            placement = functions.get_room_placement(r_name)
+            if placement == None:
+                placement = "<1000"
+
+            # Stats
+            print("stats")
+            cheers = room["Stats"]["CheerCount"]
+            favorites = room["Stats"]["FavoriteCount"]
+            visitor_count = room["Stats"]["VisitorCount"]
+            visit_count = room["Stats"]["VisitCount"]
+
+            visitor_cheer_ratio = round((cheers / visitor_count) * 100)
+            visit_visitor_ratio = round((visitor_count / visit_count) * 100)
+            
+            # Subrooms
+            print("subrooms")
+            subrooms = ""
+            for i in room["SubRooms"]:
+                subroom_name = i["Name"]
+                subrooms += f"{subroom_name}, "
+
+            # Other
+            print("other")
+            image_name = room["ImageName"]
+            description = room["Description"]
+            r_date = room["CreatedAt"][:10]
+
+            # Warning
+            print("warning")
+            custom_warning = room["CustomWarning"]
+            teleporting = room["SupportsTeleportVR"]
+            if teleporting:
+                teleporting = "TP supported!"
+            else:
+                 teleporting = "TP not supported!"
+
+            # Tags
+            print("tags")
+            tags = ""
+            for i in room["Tags"]:
+                tags += "#" + str(i["Tag"]) + " "
+
+            # Score
+            print("score")
+            avg_score = 0
+            score_list = []
+            for i in room["Scores"]:
+                if not i["VisitType"] == 2:
+                    print(i)
+                    score_list.append(i["Score"])
+                    avg_score += i["Score"]
+            print(len(score_list))
+            print(avg_score)
+            avg_score = round(avg_score / len(score_list), 5)
+    
+            print("embed")
+            embed=discord.Embed(
+                colour=discord.Colour.orange(),
+                title = f"Statistics for {r_name}, by {owner_username}",
+                description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```\n**Information**\n:calendar: `{r_date}`\n<:RRtele:803747393769570324> `{teleporting}`\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}`\n<:tag:803746052946919434> `{tags}`\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
+            )
+            print("oimg")
+            embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
+            
+            # description
+            #embed.add_field(name="⠀",value=f"**Description**\n```{description}```:calendar: `{date}`\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` ⭐ `{favorites}` 👤 `{visitor_count}` 👥 `{visit_count}`\nAvg score: `{avg_score}`")
+            
+            print("author")
+            embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}", icon_url=owner_pfp)
+        else: # account doesn't exist
+            embed = functions.error_msg(ctx, f"Room `{room_name}` doesn't exist!") 
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @roominfo.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
 def setup(client):
     client.add_cog(Utility(client))

@@ -2,6 +2,7 @@ import requests
 import discord
 import arrow
 import random
+import asyncio
 
 img_quality = 720
 image_dict = {"Id": None, "ImageName": None, "CheerCount": 0, "CommentCount": 0}
@@ -47,6 +48,34 @@ def map_image_data(arg, dict):
 
 def map_func(arg, dict):
     return arg[dict]
+
+def get_room_json(room):
+    try:
+        room_data = requests.get(f"https://api.rec.net/roomserver/rooms/search?query={room}", timeout=10).json()
+        if room_data["TotalResults"] == 0:
+            # Room doesn't exist!
+            return False
+
+        for x in room_data["Results"]:
+            if x["Name"].casefold() == room.casefold():
+                room_id = x["RoomId"]
+                break
+        print(room_id)
+        room_json = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}/?include=366").json()
+
+        return room_json
+    except:
+        return False
+
+def get_room_placement(room):
+    hot_rooms = requests.get("https://api.rec.net/roomserver/rooms/hot?take=1000").json()["Results"]
+    print("get_room_placement")
+
+    placement = 0
+    for x in hot_rooms:
+        if x["Name"].casefold() == room.casefold():
+            return placement
+        placement += 1
 
 def id_to_username(account_id):
     # Get and return account data based on id
