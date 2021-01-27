@@ -1,4 +1,5 @@
 import functions
+import requests
 import discord
 from discord.ext import commands
 
@@ -218,7 +219,7 @@ class Utility(commands.Cog):
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
                 title = f"{username}'s account was created at",
-                description = f"📆 `{created_at[:10]}`\n⏰ `{created_at[11:16]}`"
+                description = f"📆 `{created_at[:10]}`\n⏰ `{created_at[11:16]} UTX`"
             )
             embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
         else: # account doesn't exist
@@ -670,23 +671,19 @@ class Utility(commands.Cog):
         room = functions.get_room_json(room_name)
         
         if room:
-            print("get room name")
             r_name = room["Name"]
             
             # Roles
-            print("roles")
             owner_username = functions.id_to_username(room["CreatorAccountId"])
             owner_pfp = functions.id_to_pfp(room["CreatorAccountId"])
             role_count = len(room["Roles"])
             
             # Placement
-            print("placement")
             placement = functions.get_room_placement(r_name)
             if placement == None:
                 placement = "<1000"
 
             # Stats
-            print("stats")
             cheers = room["Stats"]["CheerCount"]
             favorites = room["Stats"]["FavoriteCount"]
             visitor_count = room["Stats"]["VisitorCount"]
@@ -696,51 +693,58 @@ class Utility(commands.Cog):
             visit_visitor_ratio = round((visitor_count / visit_count) * 100)
             
             # Subrooms
-            print("subrooms")
             subrooms = ""
             for i in room["SubRooms"]:
                 subroom_name = i["Name"]
                 subrooms += f"{subroom_name}, "
 
             # Other
-            print("other")
             image_name = room["ImageName"]
             description = room["Description"]
             r_date = room["CreatedAt"][:10]
 
             # Warning
-            print("warning")
             custom_warning = room["CustomWarning"]
-            teleporting = room["SupportsTeleportVR"]
-            if teleporting:
-                teleporting = "TP supported!"
+            if custom_warning:
+                custom_warning = f"\n**Custom warning**\n```{custom_warning}```"
             else:
-                 teleporting = "TP not supported!"
+                custom_warning = ""
+            supported = ""
+            if room["SupportsWalkVR"]:
+                supported += " 🏃‍♂️ "
+            if room["SupportsTeleportVR"]:
+                supported += " <:RRtele:803747393769570324> "
+            if room["SupportsVRLow"]:
+                supported += " <:OQ1:803932601768476672> "
+            if room["SupportsQuest2"]:
+                supported += " <:OQ2:803932151971577896> "
+            if room["SupportsScreens"]:
+                supported += " 🖥️ "
+            if room["SupportsMobile"]:
+                supported += " 📱 "
+            if room["SupportsJuniors"]:
+                supported += " 👶 "
 
             # Tags
-            print("tags")
             tags = ""
             for i in room["Tags"]:
                 tags += "#" + str(i["Tag"]) + " "
 
             # Score
-            print("score")
             avg_score = 0
             score_list = []
             for i in room["Scores"]:
                 if not i["VisitType"] == 2:
-                    print(i)
                     score_list.append(i["Score"])
                     avg_score += i["Score"]
             print(len(score_list))
             print(avg_score)
             avg_score = round(avg_score / len(score_list), 5)
     
-            print("embed")
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                title = f"Statistics for {r_name}, by {owner_username}",
-                description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```\n**Information**\n:calendar: `{r_date}`\n<:RRtele:803747393769570324> `{teleporting}`\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}`\n<:tag:803746052946919434> `{tags}`\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
+                title = f"Statistics for ^{r_name}, by @{owner_username}",
+                description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```{custom_warning}\n**Information**\n:calendar: `{r_date}`\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}`\n<:tag:803746052946919434> `{tags}`\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
             )
             print("oimg")
             embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
@@ -757,6 +761,144 @@ class Utility(commands.Cog):
         await ctx.send(embed=embed)
 
     @roominfo.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-APICHECK
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def apistatus(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        author = f"<@{ctx.author.id}>"
+        embed = discord.Embed(
+            description = "<a:loading:794930501597003786> Calling API to check its status...",
+            colour = discord.Colour.orange()
+        )
+        functions.embed_footer(ctx, embed)
+        loading = await ctx.send(embed=embed)
+
+        embed = discord.Embed(
+            title = "API call results!",
+            colour = discord.Colour.orange()
+        ) 
+        # Rooms
+        try:
+            api = requests.get("https://api.rec.net/roomserver/rooms/search?query=paintball", timeout=10)
+            if api.ok:
+                embed.add_field(name="Room API call",value="`✅ Successful!`", inline=False)
+            else: 
+                embed.add_field(name="Room API call",value="`❌ Failure.`", inline=False)
+        except:
+            embed.add_field(name="Room API call",value="`❌ Failure.`", inline=False)
+
+        # Accounts
+        try:
+            api = requests.get("https://accounts.rec.net/account?username=coach", timeout=10)
+            if api.ok:
+                embed.add_field(name="Account API call",value="`✅ Successful!`", inline=False)
+            else: 
+                embed.add_field(name="Account API call",value="`❌ Failure.`", inline=False)
+        except:
+            embed.add_field(name="Account API call",value="`❌ Failure.`", inline=False)
+
+        # Images
+        try:
+            api = requests.get("https://api.rec.net/api/images/v3/feed/global?take=5", timeout=10)
+            if api.ok:
+                embed.add_field(name="Image API call",value="`✅ Successful!`", inline=False)
+            else: 
+                embed.add_field(name="Image API call",value="`❌ Failure.`", inline=False)
+        except:
+            embed.add_field(name="Image API call",value="`❌ Failure.`", inline=False)
+
+        # Events
+        try:
+            api = requests.get("https://api.rec.net/api/playerevents/v1?take=5", timeout=10)
+            if api.ok:
+                embed.add_field(name="Event API call",value="`✅ Successful!`", inline=False)
+            else: 
+                embed.add_field(name="Event API call",value="`❌ Failure.`", inline=False)
+        except:
+            embed.add_field(name="Event API call",value="`❌ Failure.`", inline=False)
+
+        await loading.delete()
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(author, embed=embed)
+
+    
+    #CMD-SHORTCUTS
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def shortcuts(self, ctx, username=None):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        embed = discord.Embed(
+            title = "Shortcuts for RecNet",
+            colour = discord.Colour.orange()
+        )
+        
+        embed.add_field(name="Rec.net", value="[Link](https://rec.net/)", inline = True)
+        embed.add_field(name="Rooms", value="[Link](https://rec.net/room/browse)", inline = True)
+        embed.add_field(name="Events", value="[Link](https://rec.net/event/browse)", inline = True)
+
+        if not username:
+            embed.add_field(name="LINKS TO YOUR PROFILE", value="If nothing shows up below this, you didn't enter your username. `.shortcuts <username>`", inline = False)
+            embed.set_footer(text="Shortcuts for -")
+        else:
+            old_username = username
+            try:
+                username = functions.check_account_existence_and_return(username)["username"]
+                embed.add_field(name="LINKS TO YOUR PROFILE", value=f"Account: `@{username}`", inline = False)
+            except:
+                embed.add_field(name="LINKS TO YOUR PROFILE", value=f"Account: `@{old_username}`", inline = False)
+            embed.add_field(name="Profile", value=f"[Link](https://rec.net/user/{username})", inline = True)
+            embed.add_field(name="Photos", value=f"[Link](https://rec.net/user/{username}/photos)", inline = True)
+            embed.add_field(name="Rooms", value=f"[Link](https://rec.net/user/{username}/rooms)", inline = True)
+            embed.add_field(name="Events", value=f"[Link](https://rec.net/user/{username}/events)", inline = True)
+            embed.add_field(name="Settings", value=f"[Link](https://rec.net/user/{username}/settings)", inline = True)
+            embed.add_field(name="Friends", value=f"[Link](https://rec.net/user/{username}/friends)", inline = True)
+            embed.add_field(name="Subscribers", value=f"[Link](https://rec.net/user/{username}/subscribers)", inline = True)
+            embed.add_field(name="Subscriptions", value=f"[Link](https://rec.net/user/{username}/subscriptions)", inline = True)
+            embed.add_field(name="Seller stats", value="[Link](https://rec.net/seller-stats)", inline = True)
+            embed.set_footer(text=f"Shortcuts for @{username}")
+
+        functions.embed_footer(ctx, embed)
+        await ctx.send(author, embed=embed)
+
+
+    # CMD-PLACEMENT
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def placement(self, ctx, room):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        
+        room_json = functions.get_room_json(room)
+        if room_json:
+            placement = functions.get_room_placement(room)
+            if not placement:
+                placement = "<1000"
+            embed = discord.Embed(
+                title = f"{room_json['Name']}'s placement on hot",
+                description = f"🔥 `#{placement}`",
+                url = f"https://rec.net/room/{room_json['Name']}",
+                colour = discord.Colour.orange()
+            )
+            embed.set_thumbnail(url=f"https://img.rec.net/{room_json['ImageName']}?width=720")
+        else:
+            embed = functions.error_msg(ctx, f"Room `{room}` doesn't exist!") 
+
+        functions.embed_footer(ctx, embed)
+        await ctx.send(embed=embed)
+
+    @placement.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in a room!")

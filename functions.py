@@ -49,24 +49,31 @@ def map_image_data(arg, dict):
 def map_func(arg, dict):
     return arg[dict]
 
-def get_room_json(room):
+def get_room_json(room, is_id=False):
     try:
-        room_data = requests.get(f"https://api.rec.net/roomserver/rooms/search?query={room}", timeout=10).json()
-        if room_data["TotalResults"] == 0:
-            # Room doesn't exist!
-            return False
+        if not is_id:
+            room_data = requests.get(f"https://api.rec.net/roomserver/rooms/search?query={room}", timeout=10).json()
+            if room_data["TotalResults"] == 0:
+                # Room doesn't exist!
+                return None
 
-        for x in room_data["Results"]:
-            if x["Name"].casefold() == room.casefold():
-                room_id = x["RoomId"]
-                break
+            for x in room_data["Results"]:
+                if x["Name"].casefold() == room.casefold():
+                    room_id = x["RoomId"]
+                    break
+        else:
+            if requests.get(f"https://api.rec.net/roomserver/rooms/{room}", timeout=10).ok:
+                room_id = room
+            else:
+                return None
+
         print(room_id)
         room_json = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}/?include=366").json()
 
         return room_json
     except:
-        return False
-
+        return None
+        
 def get_room_placement(room):
     hot_rooms = requests.get("https://api.rec.net/roomserver/rooms/hot?take=1000").json()["Results"]
     print("get_room_placement")
@@ -95,6 +102,9 @@ def id_to_pfp(account_id, cropped=True, return_link=True):
             return f"https://img.rec.net/{account_pfp}"
         else: 
             return account_pfp
+
+def id_to_bio(account_id):
+    return requests.get(f"https://accounts.rec.net/account/{account_id}/bio").json()["bio"]
 
 def id_to_banner(account_id, return_link=True):
     try:
@@ -183,6 +193,46 @@ def find_random_bio():
             continue
     return {"account_id": account_id, "bio": bio}
 
+def find_random_account():
+    account_id = random.randint(1, 10000000)
+    account = None
+    while not account:
+        try:
+            account = requests.get(f"https://accounts.rec.net/account/{account_id}").json()
+        except:
+            continue
+    return account
+
+def find_random_img():
+    img_json = None
+    while img_json == None:
+      random_int = random.randint(1, 18200000)
+      img = requests.get(f"https://api.rec.net/api/images/v4/{random_int}")
+      if img.ok == False:
+            continue
+      img_json = img.json()
+    return img_json
+
+def find_random_room():
+    room = None
+    while not room:
+        random_int = random.randint(1, 12000000)
+        room_data = requests.get(f"https://api.rec.net/roomserver/rooms/{random_int}?include=366")
+        if not room_data.ok:
+            continue
+        else:
+            break
+    return room_data.json()
+
+def find_random_event():
+    events_json = requests.get("https://api.rec.net/api/playerevents/v1?take=1000").json()
+    random_int = random.randint(1, len(events_json)-1)
+    return events_json[random_int]
+
+def event_search(word):
+    events = requests.get(f"https://api.rec.net/api/playerevents/v1/search?query={word}&take=10").json()
+    return events
+
 def get_bio(account_id):
     # Get someones bio with their account's id
     return requests.get(f"https://accounts.rec.net/account/{account_id}/bio").json()["bio"]
@@ -190,6 +240,9 @@ def get_bio(account_id):
 def embed_footer(ctx, embed):
     today = get_date()
     return embed.set_footer(text=f"Requested by {ctx.author.name} - {today.format('MM/DD/YYYY')}", icon_url=ctx.author.avatar_url)
+
+def contains_word(sentence, word):
+    return (' ' + word.casefold() + ' ') in (' ' + sentence.casefold() + ' ')
 
 def error_msg(ctx, desc):
     embed=discord.Embed(
