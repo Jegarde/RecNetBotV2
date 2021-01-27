@@ -58,7 +58,7 @@ async def on_ready():
             if filename.endswith(".py"):
                 client.unload_extension(f"cogs.{filename[:-3]}")
                 client.load_extension(f"cogs.{filename[:-3]}")
-        await ctx.send(f"Cogs reloaded!")
+        await ctx.send("Cogs reloaded!")
 
         
 # Load cogs
