@@ -21,7 +21,7 @@ class Search(commands.Cog):
             events_found = functions.event_search(keyword)
 
             event_string = ""
-            if len(events_found):
+            if events_found:
                 for event in events_found:
                     if (functions.contains_word(event['Name'], keyword) or functions.contains_word(event['Description'], keyword)):
                         description = event['Description']
@@ -29,15 +29,17 @@ class Search(commands.Cog):
                             description = "None"
 
                         event_string += f"**[\"{event['Name']}\"](https://rec.net/event/{event['PlayerEventId']})** | *[{functions.id_to_display_name(event['CreatorPlayerId'])}](https://rec.net/user/{functions.id_to_username(event['CreatorPlayerId'])})*```{description}```👥 Attending: `{event['AttendeeCount']}`\n\n"
-            else:
-                event_string = "None! <:dunno:796100756653604897>"
 
+            if not event_string:
+                event_string = "None! <:dunno:796100756653604897>"
+                
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
                 title = f"Events found with keyword \"{keyword}\"",
                 description = event_string
             )
 
+            print(str(event_string))
             functions.embed_footer(ctx, embed) # get default footer from function
             await ctx.send(embed=embed)
 

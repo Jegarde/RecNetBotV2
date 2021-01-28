@@ -1,6 +1,7 @@
 import functions
 import requests
 import discord
+import asyncio
 from discord.ext import commands
 
 class Utility(commands.Cog):
@@ -668,97 +669,12 @@ class Utility(commands.Cog):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         print("Get room json")
-        room = functions.get_room_json(room_name)
+        room_embed = functions.room_embed(room_name)
         
-        if room:
-            r_name = room["Name"]
-            
-            # Roles
-            owner_username = functions.id_to_username(room["CreatorAccountId"])
-            owner_pfp = functions.id_to_pfp(room["CreatorAccountId"])
-            role_count = len(room["Roles"])
-            
-            # Placement
-            placement = functions.get_room_placement(r_name)
-            if placement == None:
-                placement = "<1000"
-
-            # Stats
-            cheers = room["Stats"]["CheerCount"]
-            favorites = room["Stats"]["FavoriteCount"]
-            visitor_count = room["Stats"]["VisitorCount"]
-            visit_count = room["Stats"]["VisitCount"]
-
-            visitor_cheer_ratio = round((cheers / visitor_count) * 100)
-            visit_visitor_ratio = round((visitor_count / visit_count) * 100)
-            
-            # Subrooms
-            subrooms = ""
-            for i in room["SubRooms"]:
-                subroom_name = i["Name"]
-                subrooms += f"{subroom_name}, "
-
-            # Other
-            image_name = room["ImageName"]
-            description = room["Description"]
-            r_date = room["CreatedAt"][:10]
-
-            # Warning
-            custom_warning = room["CustomWarning"]
-            if custom_warning:
-                custom_warning = f"\n**Custom warning**\n```{custom_warning}```"
-            else:
-                custom_warning = ""
-            supported = ""
-            if room["SupportsWalkVR"]:
-                supported += " 🏃‍♂️ "
-            if room["SupportsTeleportVR"]:
-                supported += " <:RRtele:803747393769570324> "
-            if room["SupportsVRLow"]:
-                supported += " <:OQ1:803932601768476672> "
-            if room["SupportsQuest2"]:
-                supported += " <:OQ2:803932151971577896> "
-            if room["SupportsScreens"]:
-                supported += " 🖥️ "
-            if room["SupportsMobile"]:
-                supported += " 📱 "
-            if room["SupportsJuniors"]:
-                supported += " 👶 "
-
-            # Tags
-            tags = ""
-            for i in room["Tags"]:
-                tags += "#" + str(i["Tag"]) + " "
-
-            # Score
-            avg_score = 0
-            score_list = []
-            for i in room["Scores"]:
-                if not i["VisitType"] == 2:
-                    score_list.append(i["Score"])
-                    avg_score += i["Score"]
-            print(len(score_list))
-            print(avg_score)
-            avg_score = round(avg_score / len(score_list), 5)
-    
-            embed=discord.Embed(
-                colour=discord.Colour.orange(),
-                title = f"Statistics for ^{r_name}, by @{owner_username}",
-                description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```{custom_warning}\n**Information**\n:calendar: `{r_date}`\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}`\n<:tag:803746052946919434> `{tags}`\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
-            )
-            print("oimg")
-            embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
-            
-            # description
-            #embed.add_field(name="⠀",value=f"**Description**\n```{description}```:calendar: `{date}`\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` ⭐ `{favorites}` 👤 `{visitor_count}` 👥 `{visit_count}`\nAvg score: `{avg_score}`")
-            
-            print("author")
-            embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}", icon_url=owner_pfp)
-        else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"Room `{room_name}` doesn't exist!") 
-
-        functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(embed=embed)
+        if not room_embed:
+            room_embed = functions.error_msg(ctx, f"Room `{room_name}` doesn't exist!")      
+        functions.embed_footer(ctx, room_embed) # get default footer from function
+        await ctx.send(embed=room_embed)
 
     @roominfo.error
     async def clear_error(self, ctx, error):
@@ -906,6 +822,67 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
         else:
             pass
+
+
+    # CMD-FEATURED
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def featured(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        featured_rooms = functions.get_featured_rooms()
+
+        embed=discord.Embed(
+            colour = discord.Colour.orange(),
+            description = "<a:spinning:804022054822346823> Getting featured rooms and their statistics..."
+        )
+        functions.embed_footer(ctx, embed)
+        loading = await ctx.send(embed=embed)
+
+
+        embed=discord.Embed(
+            colour = discord.Colour.orange(),
+            title = "Featured rooms"
+        )
+        
+        count = 0
+        for room in featured_rooms:
+            count += 1
+            room_data = functions.get_room_json(room['RoomId'], True)
+            embed.add_field(name=f"{count}. ^{room['RoomName']}, by @{functions.id_to_username(room_data['CreatorAccountId'])}", value=f"[🔗 RecNet link](https://rec.net/room/{room['RoomName']})\n<:CheerGeneral:803244099510861885> `{room_data['Stats']['CheerCount']}` *(CHEERS)*\n⭐ `{room_data['Stats']['FavoriteCount']}` *(FAVORITES)*\n👤 `{room_data['Stats']['VisitorCount']}` *(VISITORS)*\n👥 `{room_data['Stats']['VisitCount']}` *(ROOM VISITS)*\n🔥 `#{functions.get_room_placement(room['RoomName'])}` *(HOT PLACEMENT)*\n💯 `{functions.get_room_score(room['RoomName'])}` *(AVG SCORE)*", inline=False)
+            
+        functions.embed_footer(ctx, embed)
+        await loading.delete()
+        await ctx.send(author, embed=embed)
+
+
+    # CMD-FRONTPAGE
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def frontpage(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        msg = ""
+        frontpage = functions.get_frontpage(5)
+        
+        for post in frontpage:
+            tagged = ""
+            if post['TaggedPlayerIds']:
+                tagged = "*Users tagged:* "
+                for account_id in post['TaggedPlayerIds']:
+                    tagged += f"`@{functions.id_to_username(account_id)}` "
+            else: tagged = "*Users tagged:* None!"
+
+
+            msg += f"https://rec.net/image/{post['Id']}\n**{functions.id_to_display_name(post['PlayerId'])}** @{functions.id_to_username(post['PlayerId'])}\n🚪 `^{functions.id_to_room_name(post['RoomId'])}`\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}`\n💬 `{post['CommentCount']}`\n{tagged}\n\n"
+            
+        await ctx.send(msg)
+        
+        
 
 def setup(client):
     client.add_cog(Utility(client))
