@@ -83,6 +83,7 @@ def get_room_placement(room):
         if x["Name"].casefold() == room.casefold():
             return placement
         placement += 1
+    return "<1000"
 
 def id_to_username(account_id):
     # Get and return account data based on id
@@ -182,6 +183,120 @@ def id_to_comment_stats(account_id):
 def username_to_id(account_name):
     # Get and return account's id based on name
     return requests.get(f"https://accounts.rec.net/account?username={account_name}").json()["accountId"]
+
+def room_embed(room_name, is_json=False):
+    if is_json:
+        room = room_name
+    else:
+        room = get_room_json(room_name)
+        
+    if room:
+        r_name = room["Name"]
+        
+        # Roles
+        owner_username = id_to_username(room["CreatorAccountId"])
+        owner_pfp = id_to_pfp(room["CreatorAccountId"])
+        role_count = len(room["Roles"])
+        
+        # Placement
+        placement = get_room_placement(r_name)
+
+        # Stats
+        cheers = room["Stats"]["CheerCount"]
+        favorites = room["Stats"]["FavoriteCount"]
+        visitor_count = room["Stats"]["VisitorCount"]
+        visit_count = room["Stats"]["VisitCount"]
+
+        #visitor_cheer_ratio = round((cheers / visitor_count) * 100)
+        #visit_visitor_ratio = round((visitor_count / visit_count) * 100)
+        
+        # Subrooms
+        subrooms = ""
+        for i in room["SubRooms"]:
+            subroom_name = i["Name"]
+            subrooms += f"{subroom_name}, "
+
+        # Other
+        image_name = room["ImageName"]
+        description = room["Description"]
+        r_date = room["CreatedAt"]
+
+        # Warning
+        custom_warning = room["CustomWarning"]
+        if custom_warning:
+            custom_warning = f"\n**Custom warning**\n```{custom_warning}```"
+        else:
+            custom_warning = ""
+        supported = ""
+        if room["SupportsWalkVR"]:
+            supported += " 🏃‍♂️ "
+        if room["SupportsTeleportVR"]:
+            supported += " <:RRtele:803747393769570324> "
+        if room["SupportsVRLow"]:
+            supported += " <:OQ1:803932601768476672> "
+        if room["SupportsQuest2"]:
+            supported += " <:OQ2:803932151971577896> "
+        if room["SupportsScreens"]:
+            supported += " 🖥️ "
+        if room["SupportsMobile"]:
+            supported += " 📱 "
+        if room["SupportsJuniors"]:
+            supported += " 👶 "
+
+        # Tags
+        tags = ""
+        for i in room["Tags"]:
+            tags += "#" + str(i["Tag"]) + " "
+        if not tags:
+            tags = "None"
+
+        # Score
+        avg_score = 0
+        score_list = []
+        for i in room["Scores"]:
+            if not i["VisitType"] == 2:
+                score_list.append(i["Score"])
+                avg_score += i["Score"]
+        avg_score = round(avg_score / len(score_list), 5)
+
+        embed=discord.Embed(
+            colour=discord.Colour.orange(),
+            title = f"Statistics for ^{r_name}, by @{owner_username}",
+            description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```{custom_warning}\n**Information**\n:calendar: `{r_date[:10]}` ⏰ `{r_date[11:16]} UTX` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
+        )
+        print("oimg")
+        embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
+        
+        print("author")
+        embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}", icon_url=owner_pfp)
+        return embed
+    else:
+        return None
+
+def id_to_room_name(room_id):
+    try:
+        room_name = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}").json()['Name']
+    except:
+        room_name = "DormRoom"
+    return room_name
+
+def get_featured_rooms():
+    return requests.get("https://api.rec.net/roomserver/featuredrooms/current").json()["Rooms"]
+
+def get_room_score(room_name):
+    room = get_room_json(room_name)
+    avg_score = 0
+    score_list = []
+    for i in room["Scores"]:
+        if not i["VisitType"] == 2:
+            score_list.append(i["Score"])
+            avg_score += i["Score"]
+    avg_score = round(avg_score / len(score_list), 5)
+    return avg_score
+
+def get_frontpage(amount=5):
+    frontpage = requests.get(f"https://api.rec.net/api/images/v3/feed/global?take={amount}").json()
+    return frontpage
 
 def find_random_bio():
     bio = None

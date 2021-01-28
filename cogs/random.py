@@ -25,7 +25,7 @@ class Random(commands.Cog):
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
-            description = f"<a:spinning:803586183895580672> Searching for {amount} random bio(s)..."
+            description = f"<a:spinning:804022054822346823> Searching for {amount} random bio(s)..."
         )
         functions.embed_footer(ctx, embed)
         loading = await ctx.send(embed=embed)
@@ -185,7 +185,7 @@ class Random(commands.Cog):
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
-            description = f"<a:spinning:803586183895580672> Searching for {amount} random image(s)..."
+            description = f"<a:spinning:804022054822346823> Searching for {amount} random image(s)..."
         )
         functions.embed_footer(ctx, embed)
         loading = await ctx.send(embed=embed)
@@ -212,101 +212,18 @@ class Random(commands.Cog):
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
-            description = f"<a:spinning:803586183895580672> Searching for a random room..."
+            description = f"<a:spinning:804022054822346823> Searching for a random room..."
         )
         functions.embed_footer(ctx, embed)
         loading = await ctx.send(embed=embed)
 
         room = functions.find_random_room()
-        r_name = room["Name"]
-        
-        # Roles
-        owner_username = functions.id_to_username(room["CreatorAccountId"])
-        owner_pfp = functions.id_to_pfp(room["CreatorAccountId"])
-        role_count = len(room["Roles"])
-        
-        # Placement
-        placement = functions.get_room_placement(r_name)
-        if placement == None:
-            placement = "<1000"
+        room_embed = functions.room_embed(room, True)
 
-        # Stats
-        cheers = room["Stats"]["CheerCount"]
-        favorites = room["Stats"]["FavoriteCount"]
-        visitor_count = room["Stats"]["VisitorCount"]
-        visit_count = room["Stats"]["VisitCount"]
-
-        visitor_cheer_ratio = round((cheers / visitor_count) * 100)
-        visit_visitor_ratio = round((visitor_count / visit_count) * 100)
-        
-        # Subrooms
-        subrooms = ""
-        for i in room["SubRooms"]:
-            subroom_name = i["Name"]
-            subrooms += f"{subroom_name}, "
-
-        # Other
-        image_name = room["ImageName"]
-        description = room["Description"]
-        r_date = room["CreatedAt"][:10]
-
-        # Warning
-        custom_warning = room["CustomWarning"]
-        if custom_warning:
-            custom_warning = f"\n**Custom warning**\n```{custom_warning}```"
-        else:
-            custom_warning = ""
-        supported = ""
-        if room["SupportsWalkVR"]:
-            supported += " 🏃‍♂️ "
-        if room["SupportsTeleportVR"]:
-            supported += " <:RRtele:803747393769570324> "
-        if room["SupportsVRLow"]:
-            supported += " <:OQ1:803932601768476672> "
-        if room["SupportsQuest2"]:
-            supported += " <:OQ2:803932151971577896> "
-        if room["SupportsScreens"]:
-            supported += " 🖥️ "
-        if room["SupportsMobile"]:
-            supported += " 📱 "
-        if room["SupportsJuniors"]:
-            supported += " 👶 "
-
-        # Tags
-        tags = ""
-        for i in room["Tags"]:
-            tags += "#" + str(i["Tag"]) + " "
-
-        # Score
-        avg_score = 0
-        score_list = []
-        for i in room["Scores"]:
-            if not i["VisitType"] == 2:
-                print(i)
-                score_list.append(i["Score"])
-                avg_score += i["Score"]
-        print(len(score_list))
-        print(avg_score)
-        avg_score = round(avg_score / len(score_list), 5)
-
-        embed=discord.Embed(
-            colour=discord.Colour.orange(),
-            title = f"Statistics for ^{r_name}, by @{owner_username}",
-            description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```\n{custom_warning}**Information**\n:calendar: `{r_date}`\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}`\n<:tag:803746052946919434> `{tags}`\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
-        )
-        print("oimg")
-        embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
-        
-        # description
-        #embed.add_field(name="⠀",value=f"**Description**\n```{description}```:calendar: `{date}`\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` ⭐ `{favorites}` 👤 `{visitor_count}` 👥 `{visit_count}`\nAvg score: `{avg_score}`")
-        
-        print("author")
-        embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}", icon_url=owner_pfp)
-
-        functions.embed_footer(ctx, embed) # get default footer from function
+        functions.embed_footer(ctx, room_embed) # get default footer from function
 
         await loading.delete()
-        await ctx.send(author, embed=embed)
+        await ctx.send(author, embed=room_embed)
 
 
     # CMD-RANDOMEVENT
