@@ -1,7 +1,6 @@
 import functions
 import requests
 import discord
-import asyncio
 from discord.ext import commands
 
 class Utility(commands.Cog):
@@ -555,7 +554,9 @@ class Utility(commands.Cog):
 
         if account:
             photos = functions.id_to_photos(account['account_id'])
+            feed = functions.id_to_feed(account['account_id'])
             total_pictures = len(photos)
+            total_feed = len(feed)
             if not total_pictures:
                 embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared a single picture!")
             else: 
@@ -568,10 +569,13 @@ class Utility(commands.Cog):
 
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    title = f"RecNet Statistics for {account['username']}!"
+                    title = f"RecNet Statistics for {account['username']}!",
+                    description = f"Pictures shared: `{total_pictures}`\nPictures tagged in: `{total_feed}`"
                 )
 
-                embed.add_field(name="Pictures shared", value=f"`{total_pictures}`\n", inline=False)
+               # embed.add_field(name="Pictures shared", value=f"`{total_pictures}`\n", inline=True)
+                #embed.add_field(name="Pictures tagged in", value=f"`{total_feed}`\n", inline=True)
+                #embed.add_field(name="‎⠀", value=f"‎⠀", inline=False)
 
                 if pictures_cheered:
                     embed.add_field(name="CHEER STATISTICS", value=f"Total Cheers: <:CheerGeneral:803244099510861885> `{cheer_data['total_cheers']}`\nUser's posts cheered: `{pictures_cheered}`\n[**Most cheered post**](https://rec.net/image/{cheer_data['most_cheered']['Id']})\n<:CheerGeneral:803244099510861885> `{cheer_data['most_cheered']['CheerCount']}` 💬 `{cheer_data['most_cheered']['CommentCount']}`",inline=True)
@@ -843,7 +847,92 @@ class Utility(commands.Cog):
             msg += f"https://rec.net/image/{post['Id']}\n**{functions.id_to_display_name(post['PlayerId'])}** @{functions.id_to_username(post['PlayerId'])}\n🚪 `^{functions.id_to_room_name(post['RoomId'])}`\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}`\n💬 `{post['CommentCount']}`\n{tagged}\n\n"
             
         await ctx.send(msg)
-        
+
+
+    # CMD-TAKENIN
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def takenin(self, ctx, room, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        room_data = functions.get_room_json(room)
+        if room_data: #if room exists
+            account = functions.check_account_existence_and_return(profile)
+            if account: # if account exists
+                photos = functions.id_to_photos(account['account_id'])
+                if photos: # if user has posted anything
+                    msg = ""
+                    save_msg = ""
+                    photos_found = []
+                    exceeded_limit = False
+                    cheers = 0
+                    comments = 0
+                    for post in photos:
+                        if post['RoomId'] == room_data['RoomId']:
+                            photos_found.append(post['Id'])
+                            msg += f"<https://rec.net/image/{post['Id']}>\n"
+
+                            cheers += post['CheerCount']
+                            comments += post['CommentCount']
+
+                            save_msg += f"https://rec.net/image/{post['Id']}\n"
+                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                            save_msg += f"Cheers: {post['CheerCount']}\n"
+                            save_msg += f"Comments: {post['CommentCount']}\n"
+                            save_msg += "\n"
+
+                    if photos_found:
+                        if len(msg) > 1500:
+                            exceeded_limit = True
+                            # message exceeded
+                            msg = "*Message exceeded Discord's message length limit.*\n\n"
+                            with open("temp_txt.txt","w") as text_file:         
+                                text_file.write(save_msg)
+                            file_name = f"Taken in ^{room_data['Name']}, by {account['username']}.txt"
+
+                        # first pic
+                        msg += f"\n**First picture in **`^{room_data['Name']}`: https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
+                        # latest picture
+                        msg += f"**Latest picture in **`^{room_data['Name']}`: https://rec.net/image/{photos_found[0]}\n\n"
+                        # cheers
+                        msg += f"**Cheers in total:** `{cheers}`\n"
+                        # comments
+                        msg += f"**Comments in total:** `{comments}`\n\n"
+                        # results
+                        msg += f"*Results:* `{len(photos_found)}`"
+
+                        if exceeded_limit:
+                            print("SEND")
+                            with open("temp_txt.txt","rb") as text_file:
+                                await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                        else:
+                            print("what")
+                            await ctx.send(f"{author}\n{msg}")
+
+                    else: # not found
+                        embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture in `^{room_data['Name']}`!")
+                        await ctx.send(embed=embed)
+                else:
+                    embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!")
+                    await ctx.send(embed=embed)
+            else:
+                embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+                await ctx.send(embed=embed)
+
+        else: # room doesn't exist
+            embed = functions.error_msg(ctx, f"Room `{room}` doesn't exist!")
+            await ctx.send(embed=embed)
+
+    @takenin.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.takenin <room> <user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
 
 
 def setup(client):

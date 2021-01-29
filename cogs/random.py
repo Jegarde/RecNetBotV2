@@ -263,6 +263,98 @@ class Random(commands.Cog):
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(author, embed=embed)
 
+
+    # CMD-RANDOMIMGOF
+    @commands.command(aliases=["rimgof", "rio"])
+    @commands.check(functions.beta_tester)
+    async def randomimgof(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            feed = functions.id_to_feed(account['account_id'])
+            
+            if feed:
+                random_feed = feed[random.randint(0, len(feed)-1)]
+                username = functions.id_to_username(account['account_id'])
+                tagged = ""
+                if random_feed['TaggedPlayerIds']:
+                    tagged = "👥 "
+                    for account_id in random_feed['TaggedPlayerIds']:
+                        tagged_username = functions.id_to_username(account_id)
+                        tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                
+                room_name = functions.id_to_room_name(random_feed['RoomId'])
+                embed=discord.Embed(
+                    colour=discord.Colour.orange(),
+                    title=f"Random image of @{username}, taken by @{functions.id_to_username(random_feed['PlayerId'])}",
+                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_feed['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_feed['CheerCount']}` 💬 `{random_feed['CommentCount']}`\n📆 `{random_feed['CreatedAt'][:10]}` ⏰ `{random_feed['CreatedAt'][11:16]} UTX`\n{tagged}"
+                )
+                embed.set_image(url=f"https://img.rec.net/{random_feed['ImageName']}")
+                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+            else:
+                embed = functions.error_msg(ctx, f"User `{profile}` doesn't appear in any post!")
+        else:
+            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @randomimgof.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-RANDOMIMGBY
+    @commands.command(aliases=["rimgby", "rib"])
+    @commands.check(functions.beta_tester)
+    async def randomimgby(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            photos = functions.id_to_photos(account['account_id'])
+            
+            if photos:
+                random_photos = photos[random.randint(0, len(photos)-1)]
+                username = functions.id_to_username(account['account_id'])
+                tagged = ""
+                if random_photos['TaggedPlayerIds']:
+                    tagged = "👥 "
+                    for account_id in random_photos['TaggedPlayerIds']:
+                        tagged_username = functions.id_to_username(account_id)
+                        tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                
+                room_name = functions.id_to_room_name(random_photos['RoomId'])
+                embed=discord.Embed(
+                    colour=discord.Colour.orange(),
+                    title=f"Random image taken by @{username}",
+                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
+                )
+                embed.set_image(url=f"https://img.rec.net/{random_photos['ImageName']}")
+                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+            else:
+                embed = functions.error_msg(ctx, f"User `{profile}` hasn't shared a single post!")
+        else:
+            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @randomimgof.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
         
 def setup(client):
     client.add_cog(Random(client))
