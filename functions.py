@@ -137,18 +137,32 @@ def id_to_is_junior(account_id):
     return id_to_account_data(account_id)["isJunior"]  
 
 def id_to_latest_photo(account_id):
-    return requests.get(f"https://api.rec.net/api/images/v4/player/{account_id}?take=1").json()[0]
+    photos = requests.get(f"https://api.rec.net/api/images/v4/player/{account_id}?take=1").json()
+    if photos:
+        return photos[0]
+    else:
+        return None
 
 def id_to_latest_feed(account_id):
-    return requests.get(f"https://api.rec.net/api/images/v3/feed/player/{account_id}?take=1").json()[0]
+    feed = requests.get(f"https://api.rec.net/api/images/v3/feed/player/{account_id}?take=1").json()
+    if feed:
+        return feed[0]
+    else:
+        return None
 
 def id_to_oldest_photo(account_id):
     photos = id_to_photos(account_id)
-    return photos[len(photos)-1]
+    if photos:
+        return photos[len(photos)-1]
+    else:
+        return None
 
 def id_to_oldest_feed(account_id):
     feed = id_to_feed(account_id)
-    return feed[len(feed)-1]
+    if feed:
+        return feed[len(feed)-1]
+    else:
+        return None
 
 def id_to_photos(account_id):
     return requests.get(f"https://api.rec.net/api/images/v4/player/{account_id}?take=100000").json()

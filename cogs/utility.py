@@ -17,16 +17,14 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            bio = functions.get_bio(account_id)
-            pfp = functions.id_to_pfp(account_id, True)
+            bio = functions.get_bio(account['account_id'])
+            pfp = functions.id_to_pfp(account['account_id'], True)
 
-            print(f"{ctx.command} > {account_id}, {username}, {bio}, {pfp}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {bio}, {pfp}")
 
             embed=functions.default_embed()
-            embed.add_field(name=f"{username}'s bio:", value=f"```{bio}```")
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=pfp)
+            embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
         else:
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
 
@@ -50,17 +48,15 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            pfp = functions.id_to_pfp(account_id, False)
+            pfp = functions.id_to_pfp(account['account_id'], False)
 
-            print(f"{ctx.command} > {account_id}, {username}, {pfp}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {pfp}")
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                description = f"[{username}'s profile picture](https://rec.net/image/{functions.id_to_pfp(account_id, False, False)})"
+                description = f"[{account['username']}'s profile picture](https://rec.net/image/{functions.id_to_pfp(account['account_id'], False, False)})"
             )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
             embed.set_image(url=pfp)
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
@@ -86,24 +82,22 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            banner = functions.id_to_banner(account_id, True)
+            banner = functions.id_to_banner(account['account_id'], True)
 
-            print(f"{ctx.command} > {account_id}, {username}, {banner}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {banner}")
 
             if not banner:
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    description = f"{username}'s banner"
+                    description = f"{account['username']}'s banner"
                 )
                 banner = "https://cdn.rec.net/static/banners/default_player.png" # replace with default banner
             else:
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    description = f"[{username}'s banner](https://rec.net/image/{functions.id_to_banner(account_id, False)})"
+                    description = f"[{account['username']}'s banner](https://rec.net/image/{functions.id_to_banner(account['account_id'], False)})"
                 )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id']))
             embed.set_image(url=banner)
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
@@ -129,21 +123,18 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            display_name = functions.id_to_display_name(account_id)
-            pfp = functions.id_to_pfp(account_id, False)
-            bio = functions.get_bio(account_id)
-            created_at = functions.id_to_creation_date(account_id)
-            is_junior = functions.id_to_is_junior(account_id)
+            display_name = functions.id_to_display_name(account['account_id'])
+            pfp = functions.id_to_pfp(account['account_id'], False)
+            bio = functions.get_bio(account['account_id'])
+            created_at = functions.id_to_creation_date(account['account_id'])
+            is_junior = functions.id_to_is_junior(account['account_id'])
 
-            print(f"{ctx.command} > {account_id}, {username}, {display_name}, {pfp}, {bio}, {created_at}, {is_junior}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {display_name}, {pfp}, {bio}, {created_at}, {is_junior}")
 
             embed=discord.Embed(
                 colour=discord.Colour.orange()
-                #description = f"[{username}'s profile picture](https://rec.net/image/{functions.id_to_pfp(account_id, False, False)})"
             )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
             embed.add_field(name="Display name", value=f"`{display_name}`", inline=True)
             embed.add_field(name="Created at", value=f"`{created_at[:10]}`", inline=True)
             embed.add_field(name="Is junior?", value=f"`{is_junior}`", inline=True)
@@ -172,22 +163,20 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            is_junior = functions.id_to_is_junior(account_id)
+            is_junior = functions.id_to_is_junior(account['account_id'])
 
-            print(f"{ctx.command} > {account_id}, {username}, {is_junior}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {is_junior}")
 
             if is_junior:
-                title = f"{username} is a junior! 🧒"
+                title = f"{account['username']} is a junior! 🧒"
             else:
-                title = f"{username} is not junior! 🧔"
+                title = f"{account['username']} is not junior! 🧔"
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
                 title = title
             )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
 
@@ -211,18 +200,16 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            created_at = functions.id_to_creation_date(account_id)
+            created_at = functions.id_to_creation_date(account['account_id'])
 
-            print(f"{ctx.command} > {account_id}, {username}, {created_at}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {created_at}")
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                title = f"{username}'s account was created at",
+                title = f"{account['username']}'s account was created at",
                 description = f"📆 `{created_at[:10]}`\n⏰ `{created_at[11:16]} UTX`"
             )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
 
@@ -247,18 +234,16 @@ class Utility(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            display_name = functions.id_to_display_name(account_id)
+            display_name = functions.id_to_display_name(account['account_id'])
 
-            print(f"{ctx.command} > {account_id}, {username}, {display_name}")
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {display_name}")
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                title=f"{username}'s display name is",
+                title=f"{account['username']}'s display name is",
                 description=f"`{display_name}`"
             )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
 
@@ -282,25 +267,26 @@ class Utility(commands.Cog):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         account = functions.check_account_existence_and_return(profile)
-        latest = False # if it stays false, it couldn't be found
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
+            latest = functions.id_to_latest_photo(account['account_id'])
+            if latest:
+                tagged = ""
+                if latest['TaggedPlayerIds']:
+                    tagged = "👥 "
+                    for account_id in latest['TaggedPlayerIds']:
+                        username = functions.id_to_username(account_id)
+                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
 
-            try:
-                latest = functions.id_to_latest_photo(account_id)
-                latest_id = latest["Id"]
-                latest_img_name = latest["ImageName"]
-
+                room_name = functions.id_to_room_name(latest['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    description=f"[{username}'s latest picture](https://rec.net/image/{latest_id})"
+                    description=f"🔗 **[{account['username']}'s latest picture](https://rec.net/image/{latest['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{latest['CheerCount']}` 💬 `{latest['CommentCount']}`\n📆 `{latest['CreatedAt'][:10]}` ⏰ `{latest['CreatedAt'][11:16]} UTX`\n{tagged}"
                 )
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
-                embed.set_image(url=f"http://img.rec.net/{latest_img_name}")
-            except:
-                print(f"{ctx.command} > {account_id}, {username}, Latest not found!")
-                embed = functions.error_msg(ctx, f"User `{username}` hasn't shared any pictures!")
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                embed.set_image(url=f"http://img.rec.net/{latest['ImageName']}")
+            else:
+                print(f"{ctx.command} > {account['account_id']}, {account['username']}, Latest not found!")
+                embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared any pictures!")
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
 
@@ -323,25 +309,25 @@ class Utility(commands.Cog):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         account = functions.check_account_existence_and_return(profile)
-        oldest = False # if it stays false, it couldn't be found
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-
-            try:
-                oldest = functions.id_to_oldest_photo(account_id)
-                oldest_id = oldest["Id"]
-                oldest_img_name = oldest["ImageName"]
-
+            oldest = functions.id_to_oldest_photo(account['account_id'])
+            if oldest:
+                tagged = ""
+                if oldest['TaggedPlayerIds']:
+                    tagged = "👥 "
+                    for account_id in oldest['TaggedPlayerIds']:
+                        username = functions.id_to_username(account_id)
+                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                room_name = functions.id_to_room_name(oldest['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    description=f"[{username}'s oldest picture](https://rec.net/image/{oldest_id})"
+                    description=f"🔗 **[{account['username']}'s oldest picture](https://rec.net/image/{oldest['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{oldest['CheerCount']}` 💬 `{oldest['CommentCount']}`\n📆 `{oldest['CreatedAt'][:10]}` ⏰ `{oldest['CreatedAt'][11:16]} UTX`\n{tagged}"
                 )
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
-                embed.set_image(url=f"http://img.rec.net/{oldest_img_name}")
-            except:
-                print(f"{ctx.command} > {account_id}, {username}, Oldest not found!")
-                embed = functions.error_msg(ctx, f"User `{username}` hasn't shared any pictures!")
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                embed.set_image(url=f"http://img.rec.net/{oldest['ImageName']}")
+            else:
+                print(f"{ctx.command} > {account['account_id']}, {account['username']}, Oldest not found!")
+                embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared any pictures!")
         else:
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
 
@@ -364,26 +350,26 @@ class Utility(commands.Cog):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         account = functions.check_account_existence_and_return(profile)
-        oldestfeed = False # if it stays false, it couldn't be found
 
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-
-            try:
-                oldestfeed = functions.id_to_oldest_feed(account_id)
-                oldestfeed_id = oldestfeed["Id"]
-                oldestfeed_img_name = oldestfeed["ImageName"]
-
+            oldestfeed = functions.id_to_oldest_feed(account['account_id'])
+            if oldestfeed:
+                tagged = ""
+                if oldestfeed['TaggedPlayerIds']:
+                    tagged = "👥 "
+                    for account_id in oldestfeed['TaggedPlayerIds']:
+                        username = functions.id_to_username(account_id)
+                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                room_name = functions.id_to_room_name(oldestfeed['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    description=f"[{username}'s oldest appearance](https://rec.net/image/{oldestfeed_id})"
+                    description=f"🔗 **[{account['username']}'s oldest appearance](https://rec.net/image/{oldestfeed['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{oldestfeed['CheerCount']}` 💬 `{oldestfeed['CommentCount']}`\n📆 `{oldestfeed['CreatedAt'][:10]}` ⏰ `{oldestfeed['CreatedAt'][11:16]} UTX`\n{tagged}"
                 )
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
-                embed.set_image(url=f"http://img.rec.net/{oldestfeed_img_name}")
-            except:
-                print(f"{ctx.command} > {account_id}, {username}, Oldestfeed not found!")
-                embed = functions.error_msg(ctx, f"User `{username}` isn't tagged in any post!")
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                embed.set_image(url=f"http://img.rec.net/{oldestfeed['ImageName']}")
+            else:
+                print(f"{ctx.command} > {account['account_id']}, {account['username']}, Oldestfeed not found!")
+                embed = functions.error_msg(ctx, f"User `{account['username']}` isn't tagged in any post!")
 
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
@@ -407,26 +393,26 @@ class Utility(commands.Cog):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         account = functions.check_account_existence_and_return(profile)
-        latestfeed = False # same thing here
 
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-
-            try:
-                latestfeed = functions.id_to_latest_feed(account_id)
-                latestfeed_id = latestfeed["Id"]
-                latestfeed_img_name = latestfeed["ImageName"]
-
+            latestfeed = functions.id_to_latest_feed(account['account_id'])
+            if latestfeed:
+                tagged = ""
+                if latestfeed['TaggedPlayerIds']:
+                    tagged = "👥 "
+                    for account_id in latestfeed['TaggedPlayerIds']:
+                        username = functions.id_to_username(account_id)
+                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                room_name = functions.id_to_room_name(latestfeed['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    description=f"[{username}'s latest appearance](https://rec.net/image/{latestfeed_id})"
+                    description=f"🔗 **[{account['username']}'s latest appearance](https://rec.net/image/{latestfeed['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{latestfeed['CheerCount']}` 💬 `{latestfeed['CommentCount']}`\n📆 `{latestfeed['CreatedAt'][:10]}` ⏰ `{latestfeed['CreatedAt'][11:16]} UTX`\n{tagged}"
                 )
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
-                embed.set_image(url=f"http://img.rec.net/{latestfeed_img_name}")
-            except:
-                print(f"{ctx.command} > {account_id}, {username}, latestfeed not found!")
-                embed = functions.error_msg(ctx, f"User `{username}` isn't tagged in any post!")
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                embed.set_image(url=f"http://img.rec.net/{latestfeed['ImageName']}")
+            else:
+                print(f"{ctx.command} > {account['account_id']}, {account['username']}, latestfeed not found!")
+                embed = functions.error_msg(ctx, f"User `{account['username']}` isn't tagged in any post!")
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
 
@@ -451,29 +437,21 @@ class Utility(commands.Cog):
         account = functions.check_account_existence_and_return(profile)
 
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
+            cheer_data = functions.id_to_cheer_stats(account['account_id'])
             
-            cheer_data = functions.id_to_cheer_stats(account_id)
-            print(cheer_data)
-            total_cheers = cheer_data["total_cheers"]
-            image_name = cheer_data["most_cheered"]["ImageName"]
-            most_cheered_cheers = cheer_data["most_cheered"]["CheerCount"]
-            most_cheered_link = "https://rec.net/image/"+str(cheer_data["most_cheered"]["Id"])
-            
-            if total_cheers > 0:
-                most_cheered_post_text = f"\n<:CheerSport:803244185447956490> [Most Cheered Post:]({most_cheered_link}) (<:CheerGeneral:803244099510861885> `{most_cheered_cheers}`)"
+            if cheer_data['total_cheers'] > 0:
+                most_cheered_post_text = f"\n<:CheerSport:803244185447956490> [Most Cheered Post:](https://rec.net/image/{cheer_data['most_cheered']['Id']}) (<:CheerGeneral:803244099510861885> `{cheer_data['most_cheered']['CheerCount']}`)"
             else:
                 most_cheered_post_text = ""
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                title = f"{username}'s cheer statistics",
-                description=f"<:CheerGeneral:803244099510861885> Total Cheers: `{total_cheers}`{most_cheered_post_text}"
+                title = f"{account['username']}'s cheer statistics",
+                description=f"<:CheerGeneral:803244099510861885> Total Cheers: `{cheer_data['total_cheers']}`{most_cheered_post_text}"
             )
             print("set image")
-            embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_image(url=f"https://img.rec.net/{cheer_data['most_cheered']['ImageName']}?width=720")
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
 
@@ -498,29 +476,21 @@ class Utility(commands.Cog):
         account = functions.check_account_existence_and_return(profile)
 
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
+            comment_data = functions.id_to_comment_stats(account['account_id'])
             
-            comment_data = functions.id_to_comment_stats(account_id)
-            print(comment_data)
-            total_comments = comment_data["total_comments"]
-            image_name = comment_data["most_commented"]["ImageName"]
-            most_commented_comment_count = comment_data["most_commented"]["CommentCount"]
-            most_commented_link = "https://rec.net/image/"+str(comment_data["most_commented"]["Id"])
-            
-            if total_comments > 0:
-                most_commented_post_text = f"\n<:CheerSport:803244185447956490> [Most Commented Post:]({most_commented_link}) (💬 `{most_commented_comment_count}`)"
+            if comment_data['total_comments'] > 0:
+                most_commented_post_text = f"\n<:CheerSport:803244185447956490> [Most Commented Post:](https://rec.net/image/{comment_data['most_commented']['Id']}) (💬 `{comment_data['most_commented']['CommentCount']}`)"
             else:
                 most_commented_post_text = ""
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                title = f"{username}'s comment statistics",
-                description=f"💬 Total Comments: `{total_comments}`{most_commented_post_text}"
+                title = f"{account['username']}'s comment statistics",
+                description=f"💬 Total Comments: `{comment_data['total_comments']}`{most_commented_post_text}"
             )
             print("set image")
-            embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_image(url=f"https://img.rec.net/{comment_data['most_commented']['ImageName']}?width=720")
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
 
@@ -545,23 +515,21 @@ class Utility(commands.Cog):
         account = functions.check_account_existence_and_return(profile)
 
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            photos = functions.id_to_photos(account_id)
+            photos = functions.id_to_photos(account['account_id'])
             total_pictures = len(photos)
 
-            all_cheers = functions.id_to_all_cheers(account_id)
+            all_cheers = functions.id_to_all_cheers(account['account_id'])
             pictures_cheered = total_pictures - all_cheers.count(0)
 
-            all_comments = functions.id_to_all_comments(account_id)
+            all_comments = functions.id_to_all_comments(account['account_id'])
             pictures_commented = total_pictures - all_comments.count(0)
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
-                title = f"{username} has shared {total_pictures} pictures!",
+                title = f"{account['username']} has shared {total_pictures} pictures!",
                 description = f"<:CheerGeneral:803244099510861885> `{pictures_cheered}` of them are cheered!\n💬 `{pictures_commented}` of them have been commented!"
             )
-            embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
 
@@ -586,66 +554,60 @@ class Utility(commands.Cog):
         account = functions.check_account_existence_and_return(profile)
 
         if account:
-            account_id = account["account_id"]
-            username = account["username"]
-            photos = functions.id_to_photos(account_id)
+            photos = functions.id_to_photos(account['account_id'])
             total_pictures = len(photos)
-            if total_pictures == 0:
-                embed = functions.error_msg(ctx, f"User `{username}` hasn't shared a single picture!")
+            if not total_pictures:
+                embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared a single picture!")
             else: 
-                latest = functions.id_to_latest_photo(account_id)
-                latest_id = latest["Id"]
-                #latest_cheers = latest["CheerCount"]
-                #latest_comments = latest["CommentCount"]
-
-                oldest = functions.id_to_oldest_photo(account_id)
-                oldest_id = oldest["Id"]
-                #oldest_cheers = oldest["CheerCount"]
-                #oldest_comments = oldest["CommentCount"]
-
-                latestfeed = functions.id_to_latest_feed(account_id)
-                latestfeed_id = latestfeed["Id"]
-                #latestfeed_cheers = latestfeed["CheerCount"]
-                #latestfeed_comments = latestfeed["CommentCount"]
-
-                oldestfeed = functions.id_to_oldest_feed(account_id)
-                oldestfeed_id = oldestfeed["Id"]
-                #oldestfeed_cheers = oldestfeed["CheerCount"]
-                #oldestfeed_comments = oldestfeed["CommentCount"]
-
-                all_cheers = functions.id_to_all_cheers(account_id)
+                all_cheers = functions.id_to_all_cheers(account['account_id'])
                 pictures_cheered = total_pictures - all_cheers.count(0)
-                cheer_data = functions.id_to_cheer_stats(account_id)
-                total_cheers = cheer_data["total_cheers"]
-                most_cheered_img = cheer_data["most_cheered"]["Id"]
-                most_cheered_cheer_count = cheer_data["most_cheered"]["CheerCount"]
-                most_cheered_comment_count = cheer_data["most_cheered"]["CommentCount"]
-
-                all_comments = functions.id_to_all_comments(account_id)
+                cheer_data = functions.id_to_cheer_stats(account['account_id'])
+                all_comments = functions.id_to_all_comments(account['account_id'])
                 pictures_commented = total_pictures - all_comments.count(0)
-                comment_data = functions.id_to_comment_stats(account_id)
-                total_comments = comment_data["total_comments"]
-                most_commented_img = comment_data["most_commented"]["Id"]
-                most_commented_cheer_count = comment_data["most_commented"]["CheerCount"]
-                most_commented_comment_count = comment_data["most_commented"]["CommentCount"]
-
+                comment_data = functions.id_to_comment_stats(account['account_id'])
 
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
-                    title = f"RecNet Statistics for {username}!"
+                    title = f"RecNet Statistics for {account['username']}!"
                 )
 
                 embed.add_field(name="Pictures shared", value=f"`{total_pictures}`\n", inline=False)
 
-                embed.add_field(name="CHEER STATISTICS", value=f"Total Cheers: <:CheerGeneral:803244099510861885> `{total_cheers}`\nUser's posts cheered: `{pictures_cheered}`\n[**Most cheered post**](https://rec.net/image/{most_cheered_img})\n<:CheerGeneral:803244099510861885> `{most_cheered_cheer_count}` 💬 `{most_cheered_comment_count}`",inline=True)
+                if pictures_cheered:
+                    embed.add_field(name="CHEER STATISTICS", value=f"Total Cheers: <:CheerGeneral:803244099510861885> `{cheer_data['total_cheers']}`\nUser's posts cheered: `{pictures_cheered}`\n[**Most cheered post**](https://rec.net/image/{cheer_data['most_cheered']['Id']})\n<:CheerGeneral:803244099510861885> `{cheer_data['most_cheered']['CheerCount']}` 💬 `{cheer_data['most_cheered']['CommentCount']}`",inline=True)
 
-                embed.add_field(name="COMMENT STATISTICS", value=f"Total Comments: 💬 `{total_comments}`\nUser's posts commented: `{pictures_commented}`\n[**Most commented post**](https://rec.net/image/{most_commented_img})\n<:CheerGeneral:803244099510861885> `{most_commented_cheer_count}` 💬 `{most_commented_comment_count}`\n\n",inline=True)
+                if pictures_commented:
+                    embed.add_field(name="COMMENT STATISTICS", value=f"Total Comments: 💬 `{comment_data['total_comments']}`\nUser's posts commented: `{pictures_commented}`\n[**Most commented post**](https://rec.net/image/{comment_data['most_commented']['Id']})\n<:CheerGeneral:803244099510861885> `{comment_data['most_commented']['CheerCount']}` 💬 `{comment_data['most_commented']['CommentCount']}`\n\n",inline=True)
 
-                embed.add_field(name="OTHER POSTS", value=f"[First post](https://rec.net/image/{oldest_id})\n[Latest post](https://rec.net/image/{latest_id})\n[First appearance](https://rec.net/image/{oldestfeed_id})\n[Latest appearance](https://rec.net/image/{latestfeed_id})", inline=False)
+                oldest_text = ""
+                oldest = functions.id_to_oldest_photo(account['account_id'])
+                print(oldest)
+                if oldest:
+                    oldest_text = f"[First post](https://rec.net/image/{oldest['Id']})\n"
 
-                embed.set_thumbnail(url=functions.id_to_pfp(account_id, True))
+                latest_text = "" 
+                latest = functions.id_to_latest_photo(account['account_id'])
+                print(latest)
+                if latest:
+                    latest_text = f"[Latest post](https://rec.net/image/{latest['Id']})\n"
 
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id, True))
+                oldestfeed_text = ""
+                oldestfeed = functions.id_to_oldest_feed(account['account_id'])
+                print(oldestfeed)
+                if oldestfeed:
+                    oldestfeed_text = f"[First appearance](https://rec.net/image/{oldestfeed['Id']})\n"
+
+                latestfeed_text = ""
+                latestfeed = functions.id_to_latest_feed(account['account_id'])
+                print(latestfeed)
+                if latestfeed:
+                    latestfeed_text = f"[Latest appearance](https://rec.net/image/{latestfeed['Id']})"
+
+                embed.add_field(name="OTHER POSTS", value=f"{oldest_text}{latest_text}{oldestfeed_text}{latestfeed_text}", inline=False)
+
+                embed.set_thumbnail(url=functions.id_to_pfp(account['account_id'], True))
+
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
 
@@ -882,7 +844,7 @@ class Utility(commands.Cog):
             
         await ctx.send(msg)
         
-        
+
 
 def setup(client):
     client.add_cog(Utility(client))
