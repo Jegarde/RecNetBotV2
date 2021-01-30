@@ -25,25 +25,18 @@ def beta_tester(ctx):
 
 def check_account_existence_and_return(username):
     check = requests.get(f"https://accounts.rec.net/account?username={username}").ok
-    print(check)
-    return_dict = {}
     if check:
         account_id = username_to_id(username)
         username = id_to_username(account_id)
-        return_dict["account_id"] = account_id
-        return_dict["username"] = username
-        print(return_dict)
-        return return_dict
+        return {"account_id": account_id, "username": username}
     else: # account doesn't exist
         print(f"Account not found! ({username})")
         return False
 
 def map_image_data(arg, dict):
+    global image_dict
     if image_dict[dict] < arg[dict]:
-        image_dict["Id"] = arg["Id"] 
-        image_dict["ImageName"] = arg["ImageName"] 
-        image_dict["CheerCount"] = arg["CheerCount"] 
-        image_dict["CommentCount"] = arg["CommentCount"] 
+        image_dict = {"Id": arg['Id'], "ImageName": arg['ImageName'], "CheerCount": arg['CheerCount'], "CommentCount": arg['CommentCount']}
     return arg[dict]
 
 def map_func(arg, dict):
@@ -205,21 +198,15 @@ def room_embed(room_name, is_json=False):
         room = get_room_json(room_name)
         
     if room:
-        r_name = room["Name"]
+        r_name = room['Name']
         
         # Roles
-        owner_username = id_to_username(room["CreatorAccountId"])
-        owner_pfp = id_to_pfp(room["CreatorAccountId"])
-        role_count = len(room["Roles"])
+        owner_username = id_to_username(room['CreatorAccountId'])
+        owner_pfp = id_to_pfp(room['CreatorAccountId'])
+        role_count = len(room['Roles'])
         
         # Placement
         placement = get_room_placement(r_name)
-
-        # Stats
-        cheers = room["Stats"]["CheerCount"]
-        favorites = room["Stats"]["FavoriteCount"]
-        visitor_count = room["Stats"]["VisitorCount"]
-        visit_count = room["Stats"]["VisitCount"]
 
         #visitor_cheer_ratio = round((cheers / visitor_count) * 100)
         #visit_visitor_ratio = round((visitor_count / visit_count) * 100)
@@ -231,9 +218,9 @@ def room_embed(room_name, is_json=False):
             subrooms += f"{subroom_name}, "
 
         # Other
-        image_name = room["ImageName"]
-        description = room["Description"]
-        r_date = room["CreatedAt"]
+        room_photo_count = len(get_photos_in_room(room['Name']))
+        if room_photo_count > 9999:
+            room_photo_count = "<10000"
 
         # Warning
         custom_warning = room["CustomWarning"]
@@ -276,10 +263,10 @@ def room_embed(room_name, is_json=False):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title = f"Statistics for ^{r_name}, by @{owner_username}",
-            description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{description}```{custom_warning}\n**Information**\n:calendar: `{r_date[:10]}` ⏰ `{r_date[11:16]} UTX` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitor_count}` *(VISITORS)*\n👥 `{visit_count}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*"
+            description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{room['Description']}```{custom_warning}\n**Information**\n:calendar: `{room['CreatedAt'][:10]}` ⏰ `{room['CreatedAt'][11:16]} UTX` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{room['Stats']['CheerCount']}` *(CHEERS)*\n⭐ `{room['Stats']['FavoriteCount']}` *(FAVORITES)*\n👤 `{room['Stats']['VisitorCount']}` *(VISITORS)*\n👥 `{room['Stats']['VisitCount']}` *(ROOM VISITS)*\n🔥 `#{placement}` *(HOT PLACEMENT)*\n💯 `{avg_score}` *(AVG SCORE)*\n🖼️ `{room_photo_count}` *(PICTURES SHARED IN ROOM)*"
         )
         print("oimg")
-        embed.set_image(url=f"https://img.rec.net/{image_name}?width=720")
+        embed.set_image(url=f"https://img.rec.net/{room['ImageName']}?width=720")
         
         print("author")
         embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}", icon_url=owner_pfp)
@@ -361,6 +348,16 @@ def find_random_event():
 def event_search(word):
     events = requests.get(f"https://api.rec.net/api/playerevents/v1/search?query={word}&take=10").json()
     return events
+
+def get_photos_in_room(room_name):
+    room = get_room_json(room_name)
+    if room:
+        return requests.get(f"https://api.rec.net/api/images/v4/room/{room['RoomId']}?take=10000").json()
+    else:
+        return None
+
+def id_to_rooms(account_id):
+    return requests.get(f"https://api.rec.net/roomserver/rooms/createdby/{account_id}").json()
 
 def get_bio(account_id):
     # Get someones bio with their account's id

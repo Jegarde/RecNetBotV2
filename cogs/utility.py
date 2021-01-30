@@ -634,13 +634,25 @@ class Utility(commands.Cog):
     async def roominfo(self, ctx, room_name):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
+        author = f"<@{ctx.author.id}>"
+
+        embed = discord.Embed(
+            description = f"<a:loading:794930501597003786> Getting statistics for the room `^{room_name}`...",
+            colour = discord.Colour.orange()
+        )
+        functions.embed_footer(ctx, embed)
+        loading = await ctx.send(embed=embed)
+
         print("Get room json")
         room_embed = functions.room_embed(room_name)
         
+        await loading.delete()
+        functions.embed_footer(ctx, room_embed)
         if not room_embed:
-            room_embed = functions.error_msg(ctx, f"Room `{room_name}` doesn't exist!")      
-        functions.embed_footer(ctx, room_embed) # get default footer from function
-        await ctx.send(embed=room_embed)
+            room_embed = functions.error_msg(ctx, f"Room `{room_name}` doesn't exist!") 
+            await ctx.send(embed=room_embed)
+        else:
+            await ctx.send(author, embed=room_embed)
 
     @roominfo.error
     async def clear_error(self, ctx, error):
@@ -929,6 +941,301 @@ class Utility(commands.Cog):
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.takenin <room> <user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-TAKENOF
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def takenof(self, ctx, of_user, by_user):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        of_user_account = functions.check_account_existence_and_return(of_user)
+        by_user_account = account = functions.check_account_existence_and_return(by_user)
+        if of_user_account and by_user_account: #if both exist
+            of_user_feed = functions.id_to_feed(of_user_account['account_id'])
+            if of_user_feed: # if user appears anywhere
+                msg = ""
+                save_msg = ""
+                photos_found = []
+                exceeded_limit = False
+                cheers = 0
+                comments = 0
+                for post in of_user_feed:
+                    if by_user_account['account_id'] == post['PlayerId']:
+                        photos_found.append(post['Id'])
+                        msg += f"<https://rec.net/image/{post['Id']}>\n"
+
+                        cheers += post['CheerCount']
+                        comments += post['CommentCount']
+
+                        save_msg += f"https://rec.net/image/{post['Id']}\n"
+                        save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                        save_msg += f"Cheers: {post['CheerCount']}\n"
+                        save_msg += f"Comments: {post['CommentCount']}\n"
+                        save_msg += "\n"
+
+                if photos_found:
+                    if len(msg) > 1500:
+                        exceeded_limit = True
+                        # message exceeded
+                        msg = "*Message exceeded Discord's message length limit.*\n\n"
+                        with open("temp_txt.txt","w") as text_file:         
+                            text_file.write(save_msg)
+                        file_name = f"Taken of ^{of_user_account['username']}, by {by_user_account['username']}.txt"
+
+                    # first pic
+                    msg += f"\n**First picture:** https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
+                    # latest picture
+                    msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
+                    # cheers
+                    msg += f"**Cheers in total:** `{cheers}`\n"
+                    # comments
+                    msg += f"**Comments in total:** `{comments}`\n\n"
+                    # results
+                    msg += f"*Results:* `{len(photos_found)}`"
+
+                    if exceeded_limit:
+                        print("SEND")
+                        with open("temp_txt.txt","rb") as text_file:
+                            await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                    else:
+                        print("what")
+                        await ctx.send(f"{author}\n{msg}")
+
+                else: # not found
+                    embed = functions.error_msg(ctx, f"Couldn't find any picture taken by `@{by_user_account['username']}`, that features `@{of_user_account['username']}`")
+                    await ctx.send(embed=embed)
+            else:
+                embed = functions.error_msg(ctx, f"User `@{of_user_account['username']}` isn't tagged in any post!")
+                await ctx.send(embed=embed)
+
+        else: # either doesn't exist
+            embed = functions.error_msg(ctx, f"Either `@{of_user}` or `@{by_user}` don't exist!")
+            await ctx.send(embed=embed)
+
+    @takenof.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in 2 users! Usage: `.takenof <of_user> <by_user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-TOGETHER
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def together(self, ctx, user1, user2):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        user1_account = functions.check_account_existence_and_return(user1)
+        user2_account = functions.check_account_existence_and_return(user2)
+        if user1_account and user2_account: #if both exist
+            user1_feed = functions.id_to_feed(user1_account['account_id'])
+            if user1_feed: # if user appears anywhere
+                msg = ""
+                save_msg = ""
+                photos_found = []
+                exceeded_limit = False
+                cheers = 0
+                comments = 0
+                for post in user1_feed:
+                    if user2_account['account_id'] in post['TaggedPlayerIds']:
+                        photos_found.append(post['Id'])
+                        msg += f"<https://rec.net/image/{post['Id']}>\n"
+
+                        cheers += post['CheerCount']
+                        comments += post['CommentCount']
+
+                        save_msg += f"https://rec.net/image/{post['Id']}\n"
+                        save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                        save_msg += f"Cheers: {post['CheerCount']}\n"
+                        save_msg += f"Comments: {post['CommentCount']}\n"
+                        save_msg += "\n"
+
+                if photos_found:
+                    if len(msg) > 1500:
+                        exceeded_limit = True
+                        # message exceeded
+                        msg = "*Message exceeded Discord's message length limit.*\n\n"
+                        with open("temp_txt.txt","w") as text_file:         
+                            text_file.write(save_msg)
+                        file_name = f"Together ^{user1_account['username']} and {user2_account['username']}.txt"
+
+                    # first pic
+                    msg += f"\n**First picture:** https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
+                    # latest picture
+                    msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
+                    # cheers
+                    msg += f"**Cheers in total:** `{cheers}`\n"
+                    # comments
+                    msg += f"**Comments in total:** `{comments}`\n\n"
+                    # results
+                    msg += f"*Results:* `{len(photos_found)}`"
+
+                    if exceeded_limit:
+                        print("SEND")
+                        with open("temp_txt.txt","rb") as text_file:
+                            await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                    else:
+                        print("what")
+                        await ctx.send(f"{author}\n{msg}")
+
+                else: # not found
+                    embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
+                await ctx.send(embed=embed)
+            else:
+                embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
+                await ctx.send(embed=embed)
+
+        else: # either doesn't exist
+            embed = functions.error_msg(ctx, f"Either `@{user1}` or `@{user2}` don't exist!")
+            await ctx.send(embed=embed)
+
+    @together.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in 2 users! Usage: `.together <user1> <user2>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-SORTBY
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def sortby(self, ctx, profile, mode):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+
+        if account:
+            photos = functions.id_to_photos(account['account_id'])
+            if photos:
+                mode = mode.lower()
+                reverse_sort = True
+                if mode == "cheers":
+                    mode = lambda i: i["CheerCount"]
+                    file_name = f"Sorted by CHEERS {account['username']}.txt"
+                    reverse_sort = True
+                elif mode == "comments":
+                    mode = lambda i: i["CommentCount"]
+                    file_name = f"Sorted by COMMENTS {account['username']}.txt"
+                    reverse_sort = True
+                elif mode == "oldest":
+                    mode = lambda i: i["CreatedAt"]
+                    file_name = f"Sorted by OLDEST {account['username']}.txt"
+                    reverse_sort = False
+                elif mode == "latest":
+                    mode = lambda i: i["CreatedAt"]
+                    file_name = f"Sorted by LATEST {account['username']}.txt"
+                    reverse_sort = True
+                else:
+                    mode = None
+                
+                if mode:
+                    save_msg = ""
+                    sorted_photos = sorted(photos, key = mode, reverse = reverse_sort)
+                    with open("temp_txt.txt","w") as text_file:
+                        for photo in sorted_photos:
+                            save_msg += f"https://rec.net/image/{photo['Id']}\n"
+                            save_msg += f"Date: {photo['CreatedAt'][:10]} {photo['CreatedAt'][11:16]} UTX\n"
+                            save_msg += f"Cheers: {photo['CheerCount']}\n"
+                            save_msg += f"Comments: {photo['CommentCount']}\n"
+                            save_msg += "\n"
+                            
+                        text_file.write(save_msg)
+                        
+                    with open("temp_txt.txt","rb") as text_file:
+                        await ctx.send(file=discord.File(text_file, file_name))
+                else:
+                    embed = functions.error_msg(ctx, "Invalid mode! Modes are `cheers`, `comments`, `latest`, `oldest`") 
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!") 
+        else: # account doesn't exist
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @sortby.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username and mode! \nUsage: `.sortby <user> <latest|oldest|cheers|comments>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+    
+    # CMD-SELFCHEERS
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def selfcheers(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        embed = functions.error_msg(ctx, "Disabled until Jegarde's lazy arse optimizes it.") 
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @selfcheers.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-ROOMSBY
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def roomsby(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+
+        if account:
+            account_rooms = functions.id_to_rooms(account['account_id'])
+            if account_rooms:
+                embed=discord.Embed(
+                    colour=discord.Colour.orange(),
+                    title = f"@{account['username']}'s (max) 10 latest rooms"
+                )
+                count = 0
+                for room in account_rooms:
+                    count += 1
+                    embed.add_field(name=f"{count}. ^{room['Name']}", value=f"**Description:** ```{room['Description']}```\n**Statistics**\n<:CheerGeneral:803244099510861885> `{room['Stats']['CheerCount']}` *(CHEERS)*\n⭐ `{room['Stats']['FavoriteCount']}` *(FAVORITES)*\n👤 `{room['Stats']['VisitorCount']}` *(VISITORS)*\n👥 `{room['Stats']['VisitCount']}` *(ROOM VISITS)*", inline=False)
+                    if count == 10:
+                        break
+                        
+                pfp = functions.id_to_pfp(account['account_id'], True)
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+                
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single room!") 
+        else: # account doesn't exist
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @roomsby.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
             
             await ctx.send(embed=embed)
         else:
