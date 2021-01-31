@@ -219,7 +219,15 @@ class Random(commands.Cog):
         img_string = ""
         for x in range(amount):
             random_img = functions.find_random_img()
-            img_string += f"https://rec.net/image/{random_img['Id']}\n**@{functions.id_to_username(random_img['PlayerId'])}**\n<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n\n"
+
+            tagged = ""
+            if random_img['TaggedPlayerIds']:
+                tagged = "👥 "
+                for account_id in random_img['TaggedPlayerIds']:
+                    tagged_username = functions.id_to_username(account_id)
+                    tagged += f"`@{tagged_username}` "
+
+            img_string += f"https://rec.net/image/{random_img['Id']}\n**{functions.id_to_display_name(random_img['PlayerId'])}** @{functions.id_to_username(random_img['PlayerId'])}\n<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n{tagged}\n\n"
 
         await loading.delete()
         await ctx.send(f"{author}\n{img_string}")

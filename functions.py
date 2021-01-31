@@ -18,10 +18,11 @@ def is_it_me(ctx):
     return ctx.author.id == 293008770957836299 # Jegarde's Discord Id
 
 def beta_tester(ctx):
-    user_roles = ctx.author.roles
-    role = discord.utils.find(lambda r: r.name == 'V2 Tester', ctx.guild.roles)
-    is_beta_tester = role in user_roles
-    return is_beta_tester
+    #user_roles = ctx.author.roles
+    #role = discord.utils.find(lambda r: r.name == 'V2 Tester', ctx.guild.roles)
+    #is_beta_tester = role in user_roles
+    #return is_beta_tester
+    return True
 
 def check_account_existence_and_return(username):
     check = requests.get(f"https://accounts.rec.net/account?username={username}").ok
