@@ -25,7 +25,7 @@ class Utility(commands.Cog):
             embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
         else:
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -637,7 +637,7 @@ class Utility(commands.Cog):
         author = f"<@{ctx.author.id}>"
 
         embed = discord.Embed(
-            description = f"<a:loading:794930501597003786> Getting statistics for the room `^{room_name}`...",
+            description = f"<a:spinning:804022054822346823>  Getting statistics for the room `^{room_name}`...",
             colour = discord.Colour.orange()
         )
         functions.embed_footer(ctx, embed)
@@ -649,7 +649,7 @@ class Utility(commands.Cog):
         await loading.delete()
         functions.embed_footer(ctx, room_embed)
         if not room_embed:
-            room_embed = functions.error_msg(ctx, f"Room `{room_name}` doesn't exist!") 
+            room_embed = functions.error_msg(ctx, f"Room `^{room_name}` doesn't exist!") 
             await ctx.send(embed=room_embed)
         else:
             await ctx.send(author, embed=room_embed)
@@ -850,10 +850,10 @@ class Utility(commands.Cog):
         for post in frontpage:
             tagged = ""
             if post['TaggedPlayerIds']:
-                tagged = "*Users tagged:* "
+                tagged = "👥 "
                 for account_id in post['TaggedPlayerIds']:
                     tagged += f"`@{functions.id_to_username(account_id)}` "
-            else: tagged = "*Users tagged:* None!"
+            else: tagged = "👥 None!"
 
 
             msg += f"https://rec.net/image/{post['Id']}\n**{functions.id_to_display_name(post['PlayerId'])}** @{functions.id_to_username(post['PlayerId'])}\n🚪 `^{functions.id_to_room_name(post['RoomId'])}`\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}`\n💬 `{post['CommentCount']}`\n{tagged}\n\n"
@@ -1076,9 +1076,9 @@ class Utility(commands.Cog):
                     # latest picture
                     msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
                     # cheers
-                    msg += f"**Cheers in total:** `{cheers}`\n"
+                    msg += f"<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS IN TOTAL)*\n"
                     # comments
-                    msg += f"**Comments in total:** `{comments}`\n\n"
+                    msg += f"💬 `{comments}` *(COMMENTS IN TOTAL)*\n\n"
                     # results
                     msg += f"*Results:* `{len(photos_found)}`"
 
@@ -1240,6 +1240,73 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
         else:
             pass
+
+
+    # CMD-BOOKMARKED
+    @commands.command(aliases=["bookmark", "favorites", "favorite"])
+    @commands.check(functions.beta_tester)
+    async def bookmarked(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        account = functions.check_account_existence_and_return(profile)
+
+        if account:  
+            embed=discord.Embed(
+                colour=discord.Colour.orange(),
+                description = f"<a:spinning:804022054822346823> Looking for `@{account['username']}`'s bookmarked posts..."
+            )
+            functions.embed_footer(ctx, embed)
+            loading = await ctx.send(embed=embed)
+
+            embed=discord.Embed(
+                colour=discord.Colour.orange(),
+                title = f"@{account['username']}'s bookmarked photos 📌",
+            )
+
+            photos = functions.id_to_photos(account['account_id'])
+            print(f"photos: {bool(photos)}")
+            found_bookmarked = False
+            if photos:
+                comment_count = len(functions.id_to_all_comments(account['account_id']))
+                if comment_count > 0:
+                    count = 0
+                    for photo in photos:
+                        if photo['CommentCount'] > 0:
+                            print(f"comments over 0 - {photo['Id']}")
+                            comments = functions.get_photo_comments(photo['Id'])
+                            for comment in comments:
+                                if comment['PlayerId'] == account['account_id'] and "bookmark" in comment['Comment'].lower():
+                                    print("BOOKMARKED!!!")
+                                    found_bookmarked = True
+                                    count += 1
+                                    if count > 25:
+                                        break
+                                    embed.add_field(name=f"{count}. \"{comment['Comment'].replace('bookmark', '')}\"", value=f"https://rec.net/image/{comment['SavedImageId']}", inline=False)
+            
+            pfp = functions.id_to_pfp(account['account_id'], True)
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+                
+        else: # account doesn't exist
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await loading.delete()
+        if not found_bookmarked:
+            embed.add_field(name="None!", value="You can bookmark your own posts by commenting\n`bookmark <text>`\non a post of yours! The text you type in is there just to remind you of what the bookmarked image is, however, it's not necessary.", inline=False)
+        await ctx.send(f"{author}\n**Bookmarked:** `{count}/25`", embed=embed)
+
+    @bookmarked.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+    
 
 
 def setup(client):

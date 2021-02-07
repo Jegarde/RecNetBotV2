@@ -28,7 +28,7 @@ class Search(commands.Cog):
                         if not description:
                             description = "None"
 
-                        event_string += f"**[\"{event['Name']}\"](https://rec.net/event/{event['PlayerEventId']})** | *[{functions.id_to_display_name(event['CreatorPlayerId'])}](https://rec.net/user/{functions.id_to_username(event['CreatorPlayerId'])})*```{description}```👥 Attending: `{event['AttendeeCount']}`\n\n"
+                        event_string += f"**[\"{event['Name']}\"](https://rec.net/event/{event['PlayerEventId']})** | [`{functions.id_to_display_name(event['CreatorPlayerId'])}`](https://rec.net/user/{functions.id_to_username(event['CreatorPlayerId'])})*```{description}```👥 Attending: `{event['AttendeeCount']}`\n\n"
 
             if not event_string:
                 event_string = "None! <:dunno:796100756653604897>"
@@ -39,7 +39,6 @@ class Search(commands.Cog):
                 description = event_string
             )
 
-            print(str(event_string))
             functions.embed_footer(ctx, embed) # get default footer from function
             await ctx.send(embed=embed)
 

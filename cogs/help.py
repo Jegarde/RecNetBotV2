@@ -14,7 +14,7 @@ class Help(commands.Cog):
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
                 title = "🛠️ Utility commands",
-                description = "`stats`, `roominfo` `bio`, `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`, `latest`, `latestfeed`, `oldest`, `oldestfeed`, `cheers`, `comments`, `pictures`, `apistatus`, `shortcuts`, `placement`, `featured`, `frontpage`, `takenin`, `takenof`, `together`, `sortby`, `roomsby`"
+                description = "`stats`, `roominfo` `bio`, `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`, `latest`, `latestfeed`, `oldest`, `oldestfeed`, `cheers`, `comments`, `pictures`, `apistatus`, `shortcuts`, `placement`, `featured`, `frontpage`, `takenin`, `takenof`, `together`, `sortby`, `roomsby`, `bookmarked`"
             )
         elif menu == "other":
             embed = discord.Embed(

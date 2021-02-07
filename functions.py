@@ -2,7 +2,7 @@ import requests
 import discord
 import arrow
 import random
-import asyncio
+import json
 
 img_quality = 720
 image_dict = {"Id": None, "ImageName": None, "CheerCount": 0, "CommentCount": 0}
@@ -10,6 +10,14 @@ image_dict = {"Id": None, "ImageName": None, "CheerCount": 0, "CommentCount": 0}
 # Global functions
 def log(server, user, command):
     print(f'\n{server} > {user} > {command}')
+
+def save(_json_file, file):
+    with open(_json_file,"w") as json_file:         
+        json_file.write(file)
+
+def load(json_file):
+    with open(json_file) as file:
+        return json.load(file)
 
 def get_date():
     return arrow.now() # current date
@@ -31,8 +39,14 @@ def check_account_existence_and_return(username):
         username = id_to_username(account_id)
         return {"account_id": account_id, "username": username}
     else: # account doesn't exist
-        print(f"Account not found! ({username})")
-        return False
+        try:
+            check = requests.get(f"https://accounts.rec.net/account/search?name={username}").json()[0]
+            account_id = check['accountId']
+            username = check['username']
+            return {"account_id": account_id, "username": username}
+        except:
+            print(f"Account not found! ({username})")
+            return False
 
 def map_image_data(arg, dict):
     global image_dict
@@ -75,7 +89,7 @@ def get_room_placement(room):
     placement = 0
     for x in hot_rooms:
         if x["Name"].casefold() == room.casefold():
-            return placement
+            return placement+1
         placement += 1
     return "<1000"
 
@@ -136,6 +150,9 @@ def id_to_latest_photo(account_id):
         return photos[0]
     else:
         return None
+
+def get_photo_comments(image_id):
+    return requests.get(f"https://api.rec.net/api/images/v1/{image_id}/comments").json()
 
 def id_to_latest_feed(account_id):
     feed = requests.get(f"https://api.rec.net/api/images/v3/feed/player/{account_id}?take=1").json()
@@ -279,7 +296,7 @@ def id_to_room_name(room_id):
     try:
         room_name = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}").json()['Name']
     except:
-        room_name = "DormRoom"
+        room_name = None
     return room_name
 
 def get_featured_rooms():
@@ -350,10 +367,10 @@ def event_search(word):
     events = requests.get(f"https://api.rec.net/api/playerevents/v1/search?query={word}&take=10").json()
     return events
 
-def get_photos_in_room(room_name):
+def get_photos_in_room(room_name, amount=10000, return_photos=False):
     room = get_room_json(room_name)
     if room:
-        return requests.get(f"https://api.rec.net/api/images/v4/room/{room['RoomId']}?take=10000").json()
+        return requests.get(f"https://api.rec.net/api/images/v4/room/{room['RoomId']}?take={amount}").json()
     else:
         return None
 

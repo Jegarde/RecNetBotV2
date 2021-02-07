@@ -47,7 +47,7 @@ class Random(commands.Cog):
             username = functions.id_to_username(account_id)
             display_name = functions.id_to_display_name(account_id)
             bio = x["bio"]
-            embed.add_field(name=f"👤 `{username}` ({display_name})", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
+            embed.add_field(name=f"👤 {username} @{display_name}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await loading.delete()
@@ -86,7 +86,7 @@ class Random(commands.Cog):
             username = functions.id_to_username(account_id)
             display_name = functions.id_to_display_name(account_id)
             bio = bio["bio"]
-            embed.add_field(name=f"👤 `{display_name}` @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
+            embed.add_field(name=f"👤 **{display_name}** @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(author, embed=embed)
@@ -116,7 +116,7 @@ class Random(commands.Cog):
                 username = functions.id_to_username(data[random_bio]["account_id"])
                 display_name = functions.id_to_display_name(data[random_bio]["account_id"])
                 bio = data[random_bio]["bio"]
-                embed.add_field(name=f"👤 `{display_name}` @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
+                embed.add_field(name=f"👤 **{display_name}** @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(author, embed=embed)
@@ -306,17 +306,22 @@ class Random(commands.Cog):
                         tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
                 
                 room_name = functions.id_to_room_name(random_feed['RoomId'])
+                if room_name:
+                    room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
+                else:
+                    room_string = "\n"
+                    
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
                     title=f"Random image of @{username}, taken by @{functions.id_to_username(random_feed['PlayerId'])}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_feed['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_feed['CheerCount']}` 💬 `{random_feed['CommentCount']}`\n📆 `{random_feed['CreatedAt'][:10]}` ⏰ `{random_feed['CreatedAt'][11:16]} UTX`\n{tagged}"
+                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_feed['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{random_feed['CheerCount']}` 💬 `{random_feed['CommentCount']}`\n📆 `{random_feed['CreatedAt'][:10]}` ⏰ `{random_feed['CreatedAt'][11:16]} UTX`\n{tagged}"
                 )
                 embed.set_image(url=f"https://img.rec.net/{random_feed['ImageName']}")
                 embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
             else:
-                embed = functions.error_msg(ctx, f"User `{profile}` doesn't appear in any post!")
+                embed = functions.error_msg(ctx, f"User `@{profile}` doesn't appear in any post!")
         else:
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -352,17 +357,22 @@ class Random(commands.Cog):
                         tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
                 
                 room_name = functions.id_to_room_name(random_photos['RoomId'])
+                if room_name:
+                    room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
+                else:
+                    room_string = "\n"
+
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
                     title=f"Random image taken by @{username}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
+                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
                 )
                 embed.set_image(url=f"https://img.rec.net/{random_photos['ImageName']}")
                 embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
             else:
-                embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared a single post!")
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single post!")
         else:
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
