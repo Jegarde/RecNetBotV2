@@ -225,12 +225,31 @@ class Random(commands.Cog):
                 tagged = "👥 "
                 for account_id in random_img['TaggedPlayerIds']:
                     tagged_username = functions.id_to_username(account_id)
-                    tagged += f"`@{tagged_username}` "
+                    tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
 
-            img_string += f"https://rec.net/image/{random_img['Id']}\n**{functions.id_to_display_name(random_img['PlayerId'])}** @{functions.id_to_username(random_img['PlayerId'])}\n<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n{tagged}\n\n"
+            if amount == 1:
+                username = functions.id_to_username(random_img['PlayerId'])
+                room_name = functions.id_to_room_name(random_img['RoomId'])
+                if room_name:
+                    room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
+                else:
+                    room_string = "\n"
+                    
+                embed=discord.Embed(
+                    colour=discord.Colour.orange(),
+                    title=f"Random image of @{username}, taken by @{functions.id_to_username(random_img['PlayerId'])}",
+                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_img['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n📆 `{random_img['CreatedAt'][:10]}` ⏰ `{random_img['CreatedAt'][11:16]} UTX`\n{tagged}"
+                )
+                embed.set_image(url=f"https://img.rec.net/{random_img['ImageName']}")
+                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(random_img['PlayerId']))
+            else:
+                img_string += f"https://rec.net/image/{random_img['Id']}\n**{functions.id_to_display_name(random_img['PlayerId'])}** @{functions.id_to_username(random_img['PlayerId'])}\n<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n{tagged}\n\n"
 
         await loading.delete()
-        await ctx.send(f"{author}\n{img_string}")
+        if amount == 1:
+            await ctx.send(f"{author}\n",embed=embed)   
+        else:
+            await ctx.send(f"{author}\n{img_string}")
 
     # CMD-RANDOMROOM
     @commands.command(aliases=["rroom"])
@@ -431,11 +450,72 @@ class Random(commands.Cog):
     @randomimgbyin.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username and room!\nUsage: `.randomimgbyin <user> <room>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-RANDOMIMGOFIN
+    @commands.command(aliases=["rimgofin", "rioi"])
+    @commands.check(functions.beta_tester)
+    async def randomimgofin(self, ctx, profile, room_name):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            room = functions.get_room_json(room_name)
+            if room:
+                photos = functions.id_to_feed(account['account_id'])
+                
+                if photos:
+                    found_photos = []
+                    # find photos in room
+                    for photo in photos:
+                        if photo['RoomId'] == room['RoomId']:
+                            found_photos.append(photo)
+
+                    if found_photos:
+                        random_photos = found_photos[random.randint(0, len(found_photos)-1)]
+                        username = functions.id_to_username(account['account_id'])
+                        tagged = ""
+                        if random_photos['TaggedPlayerIds']:
+                            tagged = "👥 "
+                            for account_id in random_photos['TaggedPlayerIds']:
+                                tagged_username = functions.id_to_username(account_id)
+                                tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                        
+                        room_name = functions.id_to_room_name(random_photos['RoomId'])
+                        embed=discord.Embed(
+                            colour=discord.Colour.orange(),
+                            title=f"Random image taken of @{username} in ^{room_name}",
+                            description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
+                        )
+                        embed.set_image(url=f"https://img.rec.net/{random_photos['ImageName']}")
+                        embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+                    else:
+                        embed = functions.error_msg(ctx, f"User `@{account['username']}` doesn't appear in `^{room['Name']}`!")
+                else:
+                    embed = functions.error_msg(ctx, f"User `@{profile}` doesn't appear in `^{room_name}` at all!")
+            else:
+                embed = functions.error_msg(ctx, f"Room `^{room_name}` doesn't exist!")
+        else:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+
+    @randomimgofin.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an username and room!\nUsage: `.randomimgofin <user> <room>`")
             
             await ctx.send(embed=embed)
         else:
             pass
+
 
 
     # CMD-RANDOMIMGIN

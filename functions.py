@@ -57,6 +57,20 @@ def map_image_data(arg, dict):
 def map_func(arg, dict):
     return arg[dict]
 
+def self_cheers(photos, account_id):
+    self_cheers = 0
+    for image in photos:
+        try:
+            if image['CheerCount'] > 0:
+                image_cheer_ids = requests.get(f"https://api.rec.net/api/images/v1/{image['Id']}/cheers").json()
+                if account_id in image_cheer_ids:
+                    print("self cheered!!!") #REMOVETHIS
+                    self_cheers += 1
+        except:
+            continue
+    return self_cheers
+
+
 def get_room_json(room, is_id=False):
     try:
         if not is_id:
@@ -151,6 +165,16 @@ def id_to_latest_photo(account_id):
     else:
         return None
 
+def id_to_photos_in(account_id, room):
+    photos = id_to_photos(account_id)
+    room = get_room_json(room)
+    photos_found = []
+    if room and photos:
+        for image in photos:
+            if image['RoomId'] == room['RoomId']:
+                photos_found.append(image)
+    return photos_found
+
 def get_photo_comments(image_id):
     return requests.get(f"https://api.rec.net/api/images/v1/{image_id}/comments").json()
 
@@ -174,6 +198,15 @@ def id_to_oldest_feed(account_id):
         return feed[len(feed)-1]
     else:
         return None
+
+def together(account_id, account_id2):
+    user1_feed = id_to_feed(account_id)
+    found_images = []
+    if user1_feed:
+        for image in user1_feed:
+            if account_id2 in image['TaggedPlayerIds']:
+                found_images.append(image)
+    return found_images
 
 def id_to_photos(account_id):
     return requests.get(f"https://api.rec.net/api/images/v4/player/{account_id}?take=100000").json()
@@ -238,7 +271,7 @@ def room_embed(room_name, is_json=False):
         # Other
         room_photo_count = len(get_photos_in_room(room['Name']))
         if room_photo_count > 9999:
-            room_photo_count = "<10000"
+            room_photo_count = ">10000"
 
         # Warning
         custom_warning = room["CustomWarning"]
@@ -365,6 +398,10 @@ def find_random_event():
 
 def event_search(word):
     events = requests.get(f"https://api.rec.net/api/playerevents/v1/search?query={word}&take=10").json()
+    return events
+
+def latest_events():
+    events = requests.get("https://api.rec.net/api/playerevents/v1?take=5").json()
     return events
 
 def get_photos_in_room(room_name, amount=10000, return_photos=False):

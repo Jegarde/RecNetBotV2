@@ -21,6 +21,7 @@ class Other(commands.Cog):
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
 
+
     # CMD-INVITE
     @commands.command()
     @commands.check(functions.beta_tester)
@@ -35,7 +36,6 @@ class Other(commands.Cog):
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
-
 
 def setup(client):
     client.add_cog(Other(client))

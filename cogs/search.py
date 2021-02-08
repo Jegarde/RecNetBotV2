@@ -20,7 +20,12 @@ class Search(commands.Cog):
         else:
             events_found = functions.event_search(keyword)
 
-            event_string = ""
+            embed=discord.Embed(
+                colour=discord.Colour.orange(),
+                title = f"Events found with keyword \"{keyword}\"",
+            )
+
+            events = 0
             if events_found:
                 for event in events_found:
                     if (functions.contains_word(event['Name'], keyword) or functions.contains_word(event['Description'], keyword)):
@@ -28,16 +33,13 @@ class Search(commands.Cog):
                         if not description:
                             description = "None"
 
-                        event_string += f"**[\"{event['Name']}\"](https://rec.net/event/{event['PlayerEventId']})** | [`{functions.id_to_display_name(event['CreatorPlayerId'])}`](https://rec.net/user/{functions.id_to_username(event['CreatorPlayerId'])})*```{description}```👥 Attending: `{event['AttendeeCount']}`\n\n"
+                        events += 1
 
-            if not event_string:
-                event_string = "None! <:dunno:796100756653604897>"
+                        embed.add_field(name=event['Name'], value=f"**[\"{event['Name']}\"](https://rec.net/event/{event['PlayerEventId']})** | [`{functions.id_to_display_name(event['CreatorPlayerId'])}`](https://rec.net/user/{functions.id_to_username(event['CreatorPlayerId'])})```{description}```👥 Attending: `{event['AttendeeCount']}`\n\n~~~~~~~~~~", inline=False)
+
+            if not events:
+                embed.add_field(name="None!", value=f"Couldn't find any event that contains the word `{keyword}`", inline=False)
                 
-            embed=discord.Embed(
-                colour=discord.Colour.orange(),
-                title = f"Events found with keyword \"{keyword}\"",
-                description = event_string
-            )
 
             functions.embed_footer(ctx, embed) # get default footer from function
             await ctx.send(embed=embed)

@@ -14,8 +14,14 @@ class Help(commands.Cog):
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
                 title = "🛠️ Utility commands",
-                description = "`stats`, `roominfo` `bio`, `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`, `latest`, `latestfeed`, `oldest`, `oldestfeed`, `cheers`, `comments`, `pictures`, `apistatus`, `shortcuts`, `placement`, `featured`, `frontpage`, `takenin`, `takenof`, `together`, `sortby`, `roomsby`, `bookmarked`"
             )
+            embed.add_field(name="👤 Accounts", value="`stats`, `bio`, `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
+
+            embed.add_field(name="🖼️ Images", value="`latest`, `latestin`, `latestwith` `latestfeed`, `oldest`, `oldestin`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`",inline=False)
+
+            embed.add_field(name="🚪 Rooms", value="`roominfo`, `roomsby`, `featured`, `placement`",inline=False)
+
+            embed.add_field(name="<:RRQuestion:803587583187746847> Other", value="`apistatus`, `latestevents`, `shortcuts`", inline=False)
         elif menu == "other":
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
@@ -25,15 +31,31 @@ class Help(commands.Cog):
         elif menu == "random":
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
-                title = "<:RRQuestion:803587583187746847> \"Random\" commands",
-                description = "`randombio`, `cringebio`, `fastrandombio`, `randomaccount`, `randompfp`, `randomimg`, `randomroom`, `randomevent`, `randomloadscreen`, `randomimgof`, `randomimgby`, `randomimgin`"
+                title = "<:RRQuestion:803587583187746847> \"Random\" commands",  
             )
+
+            embed.add_field(name="🖼️ Images", value="`randomimg`, `randomimgof`, `randomimgofin`,`randomimgby`, `randomimgbyin`, `randomimgin`, `randompfp`",inline=False)
+
+            embed.add_field(name="📜 Bios", value="`randombio`, `cringebio`, `fastrandombio`",inline=False)
+
+            embed.add_field(name="<:RRQuestion:803587583187746847> Other", value="`randomaccount`, `randomroom`, `randomevent`, `randomloadscreen`",inline=False)
+
         elif menu == "search":
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
                 title = "🔎 Search commands",
-                description = "`eventsearch`"
             )
+            embed.add_field(name="📆 Events", value="`eventsearch`",inline=False)
+        elif menu == "api":
+            embed = discord.Embed(
+                colour= discord.Colour.orange(),
+                title = "📲 API commands",
+            )
+            embed.add_field(name="👤 Accounts", value="`accountdata`, `accountid`",inline=False)
+
+            embed.add_field(name="🖼️ Images", value="`imageid`",inline=False)
+
+            embed.add_field(name="These commands are experimental!", value="They will probably all be combined into one command eventually. As of now, they're used to do simple API calls.")
         else:
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
@@ -43,6 +65,7 @@ class Help(commands.Cog):
             embed.add_field(name="🛠️ Utility", value="`.help utility`")
             embed.add_field(name="<:RRQuestion:803587583187746847> \"Random\"", value="`.help random`")
             embed.add_field(name="🔎 Search", value="`.help search`")
+            embed.add_field(name="📲 API", value="`.help api`")
             embed.add_field(name="📖 Other", value="`.help other`")
         
        

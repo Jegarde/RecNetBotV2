@@ -1,11 +1,14 @@
 import functions
 import requests
 import discord
+import multiprocessing
+
 from discord.ext import commands
 
 class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
+
     # UTILITY COMMANDS
 
     # CMD-BIO
@@ -452,7 +455,7 @@ class Utility(commands.Cog):
             embed.set_image(url=f"https://img.rec.net/{cheer_data['most_cheered']['ImageName']}?width=720")
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -491,7 +494,7 @@ class Utility(commands.Cog):
             embed.set_image(url=f"https://img.rec.net/{comment_data['most_commented']['ImageName']}?width=720")
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -530,7 +533,7 @@ class Utility(commands.Cog):
             )
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -613,7 +616,7 @@ class Utility(commands.Cog):
 
                 embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -1048,19 +1051,19 @@ class Utility(commands.Cog):
                 exceeded_limit = False
                 cheers = 0
                 comments = 0
-                for post in user1_feed:
-                    if user2_account['account_id'] in post['TaggedPlayerIds']:
-                        photos_found.append(post['Id'])
-                        msg += f"<https://rec.net/image/{post['Id']}>\n"
+                together_images = functions.together(user1_account['account_id'], user2_account['account_id'])
+                for post in together_images:
+                    photos_found.append(post['Id'])
+                    msg += f"<https://rec.net/image/{post['Id']}>\n"
 
-                        cheers += post['CheerCount']
-                        comments += post['CommentCount']
+                    cheers += post['CheerCount']
+                    comments += post['CommentCount']
 
-                        save_msg += f"https://rec.net/image/{post['Id']}\n"
-                        save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
-                        save_msg += f"Cheers: {post['CheerCount']}\n"
-                        save_msg += f"Comments: {post['CommentCount']}\n"
-                        save_msg += "\n"
+                    save_msg += f"https://rec.net/image/{post['Id']}\n"
+                    save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                    save_msg += f"Cheers: {post['CheerCount']}\n"
+                    save_msg += f"Comments: {post['CommentCount']}\n"
+                    save_msg += "\n"
 
                 if photos_found:
                     if len(msg) > 1500:
@@ -1177,27 +1180,6 @@ class Utility(commands.Cog):
         else:
             pass
 
-    
-    # CMD-SELFCHEERS
-    @commands.command()
-    @commands.check(functions.beta_tester)
-    async def selfcheers(self, ctx, profile):
-        functions.log(ctx.guild.name, ctx.author, ctx.command)
-
-        embed = functions.error_msg(ctx, "Disabled until Jegarde's lazy arse optimizes it.") 
-
-        functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(embed=embed)
-
-    @selfcheers.error
-    async def clear_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in an username!")
-            
-            await ctx.send(embed=embed)
-        else:
-            pass
-
 
     # CMD-ROOMSBY
     @commands.command()
@@ -1306,7 +1288,340 @@ class Utility(commands.Cog):
         else:
             pass
 
+
+    #CMD-LATESTEVENTS
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def latestevents(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        events_found = functions.latest_events()
+        event_string = ""
+
+        embed=discord.Embed(
+            colour=discord.Colour.orange(),
+            title = f"Latest events",
+            description = event_string
+        )
+
+        if events_found:
+            for event in events_found:
+                event_string = ""
+                description = event['Description']
+                if not description:
+                    description = "None"
+
+                event_string += f"**[\"{event['Name']}\"](https://rec.net/event/{event['PlayerEventId']})** | [`{functions.id_to_display_name(event['CreatorPlayerId'])}`](https://rec.net/user/{functions.id_to_username(event['CreatorPlayerId'])})```{description}```👥 Attending: `{event['AttendeeCount']}`\n\n"
+                
+                embed.add_field(name=event['Name'], value=event_string, inline=False)
+
+        if not event_string:
+            event_string = "None! <:dunno:796100756653604897>"
+            
+        
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+
+    # CMD-SELFCHEERS
+    @commands.command(aliases=["selfc"])
+    @commands.check(functions.beta_tester)
+    async def selfcheers(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        print("check account") #REMOVETHIS
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            print("check photos") #REMOVETHIS
+            photos = functions.id_to_photos(account['account_id'])
+            if photos:
+                print("check cheers") #REMOVETHIS
+                cheers_stats = functions.id_to_cheer_stats(account['account_id'])
+                if cheers_stats['total_cheers'] > 1:
+                    print("embed") #REMOVETHIS
+                    embed = discord.Embed(
+                        title=f"<a:spinning:804022054822346823> Getting @{account['username']}'s self cheered posts...",
+                        description="This might take a while. *It hasn't been properly optimized yet*",
+                        colour=discord.Colour.orange()
+                    )
+
+                    print("send embed loading") #REMOVETHIS
+                    functions.embed_footer(ctx, embed)
+                    loading = await ctx.send(embed=embed)
+
+
+                    #experimenting with multiprocessing
+                    self_cheers = functions.self_cheers(photos, account['account_id'])
+
+                    
+                    if self_cheers:
+                        percentage = round(self_cheers / len(photos) * 100, 2) 
+                        result_string = f"Self cheered: `{self_cheers}`\n*That's `{percentage}%` of their posts!*"
+
+                        embed = discord.Embed(
+                            title=f"@{account['username']}'s self cheered posts!",
+                            description=result_string,
+                            colour=discord.Colour.orange()
+                        )
+                    else:
+                        result_string = f"No self cheers, `@{account['username']}` is pure! <:CheerSport:803244185447956490>"
+                        embed = functions.error_msg(ctx, result_string)
+                else:
+                    print("no images") #REMOVETHIS
+                    result_string = f"None, `@{account['username']}` is pure! <:CheerSport:803244185447956490>"
+                    embed = functions.error_msg(ctx, result_string)
+                
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!")
+            
+        else: # account doesn't exist
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        try:
+            await loading.delete()
+            pfp = functions.id_to_pfp(account['account_id'], True)
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+        except:
+            pass
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(author, embed=embed)
+
+    @selfcheers.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-LATESTIN
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def latestin(self, ctx, room, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            total_photos = len(functions.id_to_photos(account['account_id']))
+            if total_photos:
+                print("get photos in") # REMOVEME
+                photosin = functions.id_to_photos_in(account['account_id'], room)
+                if photosin:
+                    print("latestin") # REMOVEME
+                    latestin = photosin[0]
+                    print("tagged") # REMOVEME
+                    tagged = ""
+                    if latestin['TaggedPlayerIds']:
+                        tagged = "👥 "
+                        for account_id in latestin['TaggedPlayerIds']:
+                            username = functions.id_to_username(account_id)
+                            tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+
+                    print("roomname") # REMOVEME
+                    room_name = functions.id_to_room_name(latestin['RoomId'])
+                    print("embed") # REMOVEME
+                    embed=discord.Embed(
+                        colour=discord.Colour.orange(),
+                        description=f"🔗 **[{account['username']}'s latest picture in ^{room_name}](https://rec.net/image/{latestin['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{latestin['CheerCount']}` 💬 `{latestin['CommentCount']}`\n📆 `{latestin['CreatedAt'][:10]}` ⏰ `{latestin['CreatedAt'][11:16]} UTX`\n{tagged}"
+                    )
+                    print("author shit") # REMOVEME
+                    embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                    embed.set_image(url=f"http://img.rec.net/{latestin['ImageName']}")
+                    print("done!") # REMOVEME
+
+                else:
+                    embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture in `^{room}`!")
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!")
+        else:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        print("send") # REMOVEME
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @latestin.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.latestin <room> <user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-OLDESTIN
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def oldestin(self, ctx, room, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            total_photos = len(functions.id_to_photos(account['account_id']))
+            if total_photos:
+                print("get photos in") # REMOVEME
+                photosin = functions.id_to_photos_in(account['account_id'], room)
+                if photosin:
+                    print("oldestin") # REMOVEME
+                    oldestin = photosin[len(photosin)-1]
+                    print("tagged") # REMOVEME
+                    tagged = ""
+                    if oldestin['TaggedPlayerIds']:
+                        tagged = "👥 "
+                        for account_id in oldestin['TaggedPlayerIds']:
+                            username = functions.id_to_username(account_id)
+                            tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+
+                    print("roomname") # REMOVEME
+                    room_name = functions.id_to_room_name(oldestin['RoomId'])
+                    print("embed") # REMOVEME
+                    embed=discord.Embed(
+                        colour=discord.Colour.orange(),
+                        description=f"🔗 **[{account['username']}'s oldest picture in ^{room_name}](https://rec.net/image/{oldestin['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{oldestin['CheerCount']}` 💬 `{oldestin['CommentCount']}`\n📆 `{oldestin['CreatedAt'][:10]}` ⏰ `{oldestin['CreatedAt'][11:16]} UTX`\n{tagged}"
+                    )
+                    print("author shit") # REMOVEME
+                    embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                    embed.set_image(url=f"http://img.rec.net/{oldestin['ImageName']}")
+                    print("done!") # REMOVEME
+
+                else:
+                    embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture in `^{room}`!")
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!")
+        else:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        print("send") # REMOVEME
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @oldestin.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.oldestin <room> <user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
     
+    # CMD-LATESTWITH
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def latestwith(self, ctx, user1, user2):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        
+        user1_account = functions.check_account_existence_and_return(user1)
+        user2_account = functions.check_account_existence_and_return(user2)
+        if user1_account and user2_account:
+            user1_feed = len(functions.id_to_feed(user1_account['account_id']))
+            if user1_feed:
+                print("get photos with") # REMOVEME
+                photoswith = functions.together(user1_account['account_id'], user2_account['account_id'])
+                if photoswith:
+                    print("latestwith") # REMOVEME
+                    latestwith = photoswith[0]
+                    print("tagged") # REMOVEME
+                    tagged = ""
+                    if latestwith['TaggedPlayerIds']:
+                        tagged = "👥 "
+                        for account_id in latestwith['TaggedPlayerIds']:
+                            username = functions.id_to_username(account_id)
+                            tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+
+                    print("roomname") # REMOVEME
+                    room_name = functions.id_to_room_name(latestwith['RoomId'])
+                    print("embed") # REMOVEME
+                    embed=discord.Embed(
+                        colour=discord.Colour.orange(),
+                        description=f"🔗 **[{user1_account['username']}'s latest picture with {user2_account['username']}](https://rec.net/image/{latestwith['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{latestwith['CheerCount']}` 💬 `{latestwith['CommentCount']}`\n📆 `{latestwith['CreatedAt'][:10]}` ⏰ `{latestwith['CreatedAt'][11:16]} UTX`\n{tagged}"
+                    )
+                    print("author shit") # REMOVEME
+                    embed.set_author(name=f"{user1_account['username']}'s profile", url=f"https://rec.net/user/{user1_account['username']}", icon_url=functions.id_to_pfp(user1_account['account_id'], True))
+                    embed.set_image(url=f"http://img.rec.net/{latestwith['ImageName']}")
+                    print("done!") # REMOVEME
+                else:
+                    embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
+            else:
+                embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
+        else:
+            embed = functions.error_msg(ctx, f"Either `@{user1}` or `@{user2}` don't exist!")
+
+        print("send") # REMOVEME
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @latestwith.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.latestwith <room> <user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+    # CMD-OLDESTWITH
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def oldestwith(self, ctx, user1, user2):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        
+        user1_account = functions.check_account_existence_and_return(user1)
+        user2_account = functions.check_account_existence_and_return(user2)
+        if user1_account and user2_account:
+            user1_feed = len(functions.id_to_feed(user1_account['account_id']))
+            if user1_feed:
+                print("get photos with") # REMOVEME
+                photoswith = functions.together(user1_account['account_id'], user2_account['account_id'])
+                if photoswith:
+                    print("oldestwith") # REMOVEME
+                    oldestwith = photoswith[len(photoswith)-1]
+                    print("tagged") # REMOVEME
+                    tagged = ""
+                    if oldestwith['TaggedPlayerIds']:
+                        tagged = "👥 "
+                        for account_id in oldestwith['TaggedPlayerIds']:
+                            username = functions.id_to_username(account_id)
+                            tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+
+                    print("roomname") # REMOVEME
+                    room_name = functions.id_to_room_name(oldestwith['RoomId'])
+                    print("embed") # REMOVEME
+                    embed=discord.Embed(
+                        colour=discord.Colour.orange(),
+                        description=f"🔗 **[{user1_account['username']}'s oldest picture with {user2_account['username']}](https://rec.net/image/{oldestwith['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{oldestwith['CheerCount']}` 💬 `{oldestwith['CommentCount']}`\n📆 `{oldestwith['CreatedAt'][:10]}` ⏰ `{oldestwith['CreatedAt'][11:16]} UTX`\n{tagged}"
+                    )
+                    print("author shit") # REMOVEME
+                    embed.set_author(name=f"{user1_account['username']}'s profile", url=f"https://rec.net/user/{user1_account['username']}", icon_url=functions.id_to_pfp(user1_account['account_id'], True))
+                    embed.set_image(url=f"http://img.rec.net/{oldestwith['ImageName']}")
+                    print("done!") # REMOVEME
+                else:
+                    embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
+            else:
+                embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
+        else:
+            embed = functions.error_msg(ctx, f"Either `@{user1}` or `@{user2}` don't exist!")
+
+        print("send") # REMOVEME
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @oldestwith.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.oldestwith <room> <user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
 
 
 def setup(client):
