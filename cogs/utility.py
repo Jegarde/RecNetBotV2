@@ -1,9 +1,8 @@
 import functions
 import requests
 import discord
-import multiprocessing
-
 from discord.ext import commands
+from discord.ext import menus
 
 class Utility(commands.Cog):
     def __init__(self, client):
@@ -272,12 +271,7 @@ class Utility(commands.Cog):
         if account:
             latest = functions.id_to_latest_photo(account['account_id'])
             if latest:
-                tagged = ""
-                if latest['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in latest['TaggedPlayerIds']:
-                        username = functions.id_to_username(account_id)
-                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                tagged = functions.get_tagged_accounts_string(latest)
 
                 room_name = functions.id_to_room_name(latest['RoomId'])
                 embed=discord.Embed(
@@ -314,12 +308,7 @@ class Utility(commands.Cog):
         if account:
             oldest = functions.id_to_oldest_photo(account['account_id'])
             if oldest:
-                tagged = ""
-                if oldest['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in oldest['TaggedPlayerIds']:
-                        username = functions.id_to_username(account_id)
-                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                tagged = functions.get_tagged_accounts_string(oldest)
                 room_name = functions.id_to_room_name(oldest['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
@@ -356,12 +345,7 @@ class Utility(commands.Cog):
         if account:
             oldestfeed = functions.id_to_oldest_feed(account['account_id'])
             if oldestfeed:
-                tagged = ""
-                if oldestfeed['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in oldestfeed['TaggedPlayerIds']:
-                        username = functions.id_to_username(account_id)
-                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                tagged = functions.get_tagged_accounts_string(oldestfeed)
                 room_name = functions.id_to_room_name(oldestfeed['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
@@ -399,12 +383,7 @@ class Utility(commands.Cog):
         if account:
             latestfeed = functions.id_to_latest_feed(account['account_id'])
             if latestfeed:
-                tagged = ""
-                if latestfeed['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in latestfeed['TaggedPlayerIds']:
-                        username = functions.id_to_username(account_id)
-                        tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                tagged = functions.get_tagged_accounts_string(latestfeed)
                 room_name = functions.id_to_room_name(latestfeed['RoomId'])
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
@@ -839,10 +818,10 @@ class Utility(commands.Cog):
         await ctx.send(author, embed=embed)
 
 
-    # CMD-FRONTPAGE
+    # CMD-LEGACY_FRONTPAGE
     @commands.command()
     @commands.check(functions.beta_tester)
-    async def frontpage(self, ctx):
+    async def legacy_frontpage(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         author = f"<@{ctx.author.id}>"
@@ -851,12 +830,7 @@ class Utility(commands.Cog):
         frontpage = functions.get_frontpage(5)
         
         for post in frontpage:
-            tagged = ""
-            if post['TaggedPlayerIds']:
-                tagged = "👥 "
-                for account_id in post['TaggedPlayerIds']:
-                    tagged += f"`@{functions.id_to_username(account_id)}` "
-            else: tagged = "👥 None!"
+            tagged = functions.get_tagged_accounts_string(post)
 
 
             msg += f"https://rec.net/image/{post['Id']}\n**{functions.id_to_display_name(post['PlayerId'])}** @{functions.id_to_username(post['PlayerId'])}\n🚪 `^{functions.id_to_room_name(post['RoomId'])}`\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}`\n💬 `{post['CommentCount']}`\n{tagged}\n\n"
@@ -1414,12 +1388,7 @@ class Utility(commands.Cog):
                     print("latestin") # REMOVEME
                     latestin = photosin[0]
                     print("tagged") # REMOVEME
-                    tagged = ""
-                    if latestin['TaggedPlayerIds']:
-                        tagged = "👥 "
-                        for account_id in latestin['TaggedPlayerIds']:
-                            username = functions.id_to_username(account_id)
-                            tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                    tagged = functions.get_tagged_accounts_string(latestin)
 
                     print("roomname") # REMOVEME
                     room_name = functions.id_to_room_name(latestin['RoomId'])
@@ -1470,12 +1439,7 @@ class Utility(commands.Cog):
                     print("oldestin") # REMOVEME
                     oldestin = photosin[len(photosin)-1]
                     print("tagged") # REMOVEME
-                    tagged = ""
-                    if oldestin['TaggedPlayerIds']:
-                        tagged = "👥 "
-                        for account_id in oldestin['TaggedPlayerIds']:
-                            username = functions.id_to_username(account_id)
-                            tagged += f"[`@{username}`](https://rec.net/user/{username}) "
+                    tagged = functions.get_tagged_accounts_string(post)
 
                     print("roomname") # REMOVEME
                     room_name = functions.id_to_room_name(oldestin['RoomId'])
@@ -1622,6 +1586,76 @@ class Utility(commands.Cog):
             pass
 
 
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def frontpage(self, ctx):
+        global frontpage 
+        frontpage = requests.get("https://api.rec.net/api/images/v3/feed/global?take=51").json()
+        pages = menus.MenuPages(source=MySource(range(1, 51)), clear_reactions_after=True)
+        await pages.start(ctx)
+
+
+class MySource(menus.ListPageSource):
+    def __init__(self, data):
+        super().__init__(data, per_page=1)
+        
+
+    async def format_page(self, menu, entries):
+        global frontpage
+        offset = menu.current_page * self.per_page
+
+        post = frontpage[offset]
+        
+        tagged = functions.get_tagged_accounts_string(post)
+        
+        self_cheer_string = ""
+        cheers = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/cheers").json()
+        if post['PlayerId'] in cheers:
+            self_cheer_string = "\n*SELF CHEERED!*"
+
+        room_name = functions.id_to_room_name(post['RoomId'])
+        embed=discord.Embed(
+            colour=discord.Colour.orange(),
+            title=f"🔗 Frontpage post #{offset+1}",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
+            url=f"https://rec.net/image/{post['Id']}"
+        )
+
+        comments = ""
+        if post['CommentCount']:
+            comment_json = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/comments").json()
+
+            bulk = "https://accounts.rec.net/account/bulk?"
+
+            comments = "💬 **Comments:**\n\n"
+            for comment in comment_json:
+                #commentor = functions.id_to_username(comment['PlayerId'])
+                bulk += f"&id={comment['PlayerId']}"
+
+            bulk_account_call = requests.get(bulk).json()
+
+            old_count = 0
+            count = 0
+            for account in bulk_account_call:
+                #comments += f"👤 [`@{account['username']}`](https://rec.net/user/{account['username']})\n💬 `{comment_json[count]['Comment']}` \n\n"
+                comments += f"[`@{account['username']}`](https://rec.net/user/{account['username']})\n`{comment_json[count]['Comment']}`\n\n"
+                count += 1
+                if len(comments) > 850:
+                    embed.add_field(name="⠀", value=comments, inline=True)
+                    comments = ""
+                    old_count = count
+            if count > old_count:
+                embed.add_field(name="⠀", value=comments, inline=True)
+
+        poster_username = functions.id_to_username(post['PlayerId'])
+        embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
+        embed.set_image(url=f"http://img.rec.net/{post['ImageName']}")
+
+        return embed
+
+    @menus.button('💬')
+    async def on_stop(self, payload):
+        self.stop()
 
 
 def setup(client):

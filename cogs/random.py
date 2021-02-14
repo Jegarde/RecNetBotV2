@@ -220,12 +220,7 @@ class Random(commands.Cog):
         for x in range(amount):
             random_img = functions.find_random_img()
 
-            tagged = ""
-            if random_img['TaggedPlayerIds']:
-                tagged = "👥 "
-                for account_id in random_img['TaggedPlayerIds']:
-                    tagged_username = functions.id_to_username(account_id)
-                    tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+            tagged = functions.get_tagged_accounts_string(random_img)
 
             if amount == 1:
                 username = functions.id_to_username(random_img['PlayerId'])
@@ -317,12 +312,7 @@ class Random(commands.Cog):
             if feed:
                 random_feed = feed[random.randint(0, len(feed)-1)]
                 username = functions.id_to_username(account['account_id'])
-                tagged = ""
-                if random_feed['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in random_feed['TaggedPlayerIds']:
-                        tagged_username = functions.id_to_username(account_id)
-                        tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                tagged = functions.get_tagged_accounts_string(random_feed)
                 
                 room_name = functions.id_to_room_name(random_feed['RoomId'])
                 if room_name:
@@ -368,12 +358,7 @@ class Random(commands.Cog):
             if photos:
                 random_photos = photos[random.randint(0, len(photos)-1)]
                 username = functions.id_to_username(account['account_id'])
-                tagged = ""
-                if random_photos['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in random_photos['TaggedPlayerIds']:
-                        tagged_username = functions.id_to_username(account_id)
-                        tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                tagged = functions.get_tagged_accounts_string(random_photos)
                 
                 room_name = functions.id_to_room_name(random_photos['RoomId'])
                 if room_name:
@@ -419,12 +404,7 @@ class Random(commands.Cog):
                     if found_photos:
                         random_photos = found_photos[random.randint(0, len(found_photos)-1)]
                         username = functions.id_to_username(account['account_id'])
-                        tagged = ""
-                        if random_photos['TaggedPlayerIds']:
-                            tagged = "👥 "
-                            for account_id in random_photos['TaggedPlayerIds']:
-                                tagged_username = functions.id_to_username(account_id)
-                                tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                        tagged = functions.get_tagged_accounts_string(random_photos)
                         
                         room_name = functions.id_to_room_name(random_photos['RoomId'])
                         embed=discord.Embed(
@@ -479,12 +459,7 @@ class Random(commands.Cog):
                     if found_photos:
                         random_photos = found_photos[random.randint(0, len(found_photos)-1)]
                         username = functions.id_to_username(account['account_id'])
-                        tagged = ""
-                        if random_photos['TaggedPlayerIds']:
-                            tagged = "👥 "
-                            for account_id in random_photos['TaggedPlayerIds']:
-                                tagged_username = functions.id_to_username(account_id)
-                                tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
+                        tagged = functions.get_tagged_accounts_string(random_photos)
                         
                         room_name = functions.id_to_room_name(random_photos['RoomId'])
                         embed=discord.Embed(
@@ -538,13 +513,7 @@ class Random(commands.Cog):
             room_photos = functions.get_photos_in_room(room_name)
             if room_photos:
                 random_photo = room_photos[random.randint(0, len(room_photos)-1)]
-                tagged = ""
-                if random_photo['TaggedPlayerIds']:
-                    tagged = "👥 "
-                    for account_id in random_photo['TaggedPlayerIds']:
-                        tagged_username = functions.id_to_username(account_id)
-                        tagged += f"[`@{tagged_username}`](https://rec.net/user/{tagged_username}) "
-                    tagged += "\n"
+                tagged = functions.get_tagged_accounts_string(random_photo)
                 room_photo_count = len(room_photos)
                 if room_photo_count > 9999:
                     room_photo_count = "<10000"
@@ -552,7 +521,7 @@ class Random(commands.Cog):
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
                     title=f"Random image taken in ^{room['Name']}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photo['Id']})**\n🚪 [`^{room['Name']}`](https://rec.net/room/{room['Name']})\n<:CheerGeneral:803244099510861885> `{random_photo['CheerCount']}` 💬 `{random_photo['CommentCount']}`\n📆 `{random_photo['CreatedAt'][:10]}` ⏰ `{random_photo['CreatedAt'][11:16]} UTX`\n{tagged}🖼️ Pictures shared in `^{room['Name']}`: `{room_photo_count}`"
+                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photo['Id']})**\n🚪 [`^{room['Name']}`](https://rec.net/room/{room['Name']})\n<:CheerGeneral:803244099510861885> `{random_photo['CheerCount']}` 💬 `{random_photo['CommentCount']}`\n📆 `{random_photo['CreatedAt'][:10]}` ⏰ `{random_photo['CreatedAt'][11:16]} UTX`\n{tagged}\n🖼️ Pictures shared in `^{room['Name']}`: `{room_photo_count}`"
                 )
                 embed.set_image(url=f"https://img.rec.net/{random_photo['ImageName']}")
                 username = functions.id_to_username(random_photo['PlayerId'])

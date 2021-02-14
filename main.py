@@ -1,6 +1,5 @@
 import discord
 import os
-import keep_alive
 import functions
 from discord.ext import commands
 
@@ -19,6 +18,7 @@ async def on_ready():
     print(f"Servers: {len(client.guilds)}")
     for guild in client.guilds:
         print(f"-{guild.name}")
+        print(f"{guild.owner}\n")
     await client.change_presence(status=discord.Status.online, activity=discord.Game(".help | bit.ly/RecNetBot"))
 
 
@@ -66,8 +66,6 @@ for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         client.load_extension(f"cogs.{filename[:-3]}")
 
-#keep it alive
-keep_alive.keep_alive()
 
 
 # token
