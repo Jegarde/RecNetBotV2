@@ -2,6 +2,7 @@ import discord
 import os
 import functions
 from discord.ext import commands
+from replit import db
 
 client = discord.Client()
 
@@ -18,7 +19,8 @@ async def on_ready():
     print(f"Servers: {len(client.guilds)}")
     for guild in client.guilds:
         print(f"-{guild.name}")
-        print(f"{guild.owner}\n")
+        print(f"{guild.owner}")
+        print(f"Members: {len(guild.members)}\n")
     await client.change_presence(status=discord.Status.online, activity=discord.Game(".help | bit.ly/RecNetBot"))
 
 
@@ -60,7 +62,41 @@ async def reloadall(ctx):
             client.load_extension(f"cogs.{filename[:-3]}")
     await ctx.send("Cogs reloaded!")
 
-        
+@client.command()
+@commands.check(functions.is_it_me)
+async def guilds(ctx):
+    string = f"**Servers:** {len(client.guilds)}\n\n"
+    for guild in client.guilds:
+        #string += f"-{guild.name}\n{guild.owner}\n**Members:** {len(guild.members)}\n"
+        string += f"-{guild.name}\n"
+    await ctx.send(string)
+
+@client.command()
+@commands.check(functions.is_it_me)
+async def dbase(ctx, key=None, delete=False, set_val=False, val=None, int_=False):
+    if not key:
+        await ctx.send(db.keys())
+    else:
+        try:
+            if delete:
+                del db[key]
+                await ctx.send(f"`{key}` deleted!!")
+            elif set_val and val:
+                if int_:
+                    db[key] = int(val)
+                else:
+                    db[key] = val
+                await ctx.send(f"`{key}` set to {db[key]}\nInt = {int_}")
+            else:
+                await ctx.send(db[key])
+        except:
+            await ctx.send("EROR")
+
+def return_guild_count():
+    return len(client.guilds)
+
+
+ 
 # Load cogs
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):

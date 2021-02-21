@@ -1,334 +1,4 @@
 {
-    "619605": {
-        "RoomId": 619605,
-        "IsDorm": false,
-        "CloningAllowed": false,
-        "DisableMicAutoMute": false,
-        "DisableRoomComments": false,
-        "EncryptVoiceChat": false,
-        "LoadScreenLocked": false,
-        "Name": "DormRoomPVP",
-        "Description": "Join the official Discord to enter the 10,000 token giveaway: https://discord.gg/pZH67pFPrV",
-        "ImageName": "0c90aa7c937645519e3879403cebc058.jpg",
-        "WarningMask": 0,
-        "CustomWarning": null,
-        "CreatorAccountId": 924029,
-        "State": 0,
-        "Accessibility": 1,
-        "SupportsLevelVoting": false,
-        "IsRRO": false,
-        "SupportsScreens": true,
-        "SupportsWalkVR": true,
-        "SupportsTeleportVR": true,
-        "SupportsVRLow": true,
-        "SupportsQuest2": true,
-        "SupportsMobile": true,
-        "SupportsJuniors": true,
-        "CreatedAt": "2019-01-25T20:59:46.5422095Z",
-        "Stats": {
-            "CheerCount": 158919,
-            "FavoriteCount": 147631,
-            "VisitorCount": 1081646,
-            "VisitCount": 2962909
-        },
-        "SubRooms": [
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": false,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 630997,
-                "RoomId": 619605,
-                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
-                "Name": "Home",
-                "DataBlob": "74b3e2c8af7c43e98b6cc1e2db39aaca.room",
-                "DataSavedAt": "2021-02-09T10:21:01.6829967Z",
-                "IsSandbox": true,
-                "MaxPlayers": 12,
-                "Accessibility": 1
-            }
-        ],
-        "Roles": [
-            {
-                "AccountId": 924029,
-                "Role": 255,
-                "InvitedRole": 0
-            },
-            {
-                "AccountId": 1717035,
-                "Role": 20,
-                "InvitedRole": 0
-            }
-        ],
-        "Tags": [
-            {
-                "Tag": "dorm",
-                "Type": 0
-            },
-            {
-                "Tag": "keys",
-                "Type": 0
-            },
-            {
-                "Tag": "pvp",
-                "Type": 0
-            }
-        ],
-        "PromoImages": [],
-        "PromoExternalContent": [],
-        "Scores": [
-            {
-                "RoomId": 619605,
-                "VisitType": 0,
-                "Score": 0.728327453,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 619605,
-                "VisitType": 1,
-                "Score": 0.5805003,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 619605,
-                "VisitType": 2,
-                "Score": 0.0,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 619605,
-                "VisitType": 11,
-                "Score": 0.7530499,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 619605,
-                "VisitType": 20,
-                "Score": 0.7155929,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 619605,
-                "VisitType": 10,
-                "Score": 0.796117544,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 619605,
-                "VisitType": 30,
-                "Score": 0.60246706,
-                "BackupScore": null
-            }
-        ],
-        "LoadScreens": [
-            {
-                "ImageName": "4bd390f46d6743ca80cc4de89b2789fe.jpg",
-                "Title": "10,000 Token Giveaway!",
-                "Subtitle": "Join the Discord to be entered in the 10,000 token giveaway[|=)]"
-            }
-        ],
-        "Placement": 16,
-        "Score": 0.69601,
-        "LastCheck": "2021-02-12T13:42:58.878424+00:00",
-        "ImagesShared": ">10000"
-    },
-    "170132": {
-        "RoomId": 170132,
-        "IsDorm": false,
-        "CloningAllowed": true,
-        "DisableMicAutoMute": false,
-        "DisableRoomComments": false,
-        "EncryptVoiceChat": false,
-        "LoadScreenLocked": false,
-        "Name": "Paintball",
-        "Description": "Red and Blue teams splat each other in capture the flag and team battle.",
-        "ImageName": "93a53ced93a04f658795a87f4a4aab85",
-        "WarningMask": 0,
-        "CustomWarning": null,
-        "CreatorAccountId": 1,
-        "State": 0,
-        "Accessibility": 1,
-        "SupportsLevelVoting": true,
-        "IsRRO": true,
-        "SupportsScreens": true,
-        "SupportsWalkVR": true,
-        "SupportsTeleportVR": true,
-        "SupportsVRLow": true,
-        "SupportsQuest2": true,
-        "SupportsMobile": true,
-        "SupportsJuniors": true,
-        "CreatedAt": "2018-08-28T15:44:47.366637Z",
-        "Stats": {
-            "CheerCount": 75094,
-            "FavoriteCount": 159657,
-            "VisitorCount": 11155974,
-            "VisitCount": 32909613
-        },
-        "SubRooms": [
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": true,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 170129,
-                "RoomId": 170132,
-                "UnitySceneId": "380d18b5-de9c-49f3-80f7-f4a95c1de161",
-                "Name": "Clearcut",
-                "DataBlob": null,
-                "DataSavedAt": "2019-07-31T16:09:21.7099889Z",
-                "IsSandbox": false,
-                "MaxPlayers": 8,
-                "Accessibility": 1
-            },
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": true,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 4919560,
-                "RoomId": 170132,
-                "UnitySceneId": "65ddbb48-5a01-4e3e-972d-e5c7419e2bc3",
-                "Name": "Drive-in",
-                "DataBlob": null,
-                "DataSavedAt": "0001-01-01T00:00:00Z",
-                "IsSandbox": false,
-                "MaxPlayers": 8,
-                "Accessibility": 1
-            },
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": true,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 170127,
-                "RoomId": 170132,
-                "UnitySceneId": "a785267d-c579-42ea-be43-fec1992d1ca7",
-                "Name": "Homestead",
-                "DataBlob": null,
-                "DataSavedAt": "0001-01-01T00:00:00Z",
-                "IsSandbox": false,
-                "MaxPlayers": 8,
-                "Accessibility": 1
-            },
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": true,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 170128,
-                "RoomId": 170132,
-                "UnitySceneId": "ff4c6427-7079-4f59-b22a-69b089420827",
-                "Name": "Quarry",
-                "DataBlob": null,
-                "DataSavedAt": "0001-01-01T00:00:00Z",
-                "IsSandbox": false,
-                "MaxPlayers": 8,
-                "Accessibility": 1
-            },
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": true,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 170126,
-                "RoomId": 170132,
-                "UnitySceneId": "e122fe98-e7db-49e8-a1b1-105424b6e1f0",
-                "Name": "River",
-                "DataBlob": null,
-                "DataSavedAt": "0001-01-01T00:00:00Z",
-                "IsSandbox": false,
-                "MaxPlayers": 8,
-                "Accessibility": 1
-            },
-            {
-                "SupportsJoinInProgress": true,
-                "UseLevelBasedMatchmaking": true,
-                "UseAgeBasedMatchmaking": false,
-                "UseRecRoyaleMatchmaking": false,
-                "SubRoomId": 170130,
-                "RoomId": 170132,
-                "UnitySceneId": "58763055-2dfb-4814-80b8-16fac5c85709",
-                "Name": "Spillway",
-                "DataBlob": null,
-                "DataSavedAt": "0001-01-01T00:00:00Z",
-                "IsSandbox": false,
-                "MaxPlayers": 8,
-                "Accessibility": 1
-            }
-        ],
-        "Roles": [
-            {
-                "AccountId": 1,
-                "Role": 255,
-                "InvitedRole": 0
-            }
-        ],
-        "Tags": [
-            {
-                "Tag": "paintball",
-                "Type": 1
-            },
-            {
-                "Tag": "4v4",
-                "Type": 0
-            },
-            {
-                "Tag": "pvp",
-                "Type": 0
-            }
-        ],
-        "PromoImages": [],
-        "PromoExternalContent": [],
-        "Scores": [
-            {
-                "RoomId": 170132,
-                "VisitType": 0,
-                "Score": 0.7363383,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 170132,
-                "VisitType": 1,
-                "Score": 0.724810243,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 170132,
-                "VisitType": 2,
-                "Score": 0.0,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 170132,
-                "VisitType": 20,
-                "Score": 0.7342702,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 170132,
-                "VisitType": 11,
-                "Score": 0.7594698,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 170132,
-                "VisitType": 30,
-                "Score": 0.606094,
-                "BackupScore": null
-            },
-            {
-                "RoomId": 170132,
-                "VisitType": 10,
-                "Score": 0.810946345,
-                "BackupScore": null
-            }
-        ],
-        "LoadScreens": [],
-        "Placement": 7,
-        "Score": 0.72865,
-        "LastCheck": "2021-02-12T13:50:45.144346+00:00",
-        "ImagesShared": ">10000"
-    },
     "11372": {
         "RoomId": 11372,
         "IsDorm": false,
@@ -437,5 +107,1873 @@
         "Score": 0.0,
         "LastCheck": "2021-02-14T08:37:27.081287+00:00",
         "ImagesShared": 0
+    },
+    "17274336": {
+        "RoomId": 17274336,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "RectNet",
+        "Description": "Where the magic happens",
+        "ImageName": "3f365d8c2307488f81e86b3e248803e1.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 9085,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2021-02-09T03:10:26.3055113Z",
+        "Stats": {
+            "CheerCount": 24,
+            "FavoriteCount": 35,
+            "VisitorCount": 475,
+            "VisitCount": 622
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 17621472,
+                "RoomId": 17274336,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "1aa5caefe21a4d08a77c0d2b2521b696.room",
+                "DataSavedAt": "2021-02-15T00:46:29.5077542Z",
+                "IsSandbox": true,
+                "MaxPlayers": 40,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 9085,
+                "Role": 255,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1225626,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2108122,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 504817,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 682366,
+                "Role": 0,
+                "InvitedRole": 30
+            },
+            {
+                "AccountId": 1700372,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1835408,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 929446,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 366937,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 4634207,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1203872,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 362823,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1307210,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2002726,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 672036,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 402676,
+                "Role": 10,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "hangout",
+                "Type": 0
+            },
+            {
+                "Tag": "puzzle",
+                "Type": 0
+            },
+            {
+                "Tag": "art",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 17274336,
+                "VisitType": 0,
+                "Score": 0.17485863,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 17274336,
+                "VisitType": 1,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 17274336,
+                "VisitType": 2,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 17274336,
+                "VisitType": 10,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 17274336,
+                "VisitType": 11,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 17274336,
+                "VisitType": 20,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 17274336,
+                "VisitType": 30,
+                "Score": 0.0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.02914,
+        "LastCheck": "2021-02-16T12:12:06.110617+00:00",
+        "ImagesShared": 831
+    },
+    "5968755": {
+        "RoomId": 5968755,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "dodgeball2018",
+        "Description": "2018 dodgeball version with spectating.\nGood for tournaments, flying option for spectators.",
+        "ImageName": "ce154d3be61b496caedc09c86d2cc694.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 929446,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2020-04-26T11:53:02.2408516Z",
+        "Stats": {
+            "CheerCount": 33,
+            "FavoriteCount": 126,
+            "VisitorCount": 1692,
+            "VisitCount": 4824
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": false,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 6112385,
+                "RoomId": 5968755,
+                "UnitySceneId": "3d474b26-26f7-45e9-9a36-9b02847d5e6f",
+                "Name": "Home",
+                "DataBlob": "7422d4e57b974c7ea1b8709b07198fd8.room",
+                "DataSavedAt": "2021-02-13T22:03:35.7736397Z",
+                "IsSandbox": false,
+                "MaxPlayers": 15,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 929446,
+                "Role": 255,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 873413,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1136016,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 524568,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 490706,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 145474,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 673614,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 383012,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3048082,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 741408,
+                "Role": 10,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "dodgeball",
+                "Type": 1
+            },
+            {
+                "Tag": "3v3",
+                "Type": 0
+            },
+            {
+                "Tag": "sport",
+                "Type": 0
+            },
+            {
+                "Tag": "pvp",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 5968755,
+                "VisitType": 0,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5968755,
+                "VisitType": 1,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5968755,
+                "VisitType": 2,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5968755,
+                "VisitType": 10,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5968755,
+                "VisitType": 11,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5968755,
+                "VisitType": 20,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5968755,
+                "VisitType": 30,
+                "Score": 0.0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [
+            {
+                "ImageName": "b4da0325fa6d4d9e83660e740495c0ec.jpg",
+                "Title": null,
+                "Subtitle": null
+            }
+        ],
+        "Placement": "<1000",
+        "Score": 0.0,
+        "LastCheck": "2021-02-16T12:12:50.536609+00:00",
+        "ImagesShared": 221
+    },
+    "10318899": {
+        "RoomId": 10318899,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "TossParty",
+        "Description": "Throw like there's no tomorrow!\n4vs4\n2-8 players",
+        "ImageName": "f2dc7d7e9dd04bc4bb5bffda06d3abc4.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 1210785,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2020-11-02T18:01:01.732025Z",
+        "Stats": {
+            "CheerCount": 1154,
+            "FavoriteCount": 995,
+            "VisitorCount": 14735,
+            "VisitCount": 17062
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 10583586,
+                "RoomId": 10318899,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "52b02e79f9ac4ab2925fda0ff2bc7d95.room",
+                "DataSavedAt": "2020-11-18T18:48:22.0969496Z",
+                "IsSandbox": true,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 1210785,
+                "Role": 255,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2002726,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1445672,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2975134,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1985038,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1009734,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 668619,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 640335,
+                "Role": 10,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "beta",
+                "Type": 1
+            },
+            {
+                "Tag": "gamejam2020",
+                "Type": 2
+            },
+            {
+                "Tag": "party",
+                "Type": 0
+            },
+            {
+                "Tag": "action",
+                "Type": 0
+            },
+            {
+                "Tag": "game",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [
+            "f041f79f7cf3475586ac3736850fb5fd.jpg",
+            "9217b0a733e9496ba644ccc5a1bf7942.jpg",
+            "931a0e54156744c6917aa0eba23dfa9f.jpg",
+            "bfc4445964f6460d8e3477e843d59a8d.jpg",
+            "f7844539d87c4d0da724d70d179b082c.jpg"
+        ],
+        "PromoExternalContent": [
+            {
+                "Type": 0,
+                "Reference": "L0EnkNE6PVg"
+            }
+        ],
+        "Scores": [
+            {
+                "RoomId": 10318899,
+                "VisitType": 0,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10318899,
+                "VisitType": 1,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10318899,
+                "VisitType": 2,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10318899,
+                "VisitType": 10,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10318899,
+                "VisitType": 11,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10318899,
+                "VisitType": 20,
+                "Score": 0.0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10318899,
+                "VisitType": 30,
+                "Score": 0.0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.0,
+        "LastCheck": "2021-02-16T13:16:19.771611+00:00",
+        "ImagesShared": 482
+    },
+    "170132": {
+        "RoomId": 170132,
+        "IsDorm": false,
+        "CloningAllowed": true,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "Paintball",
+        "Description": "Red and Blue teams splat each other in capture the flag and team battle.",
+        "ImageName": "93a53ced93a04f658795a87f4a4aab85",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 1,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": true,
+        "IsRRO": true,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2018-08-28T15:44:47.366637Z",
+        "Stats": {
+            "CheerCount": 77954,
+            "FavoriteCount": 164275,
+            "VisitorCount": 11246727,
+            "VisitCount": 33421921
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 170129,
+                "RoomId": 170132,
+                "UnitySceneId": "380d18b5-de9c-49f3-80f7-f4a95c1de161",
+                "Name": "Clearcut",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 4919560,
+                "RoomId": 170132,
+                "UnitySceneId": "65ddbb48-5a01-4e3e-972d-e5c7419e2bc3",
+                "Name": "Drive-in",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 170126,
+                "RoomId": 170132,
+                "UnitySceneId": "e122fe98-e7db-49e8-a1b1-105424b6e1f0",
+                "Name": "River",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 170127,
+                "RoomId": 170132,
+                "UnitySceneId": "a785267d-c579-42ea-be43-fec1992d1ca7",
+                "Name": "Homestead",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 170128,
+                "RoomId": 170132,
+                "UnitySceneId": "ff4c6427-7079-4f59-b22a-69b089420827",
+                "Name": "Quarry",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": true,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 170130,
+                "RoomId": 170132,
+                "UnitySceneId": "58763055-2dfb-4814-80b8-16fac5c85709",
+                "Name": "Spillway",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 8,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 1,
+                "Role": 255,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "paintball",
+                "Type": 1
+            },
+            {
+                "Tag": "pvp",
+                "Type": 0
+            },
+            {
+                "Tag": "4v4",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 170132,
+                "VisitType": 0,
+                "Score": 0.7279299,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170132,
+                "VisitType": 1,
+                "Score": 0.7161806,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170132,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170132,
+                "VisitType": 10,
+                "Score": 0.80391455,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170132,
+                "VisitType": 11,
+                "Score": 0.755626,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170132,
+                "VisitType": 20,
+                "Score": 0.72040397,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170132,
+                "VisitType": 30,
+                "Score": 0.58905065,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": 16,
+        "Score": 0.71885,
+        "LastCheck": "2021-02-16T19:08:21.041124+00:00",
+        "LastCheckUserId": 293008770957836299,
+        "ImagesShared": ">10000"
+    },
+    "15856025": {
+        "RoomId": 15856025,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "EternalParkour",
+        "Description": "Try out your parkour skills, in the ultimate map! Jump from level to level to complete the parkour. Have fun and enjoy! :D",
+        "ImageName": "2fe247a750ae49d68e9ad7f51625abfd.jpg",
+        "WarningMask": 40,
+        "CustomWarning": "We allow god throw! :D",
+        "CreatorAccountId": 3673034,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": false,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2021-01-23T21:23:53.5842603Z",
+        "Stats": {
+            "CheerCount": 42,
+            "FavoriteCount": 77,
+            "VisitorCount": 1815,
+            "VisitCount": 2259
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 16194954,
+                "RoomId": 15856025,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "41c3b38dc6bc4e0697f6d5a72327dd7c.room",
+                "DataSavedAt": "2021-02-14T03:19:26.7963494Z",
+                "IsSandbox": true,
+                "MaxPlayers": 20,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 7294779,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3203387,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 282029,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3673034,
+                "Role": 255,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "puzzle",
+                "Type": 0
+            },
+            {
+                "Tag": "hangout",
+                "Type": 0
+            },
+            {
+                "Tag": "parkour",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [
+            "74f5af5180af49eaad1429a225d3cba8.jpg",
+            "556ae35b324d47f9b516e586a8eb3513.jpg",
+            "04690de98ced4781b8c79e5e7cc7e6b1.jpg"
+        ],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 15856025,
+                "VisitType": 0,
+                "Score": 0.42763937,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 15856025,
+                "VisitType": 1,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 15856025,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 15856025,
+                "VisitType": 10,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 15856025,
+                "VisitType": 11,
+                "Score": 0.4448221,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 15856025,
+                "VisitType": 20,
+                "Score": 0.36720592,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 15856025,
+                "VisitType": 30,
+                "Score": 0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.20661,
+        "LastCheck": "2021-02-16T19:13:59.451130+00:00",
+        "LastCheckUserId": 547633635717808148,
+        "ImagesShared": 59
+    },
+    "10604": {
+        "RoomId": 10604,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "brazil",
+        "Description": "The Lounge",
+        "ImageName": "DefaultRoomImage.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 448814,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": false,
+        "CreatedAt": "2018-01-19T05:48:06.4296419Z",
+        "Stats": {
+            "CheerCount": 15,
+            "FavoriteCount": 27,
+            "VisitorCount": 2258,
+            "VisitCount": 3492
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 10604,
+                "RoomId": 10604,
+                "UnitySceneId": "a067557f-ca32-43e6-b6e5-daaec60b4f5a",
+                "Name": "Home",
+                "DataBlob": "cREnKFTsGEuVTBipNXGw9w",
+                "DataSavedAt": "2018-01-19T05:48:07.6171731Z",
+                "IsSandbox": true,
+                "MaxPlayers": 20,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 448814,
+                "Role": 255,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 10604,
+                "VisitType": 0,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10604,
+                "VisitType": 1,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10604,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10604,
+                "VisitType": 10,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10604,
+                "VisitType": 11,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10604,
+                "VisitType": 20,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 10604,
+                "VisitType": 30,
+                "Score": 0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.0,
+        "LastCheck": "2021-02-16T19:28:41.837448+00:00",
+        "LastCheckUserId": 525323437263159307,
+        "ImagesShared": 90
+    },
+    "9103542": {
+        "RoomId": 9103542,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": true,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "Ancient_PVP",
+        "Description": "Battle it out in the ultimate Ancient PvP map, make alliances with others and fight to the death. 10,000 token trick shot contest in the discord!!",
+        "ImageName": "81193609468e4206a24d3c59b0e5b1c3.jpg",
+        "WarningMask": 32,
+        "CustomWarning": "Do not vote to kick people just because they massacre the server. We allow god throw :D",
+        "CreatorAccountId": 3673034,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": false,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2020-09-04T02:51:09.4959298Z",
+        "Stats": {
+            "CheerCount": 36759,
+            "FavoriteCount": 31718,
+            "VisitorCount": 368685,
+            "VisitCount": 698376
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 9334544,
+                "RoomId": 9103542,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "800b3cbf68184001ac5ffde6e27a52b8.room",
+                "DataSavedAt": "2021-02-12T21:10:52.602538Z",
+                "IsSandbox": true,
+                "MaxPlayers": 20,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 3187377,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3929718,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2845660,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3144686,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3097021,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 5178597,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 8019723,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 11960911,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 997642,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 361761,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 7951877,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 4023797,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3582316,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 7294779,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3353384,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 4118305,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 6921005,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 913316,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1598109,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1241600,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3203387,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 282029,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 3673034,
+                "Role": 255,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "pvp",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [
+            "ec863cd8ff634d07a99627ea757a5363.jpg",
+            "ebd53477109b452aa2aa4f83ba482f85.jpg",
+            "35c1f44b12c94bdebe204556c0b1a7a4.jpg"
+        ],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 9103542,
+                "VisitType": 0,
+                "Score": 0.72711265,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 9103542,
+                "VisitType": 1,
+                "Score": 0.57103,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 9103542,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 9103542,
+                "VisitType": 10,
+                "Score": 0.735499,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 9103542,
+                "VisitType": 11,
+                "Score": 0.75002354,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 9103542,
+                "VisitType": 20,
+                "Score": 0.69567525,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 9103542,
+                "VisitType": 30,
+                "Score": 0.48009783,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": 44,
+        "Score": 0.65991,
+        "LastCheck": "2021-02-16T19:35:00.706609+00:00",
+        "LastCheckUserId": 293008770957836299,
+        "ImagesShared": 7952
+    },
+    "11043449": {
+        "RoomId": 11043449,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "Movie_Mayhem",
+        "Description": "You and some friends get sucked into action movies, and now you are the stars of the movies.  OST https://youtu.be/aJRYX4NDCjA",
+        "ImageName": "8d9bf6f280034a3b82ee3ce3a6197251.jpg",
+        "WarningMask": 12,
+        "CustomWarning": null,
+        "CreatorAccountId": 440062,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2020-12-01T02:24:09.924728Z",
+        "Stats": {
+            "CheerCount": 1867,
+            "FavoriteCount": 1497,
+            "VisitorCount": 14330,
+            "VisitCount": 17810
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11412144,
+                "RoomId": 11043449,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "BlackoutBrawl",
+                "DataBlob": "19160102328d4975b1224231aac3713c.room",
+                "DataSavedAt": "2020-12-31T17:13:53.3262124Z",
+                "IsSandbox": true,
+                "MaxPlayers": 8,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11412214,
+                "RoomId": 11043449,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "BoomstickBombardment",
+                "DataBlob": "bfecce8db4f14e14b02d8f37e9a64868.room",
+                "DataSavedAt": "2020-12-30T16:11:01.0877394Z",
+                "IsSandbox": true,
+                "MaxPlayers": 8,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11325133,
+                "RoomId": 11043449,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Lobby",
+                "DataBlob": "2b831c6a708e49278a5e0539709b855a.room",
+                "DataSavedAt": "2021-02-11T16:15:35.546563Z",
+                "IsSandbox": true,
+                "MaxPlayers": 8,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11345872,
+                "RoomId": 11043449,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Hub",
+                "DataBlob": "285f343006a14106ba481f46aa940bd4.room",
+                "DataSavedAt": "2021-02-01T21:15:02.5870102Z",
+                "IsSandbox": true,
+                "MaxPlayers": 16,
+                "Accessibility": 1
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11387659,
+                "RoomId": 11043449,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "OperationNewMoon",
+                "DataBlob": "a5e70df8f57146d59ceeac04cc1fd904.room",
+                "DataSavedAt": "2020-12-31T15:53:23.3360568Z",
+                "IsSandbox": true,
+                "MaxPlayers": 8,
+                "Accessibility": 0
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 621618,
+                "Role": 10,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 9085,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 668619,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1445672,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1009734,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1210785,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 1835408,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 440062,
+                "Role": 255,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "pvp",
+                "Type": 0
+            },
+            {
+                "Tag": "moviemagic",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [
+            "fe0ba2725073429a8dbc37b5798be474.jpg",
+            "8905d924dcbd4de6a4af73750194a0e3.jpg",
+            "aef5226e4202410b8a9c7acbcf273626.jpg",
+            "4bb07de07d88416881fcb1d63347bd91.jpg",
+            "df5ce40e11364c389bd699157195aa35.jpg",
+            "39227f5a871f4fe2bd558942a20dc7c9.jpg"
+        ],
+        "PromoExternalContent": [
+            {
+                "Type": 0,
+                "Reference": "aJRYX4NDCjA"
+            }
+        ],
+        "Scores": [
+            {
+                "RoomId": 11043449,
+                "VisitType": 0,
+                "Score": 0.40422165,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11043449,
+                "VisitType": 1,
+                "Score": 0.31991726,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11043449,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11043449,
+                "VisitType": 10,
+                "Score": 0.5183313,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11043449,
+                "VisitType": 11,
+                "Score": 0.4690833,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11043449,
+                "VisitType": 20,
+                "Score": 0.29276475,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11043449,
+                "VisitType": 30,
+                "Score": 0.33232054,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [
+            {
+                "ImageName": "d92969bfae9a49b99b5f5a895d694d83.jpg",
+                "Title": null,
+                "Subtitle": null
+            }
+        ],
+        "Placement": "<1000",
+        "Score": 0.38944,
+        "LastCheck": "2021-02-16T19:48:22.869925+00:00",
+        "LastCheckUserId": 412398036677820450,
+        "ImagesShared": 594
+    },
+    "619605": {
+        "RoomId": 619605,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "DormRoomPVP",
+        "Description": "Join the official Discord to enter the 10,000 token giveaway: https://discord.gg/pZH67pFPrV",
+        "ImageName": "0c90aa7c937645519e3879403cebc058.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 924029,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2019-01-25T20:59:46.5422095Z",
+        "Stats": {
+            "CheerCount": 164796,
+            "FavoriteCount": 153387,
+            "VisitorCount": 1116176,
+            "VisitCount": 3049140
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 630997,
+                "RoomId": 619605,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "76c36e6839204ea3b8c3db01cc7da8c7.room",
+                "DataSavedAt": "2021-02-15T09:58:39.5052336Z",
+                "IsSandbox": true,
+                "MaxPlayers": 12,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 1717035,
+                "Role": 20,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 924029,
+                "Role": 255,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "pvp",
+                "Type": 0
+            },
+            {
+                "Tag": "dorm",
+                "Type": 0
+            },
+            {
+                "Tag": "keys",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 619605,
+                "VisitType": 0,
+                "Score": 0.72780144,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 619605,
+                "VisitType": 1,
+                "Score": 0.6576743,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 619605,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 619605,
+                "VisitType": 10,
+                "Score": 0.7874596,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 619605,
+                "VisitType": 11,
+                "Score": 0.7599517,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 619605,
+                "VisitType": 20,
+                "Score": 0.71391475,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 619605,
+                "VisitType": 30,
+                "Score": 0.61062336,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [
+            {
+                "ImageName": "4bd390f46d6743ca80cc4de89b2789fe.jpg",
+                "Title": "10,000 Token Giveaway!",
+                "Subtitle": "Join the Discord to be entered in the 10,000 token giveaway[|=)]"
+            }
+        ],
+        "Placement": 24,
+        "Score": 0.70957,
+        "LastCheck": "2021-02-18T11:06:28.463089+00:00",
+        "LastCheckUserId": 472870186672717826,
+        "ImagesShared": ">10000"
+    },
+    "11934939": {
+        "RoomId": 11934939,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "Hugo",
+        "Description": "Come and experience the Magical World of Hugo Cabret. This room is designed around the movie and book Hugo (2011).",
+        "ImageName": "f6e49313b30c4f12a3d2dbf8743c16db.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 2746500,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "CreatedAt": "2020-12-16T10:53:04.3436315Z",
+        "Stats": {
+            "CheerCount": 2810,
+            "FavoriteCount": 2111,
+            "VisitorCount": 16980,
+            "VisitCount": 20906
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 13096500,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "City",
+                "DataBlob": "bff1b2af5fdc4a2daa9efb5d86842d29.room",
+                "DataSavedAt": "2021-01-15T16:07:39.5799167Z",
+                "IsSandbox": true,
+                "MaxPlayers": 20,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 12222252,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Clocktower",
+                "DataBlob": "baa7659c34b541128b14c9ad2780936f.room",
+                "DataSavedAt": "2021-01-31T13:40:04.0048451Z",
+                "IsSandbox": true,
+                "MaxPlayers": 10,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11755661,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "TheStation",
+                "DataBlob": "de591b4678394b4b8d6b932f6751bcf2.room",
+                "DataSavedAt": "2021-01-08T23:49:25.128448Z",
+                "IsSandbox": true,
+                "MaxPlayers": 25,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 12325897,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "ClocktowerStairs",
+                "DataBlob": "8064b7a28224411390614cc6c7f764c2.room",
+                "DataSavedAt": "2021-02-05T16:32:56.8718503Z",
+                "IsSandbox": true,
+                "MaxPlayers": 10,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 12443540,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "ClocktowerStairsDown",
+                "DataBlob": "8f6a0938c13e4203b2676a04a8ea27bb.room",
+                "DataSavedAt": "2021-01-28T17:18:38.5447833Z",
+                "IsSandbox": true,
+                "MaxPlayers": 10,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 12726259,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Fireworks",
+                "DataBlob": "a83427cb66404b9ba575476e91a5b9db.room",
+                "DataSavedAt": "2021-01-11T18:56:55.3483645Z",
+                "IsSandbox": true,
+                "MaxPlayers": 40,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 11998567,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Travel",
+                "DataBlob": "d41dc1d164494a6bb5c5a9aeab965ade.room",
+                "DataSavedAt": "2021-01-31T13:47:31.1865106Z",
+                "IsSandbox": true,
+                "MaxPlayers": 10,
+                "Accessibility": 0
+            },
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 12871663,
+                "RoomId": 11934939,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Workshop",
+                "DataBlob": "439aad5f8b5a4b2899c0ab061f15c133.room",
+                "DataSavedAt": "2021-01-31T13:35:18.2764394Z",
+                "IsSandbox": true,
+                "MaxPlayers": 25,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 1981282,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 527138,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 430454,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2055886,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 4761106,
+                "Role": 30,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2746500,
+                "Role": 255,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2285545,
+                "Role": 0,
+                "InvitedRole": 30
+            },
+            {
+                "AccountId": 2707213,
+                "Role": 0,
+                "InvitedRole": 30
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "art",
+                "Type": 0
+            },
+            {
+                "Tag": "moviemagic",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [
+            "ef1eac8a0b5942c2b6e3f496586feeba.jpg",
+            "983493d88077446aae5b9e8600ac2c04.jpg",
+            "6690b958f8554cfa9d4f5c14bd159d39.jpg",
+            "2b84e2eb93c84bce909b5f8a4b1970d9.jpg",
+            "485aff0723a847e59e8e0c0ab7a7954e.jpg",
+            "78d92599244e46c78f406ff1c41cff7c.jpg",
+            "df41600daa7f436ab26022d2d00d0647.jpg",
+            "7989c55f169046708a4448bfce0449e2.jpg"
+        ],
+        "PromoExternalContent": [
+            {
+                "Type": 0,
+                "Reference": "yg8Z4sK-yzA"
+            }
+        ],
+        "Scores": [
+            {
+                "RoomId": 11934939,
+                "VisitType": 0,
+                "Score": 0.53404284,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11934939,
+                "VisitType": 1,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11934939,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11934939,
+                "VisitType": 10,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11934939,
+                "VisitType": 11,
+                "Score": 0.5724138,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11934939,
+                "VisitType": 20,
+                "Score": 0.4296604,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 11934939,
+                "VisitType": 30,
+                "Score": 0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": 521,
+        "Score": 0.25602,
+        "LastCheck": "2021-02-19T02:22:30.124236+00:00",
+        "LastCheckUserId": 384507003562885121,
+        "ImagesShared": 1934
     }
 }

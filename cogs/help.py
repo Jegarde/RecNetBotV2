@@ -1,7 +1,8 @@
 import functions
 import discord
 from discord.ext import commands
-
+from replit import db
+from main import return_guild_count
 
 class Help(commands.Cog):
     def __init__(self, client):
@@ -15,9 +16,9 @@ class Help(commands.Cog):
                 colour= discord.Colour.orange(),
                 title = "🛠️ Utility commands",
             )
-            embed.add_field(name="👤 Accounts", value="`stats`, `bio`, `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
+            embed.add_field(name="👤 Accounts", value="`stats`, `bio`, `cringebiocheck` `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
 
-            embed.add_field(name="🖼️ Images", value="`latest`, `latestin`, `latestwith` `latestfeed`, `oldest`, `oldestin`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`",inline=False)
+            embed.add_field(name="🖼️ Images", value="`latest`, `latestin`, `latestwith` `latestfeed`, `oldest`, `oldestin`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`, `blacklisted`",inline=False)
 
             embed.add_field(name="🚪 Rooms", value="`roominfo`, `roomsby`, `featured`, `placement`",inline=False)
 
@@ -67,6 +68,21 @@ class Help(commands.Cog):
             embed.add_field(name="🔎 Search", value="`.help search`")
             embed.add_field(name="📲 API", value="`.help api`")
             embed.add_field(name="📖 Other", value="`.help other`")
+
+            rnb_stats = {}
+            # total count
+            try:
+                rnb_stats['TotalCount'] = db['TotalCount']
+            except:
+                rnb_stats['TotalCount'] = "None"
+            
+            # server count
+            try:
+                rnb_stats['GuildCount'] = return_guild_count()
+            except:
+                rnb_stats['GuildCount'] = "None"
+
+            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands runned: `{rnb_stats['TotalCount']}`\nGuild count: `{rnb_stats['GuildCount']}`", inline=False)
         
        
         functions.embed_footer(ctx, embed)

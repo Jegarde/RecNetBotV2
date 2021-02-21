@@ -10,6 +10,59 @@ class Utility(commands.Cog):
 
     # UTILITY COMMANDS
 
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def rectnet(self, ctx):
+        cheers = functions.cheers_in_room()
+        await ctx.send(f"<@{ctx.author.id}>\n**Cheers:** `{cheers['cheers']}`\n**Images taken:** `{cheers['image_count']}`\n\n**On frontpage: ** `{cheers['frontpage_count']}` (top 100)")
+
+    # CMD-BLACKLISTED
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def blacklisted(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            blacklisted = True
+            frontpage = requests.get("https://api.rec.net/api/images/v3/feed/global?take=500").json()
+            count = 1
+            for post in frontpage:
+                count += 1
+                if post['PlayerId'] == account['account_id']:
+                    blacklisted = False
+                    break
+
+            if blacklisted:
+                title_string = f"@{account['username']} may be blacklisted!"
+                description = "For this to be accurate, please take a fresh picture in-game, share it, self-cheer it, and wait about 5-10 minutes."
+            else:
+                title_string = f"@{account['username']} is not blacklisted!"
+                description = f"Your picture appears in `#{count}`."
+
+            embed=discord.Embed(
+                colour=discord.Colour.orange(),
+                title = title_string,
+                description = description
+            )
+            pfp = functions.id_to_pfp(account['account_id'])
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+
+        else:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @blacklisted.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
     # CMD-BIO
     @commands.command()
     @commands.check(functions.beta_tester)
@@ -33,6 +86,147 @@ class Utility(commands.Cog):
         await ctx.send(embed=embed)
 
     @bio.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+    # CMD-CRINGEBIOCHECK
+    @commands.command(aliases=["cbc"])
+    @commands.check(functions.beta_tester)
+    async def cringebiocheck(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            bio = functions.get_bio(account['account_id'])
+            pfp = functions.id_to_pfp(account['account_id'], True)
+
+            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {bio}, {pfp}")
+
+            embed=functions.default_embed()
+            embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
+
+            cringe_check_list = [
+                "girl",
+                "boy",
+                "furry",
+                "11",
+                "12",
+                "10",
+                "gf",
+                "bf",
+                "straight",
+                "single",
+                "taken",
+                "<3",
+                "uwu",
+                "owo",
+                "nig",
+                "carry",
+                "headpat",
+                "mirror",
+                "date",
+                "crush",
+                "simp",
+                "gay",
+                "lesb",
+                "binary",
+                "trans",
+                "lgbt",
+                "black",
+                "cuddle",
+                "cute",
+                "give",
+                "gift",
+                "wl",
+                "phantom",
+                "sense",
+                "bi",
+                "old",
+                "year",
+                "wish",
+                "nibb",
+                "racism",
+                "racist",
+                "love",
+                "naked",
+                "under",
+                "weeb",
+                "anime",
+                "age",
+                "relationship",
+                "they",
+                "them",
+                "pls",
+                "gei",
+                "perv",
+                "hug",
+                "voice",
+                "sex",
+                "kid",
+                "toddler",
+                "kiss",
+                "touch",
+                "crazy",
+                "hot",
+                "mhmm",
+                "crack",
+                "young",
+                "hairy",
+                "suck",
+                "ig",
+                "nick gur",
+                "pp",
+                "mom",
+                "stupid",
+                "ni@@a",
+                "silly",
+                "snap",
+                "yt",
+                "youtube",
+                "sub",
+                "ded",
+                "goth",
+                "mum",
+                "xx",
+                "kill",
+                "freak",
+                "minor",
+                "insta",
+                "molest",
+                "hairy",
+                "gtl",
+                "league",
+                "cringe"
+            ]
+
+            if bio:
+                cringe_check = any(val in bio for val in cringe_check_list)
+            else:
+                cringe_check = True
+
+            if cringe_check:
+                cringe_check = "**CRINGE!** 😬\n"
+            else:
+                cringe_check = "**NOT CRINGE!** <:wholesome:796100757354053653>\n"
+
+            if cringe_check and bio:
+                embed.add_field(name=cringe_check, value="||Based on my cringe keyword list! Result may not be accurate.||", inline=False)
+            else:
+                embed.add_field(name=cringe_check, value="||no bio = cringe 🙂||", inline=False)
+
+            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+        else:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @cringebiocheck.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an username!")
@@ -626,15 +820,16 @@ class Utility(commands.Cog):
         loading = await ctx.send(embed=embed)
 
         print("Get room json")
-        room_embed = functions.room_embed(room_name)
+        try:
+            room_embed = functions.room_embed(room_name, False, ctx)
+            functions.embed_footer(ctx, room_embed)
+            await ctx.send(author, embed=room_embed)
+        except:
+            room_embed = functions.error_msg(ctx, f"Room `^{room_name}` doesn't exist!") 
+            functions.embed_footer(ctx, room_embed)
+            await ctx.send(embed=room_embed)
         
         await loading.delete()
-        functions.embed_footer(ctx, room_embed)
-        if not room_embed:
-            room_embed = functions.error_msg(ctx, f"Room `^{room_name}` doesn't exist!") 
-            await ctx.send(embed=room_embed)
-        else:
-            await ctx.send(author, embed=room_embed)
 
     @roominfo.error
     async def clear_error(self, ctx, error):
@@ -816,26 +1011,6 @@ class Utility(commands.Cog):
         functions.embed_footer(ctx, embed)
         await loading.delete()
         await ctx.send(author, embed=embed)
-
-
-    # CMD-LEGACY_FRONTPAGE
-    @commands.command()
-    @commands.check(functions.beta_tester)
-    async def legacy_frontpage(self, ctx):
-        functions.log(ctx.guild.name, ctx.author, ctx.command)
-
-        author = f"<@{ctx.author.id}>"
-
-        msg = ""
-        frontpage = functions.get_frontpage(5)
-        
-        for post in frontpage:
-            tagged = functions.get_tagged_accounts_string(post)
-
-
-            msg += f"https://rec.net/image/{post['Id']}\n**{functions.id_to_display_name(post['PlayerId'])}** @{functions.id_to_username(post['PlayerId'])}\n🚪 `^{functions.id_to_room_name(post['RoomId'])}`\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}`\n💬 `{post['CommentCount']}`\n{tagged}\n\n"
-            
-        await ctx.send(msg)
 
 
     # CMD-TAKENIN
@@ -1439,7 +1614,7 @@ class Utility(commands.Cog):
                     print("oldestin") # REMOVEME
                     oldestin = photosin[len(photosin)-1]
                     print("tagged") # REMOVEME
-                    tagged = functions.get_tagged_accounts_string(post)
+                    tagged = functions.get_tagged_accounts_string(oldestin)
 
                     print("roomname") # REMOVEME
                     room_name = functions.id_to_room_name(oldestin['RoomId'])
@@ -1523,7 +1698,7 @@ class Utility(commands.Cog):
     @latestwith.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.latestwith <room> <user>`")
+            embed = functions.error_msg(ctx, "Please include in two users! Usage: `.latestwith <user1> <user2>`")
             
             await ctx.send(embed=embed)
         else:
@@ -1579,8 +1754,40 @@ class Utility(commands.Cog):
     @oldestwith.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.oldestwith <room> <user>`")
+            embed = functions.error_msg(ctx, "Please include in two users! Usage: `.oldestwith <user1> <user2>`")
             
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+    
+    # CMD-ANNIVERSARY
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def anniversary(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        
+        account = functions.check_account_existence_and_return(profile)
+        if account:
+            created_at = id_to_creation_date(account['account_id'])
+
+            total_photos = len(functions.id_to_photos(account['account_id']))
+            if total_photos:
+                embed = functions.error_msg(ctx, f"imma finish this later")
+                pass
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!")
+        else:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+
+        print("send") # REMOVEME
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @anniversary.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
             await ctx.send(embed=embed)
         else:
             pass
@@ -1627,10 +1834,12 @@ class MySource(menus.ListPageSource):
 
             bulk = "https://accounts.rec.net/account/bulk?"
 
+            comment_section = {}
             comments = "💬 **Comments:**\n\n"
             for comment in comment_json:
                 #commentor = functions.id_to_username(comment['PlayerId'])
                 bulk += f"&id={comment['PlayerId']}"
+                comment_section[comment['PlayerId']] = comment['Comment']
 
             bulk_account_call = requests.get(bulk).json()
 
@@ -1638,7 +1847,7 @@ class MySource(menus.ListPageSource):
             count = 0
             for account in bulk_account_call:
                 #comments += f"👤 [`@{account['username']}`](https://rec.net/user/{account['username']})\n💬 `{comment_json[count]['Comment']}` \n\n"
-                comments += f"[`@{account['username']}`](https://rec.net/user/{account['username']})\n`{comment_json[count]['Comment']}`\n\n"
+                comments += f"[`@{account['username']}`](https://rec.net/user/{account['username']})\n`{comment_section[account['accountId']]}`\n\n"
                 count += 1
                 if len(comments) > 850:
                     embed.add_field(name="⠀", value=comments, inline=True)
@@ -1649,7 +1858,7 @@ class MySource(menus.ListPageSource):
 
         poster_username = functions.id_to_username(post['PlayerId'])
         embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
-        embed.set_image(url=f"http://img.rec.net/{post['ImageName']}")
+        embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
 
         return embed
 

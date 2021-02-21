@@ -3,6 +3,7 @@ import discord
 import arrow
 import random
 import json
+from replit import db
 
 img_quality = 720
 image_dict = {"Id": None, "ImageName": None, "CheerCount": 0, "CommentCount": 0}
@@ -10,6 +11,14 @@ image_dict = {"Id": None, "ImageName": None, "CheerCount": 0, "CommentCount": 0}
 # Global functions
 def log(server, user, command):
     print(f'\n{server} > {user} > {command}')
+    if command not in db.keys():
+        db[command] = 1
+    else:
+        db[command] += 1
+    if "TotalCount" not in db.keys():
+        db["TotalCount"] = 1
+    else:
+        db["TotalCount"] += 1
 
 def load(json_f):
     with open(json_f) as json_file:
@@ -74,6 +83,25 @@ def self_cheers(photos, account_id):
             continue
     return self_cheers
 
+def cheers_in_room():
+    images = requests.get("https://api.rec.net/api/images/v4/room/17274336?take=999999").json()
+    print(len(images))
+    cheers = 0
+    image_count = 0
+    for image in images:
+        cheers += image['CheerCount']
+        image_count += 1
+
+    frontpage = requests.get("https://api.rec.net/api/images/v3/feed/global?take=100").json()
+
+    frontpage_count = 0
+    for post in frontpage:
+        if post['RoomId'] == 17274336:
+            frontpage_count += 1
+        
+
+    return {"cheers": cheers, "image_count": image_count, "frontpage_count": frontpage_count}
+
 
 def get_room_json(room, is_id=False):
     try:
@@ -95,9 +123,6 @@ def get_room_json(room, is_id=False):
 
         print(room_id)
         room_json = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}/?include=366").json()
-
-
-        
 
         return room_json
     except:
@@ -252,7 +277,7 @@ def username_to_id(account_name):
 def percentage_increase(starting_value, final_value):
     return ((final_value - starting_value) / starting_value) * 100
 
-def room_embed(room_name, is_json=False):
+def room_embed(room_name, is_json=False, ctx=None):
     if is_json:
         room = room_name
     else:
@@ -285,18 +310,7 @@ def room_embed(room_name, is_json=False):
             subrooms += f"{subroom_name}, "
 
         # Other
-        print("room photo count")
-        try:
-            if cached_data['ImagesShared'] == 10000:
-                room_photo_count = ">10000"
-            else: 
-                room_photo_count = len(get_photos_in_room(room['Name']))
-                if room_photo_count > 9999:
-                    room_photo_count = ">10000"
-        except:
-            room_photo_count = len(get_photos_in_room(room['Name']))
-            if room_photo_count > 9999:
-                room_photo_count = ">10000"
+        
         
 
         # Warning
@@ -345,11 +359,22 @@ def room_embed(room_name, is_json=False):
         visit_count_string = str(room['Stats']['VisitCount'])
         score_string = str(avg_score)
         placement_string = str(placement)
-        images_shared_string = str(room_photo_count)
+        images_shared_string = ""
         last_check = "\n\n**Last check:** `None!`"
         # cached
         if is_cached:
             cached_data = cached[str(room['RoomId'])]
+
+            print("room photo count")
+            try:
+                if cached_data['ImagesShared'] == 10000:
+                    room_photo_count = ">10000"
+                else: 
+                    room_photo_count = len(get_photos_in_room(room['Name']))
+                    if room_photo_count > 9999:
+                        room_photo_count = ">10000"
+            except:
+                pass
 
             # Role count
             print("Role count")
@@ -409,10 +434,20 @@ def room_embed(room_name, is_json=False):
                 if cached_data['LastCheck']:
                     print("last check confrim")
                     last_check = f"\n\n**Last check:** 📆 `{cached_data['LastCheck'][:10]}` ⏰ `{cached_data['LastCheck'][11:16]} UTC`"
+                    
+                if cached_data['LastCheckUserId'] == ctx.author.id:
+                    last_check += " by you!"
+                elif cached_data['LastCheckUserId'] != ctx.author.id:
+                    last_check += " by someone else!"
             except:
                 pass
 
-                
+        else:
+            room_photo_count = len(get_photos_in_room(room['Name']))
+            if room_photo_count > 9999:
+                room_photo_count = ">10000"
+
+        images_shared_string = str(room_photo_count)
                 
         print("embed")
         embed=discord.Embed(
@@ -431,6 +466,12 @@ def room_embed(room_name, is_json=False):
         room['Placement'] = placement
         room['Score'] = avg_score
         room['LastCheck'] = str(get_utc_time())
+        print(f"Last check: {room['LastCheck']}")
+        if ctx:
+            room['LastCheckUserId'] = ctx.author.id
+        else:
+            room['LastCheckUserId'] = None
+        print(f"Last check use id: {room['LastCheckUserId']}")
         room['ImagesShared'] = room_photo_count
         cached[str(room['RoomId'])] = room
         print("save")

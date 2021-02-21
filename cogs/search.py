@@ -9,7 +9,7 @@ class Search(commands.Cog):
     # SEARCH COMMANDS
 
     #CMD-EVENTSEARCH
-    @commands.command()
+    @commands.command(aliases=["es"])
     @commands.check(functions.beta_tester)
     async def eventsearch(self, ctx, word):
         functions.log(ctx.guild.name, ctx.author, ctx.command)

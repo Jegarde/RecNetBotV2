@@ -88,6 +88,8 @@ class Random(commands.Cog):
             bio = bio["bio"]
             embed.add_field(name=f"👤 **{display_name}** @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
+        embed.add_field(name=f"CHECK IF SOMEONE'S BIO IS CRINGE!", value=f"`.cbc <username>`", inline=False)
+
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(author, embed=embed)
 
@@ -516,7 +518,7 @@ class Random(commands.Cog):
                 tagged = functions.get_tagged_accounts_string(random_photo)
                 room_photo_count = len(room_photos)
                 if room_photo_count > 9999:
-                    room_photo_count = "<10000"
+                    room_photo_count = ">10000"
 
                 embed=discord.Embed(
                     colour=discord.Colour.orange(),
