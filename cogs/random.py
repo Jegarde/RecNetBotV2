@@ -222,7 +222,7 @@ class Random(commands.Cog):
         for x in range(amount):
             random_img = functions.find_random_img()
 
-            tagged = functions.get_tagged_accounts_string(random_img)
+            tagged = functions.get_tagged_accounts_string(random_img, True)
 
             if amount == 1:
                 username = functions.id_to_username(random_img['PlayerId'])
@@ -383,6 +383,15 @@ class Random(commands.Cog):
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
 
+    @randomimgby.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
     
     # CMD-RANDOMIMGBYIN
     @commands.command(aliases=["rimgbyin", "ribi"])
@@ -427,7 +436,6 @@ class Random(commands.Cog):
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
-
 
     @randomimgbyin.error
     async def clear_error(self, ctx, error):

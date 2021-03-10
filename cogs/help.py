@@ -18,7 +18,7 @@ class Help(commands.Cog):
             )
             embed.add_field(name="👤 Accounts", value="`stats`, `bio`, `cringebiocheck` `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
 
-            embed.add_field(name="🖼️ Images", value="`latest`, `latestin`, `latestwith` `latestfeed`, `oldest`, `oldestin`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`, `blacklisted`",inline=False)
+            embed.add_field(name="🖼️ Images", value="`latest`, `latestin`, `latestwith` `latestfeed`, `oldest`, `oldestin`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `takenofin`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`, `blacklisted`",inline=False)
 
             embed.add_field(name="🚪 Rooms", value="`roominfo`, `roomsby`, `featured`, `placement`",inline=False)
 
@@ -82,7 +82,7 @@ class Help(commands.Cog):
             except:
                 rnb_stats['GuildCount'] = "None"
 
-            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands runned: `{rnb_stats['TotalCount']}`\nGuild count: `{rnb_stats['GuildCount']}`", inline=False)
+            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands executed: `{rnb_stats['TotalCount']}`\nGuild count: `{rnb_stats['GuildCount']}`", inline=False)
         
        
         functions.embed_footer(ctx, embed)

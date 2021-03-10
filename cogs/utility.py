@@ -8,6 +8,14 @@ class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
 
+    @commands.command()
+    @commands.check(functions.is_it_me)
+    async def addrole(self, ctx, role_):
+        member = ctx.message.author
+        var = discord.utils.get(ctx.guild.roles, name = role_)
+        await member.add_roles(var)
+
+
     # UTILITY COMMANDS
 
     @commands.command()
@@ -17,7 +25,7 @@ class Utility(commands.Cog):
         await ctx.send(f"<@{ctx.author.id}>\n**Cheers:** `{cheers['cheers']}`\n**Images taken:** `{cheers['image_count']}`\n\n**On frontpage: ** `{cheers['frontpage_count']}` (top 100)")
 
     # CMD-BLACKLISTED
-    @commands.command()
+    @commands.command(aliases=['bl'])
     @commands.check(functions.beta_tester)
     async def blacklisted(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -110,107 +118,35 @@ class Utility(commands.Cog):
             embed=functions.default_embed()
             embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
 
-            cringe_check_list = [
-                "girl",
-                "boy",
-                "furry",
-                "11",
-                "12",
-                "10",
-                "gf",
-                "bf",
-                "straight",
-                "single",
-                "taken",
-                "<3",
-                "uwu",
-                "owo",
-                "nig",
-                "carry",
-                "headpat",
-                "mirror",
-                "date",
-                "crush",
-                "simp",
-                "gay",
-                "lesb",
-                "binary",
-                "trans",
-                "lgbt",
-                "black",
-                "cuddle",
-                "cute",
-                "give",
-                "gift",
-                "wl",
-                "phantom",
-                "sense",
-                "bi",
-                "old",
-                "year",
-                "wish",
-                "nibb",
-                "racism",
-                "racist",
-                "love",
-                "naked",
-                "under",
-                "weeb",
-                "anime",
-                "age",
-                "relationship",
-                "they",
-                "them",
-                "pls",
-                "gei",
-                "perv",
-                "hug",
-                "voice",
-                "sex",
-                "kid",
-                "toddler",
-                "kiss",
-                "touch",
-                "crazy",
-                "hot",
-                "mhmm",
-                "crack",
-                "young",
-                "hairy",
-                "suck",
-                "ig",
-                "nick gur",
-                "pp",
-                "mom",
-                "stupid",
-                "ni@@a",
-                "silly",
-                "snap",
-                "yt",
-                "youtube",
-                "sub",
-                "ded",
-                "goth",
-                "mum",
-                "xx",
-                "kill",
-                "freak",
-                "minor",
-                "insta",
-                "molest",
-                "hairy",
-                "gtl",
-                "league",
-                "cringe"
-            ]
+            cringe_check_list = functions.load("cringe_word_list.json")
+
+            maybe_cringe = False
 
             if bio:
-                cringe_check = any(val in bio for val in cringe_check_list)
+                #cringe_check = any(val in bio for val in cringe_check_list)
+                cringe_check_words = [ele for ele in cringe_check_list if(f" {ele.casefold()}" in bio.casefold())]
+                
+                if not bool(cringe_check_words):
+                    cringe_check_words = [ele for ele in cringe_check_list if(ele.casefold() in bio.casefold())]
+                    if bool(cringe_check_words):
+                        if len(cringe_check_words) > 1:
+                            maybe_cringe = False
+                        else:
+                            maybe_cringe = True
+
+                if len(cringe_check_words) < 2:
+                    maybe_cringe = True
+
+                cringe_check = bool(cringe_check_words)
             else:
                 cringe_check = True
+                cringe_check_words = "no bio......"
 
             if cringe_check:
-                cringe_check = "**CRINGE!** 😬\n"
+                if maybe_cringe:
+                    cringe_check = f"**MAYBE CRINGE?** 🤔\nFlag(s): ||{cringe_check_words}||\n"
+                else:
+                    cringe_check = f"**CRINGE!** 😬\nFlag(s): ||{cringe_check_words}||\n"
             else:
                 cringe_check = "**NOT CRINGE!** <:wholesome:796100757354053653>\n"
 
@@ -254,7 +190,7 @@ class Utility(commands.Cog):
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
             embed.set_image(url=pfp)
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -295,7 +231,7 @@ class Utility(commands.Cog):
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id']))
             embed.set_image(url=banner)
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
         
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -311,7 +247,7 @@ class Utility(commands.Cog):
 
 
     # CMD-PROFILE
-    @commands.command()
+    @commands.command(aliases=['p'])
     @commands.check(functions.beta_tester)
     async def profile(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -336,7 +272,7 @@ class Utility(commands.Cog):
             embed.add_field(name="Bio", value=f"```{bio}```", inline=False)
             embed.set_image(url=pfp)
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -351,7 +287,7 @@ class Utility(commands.Cog):
             pass
 
     # CMD-JUNIOR
-    @commands.command()
+    @commands.command(aliases=['jr'])
     @commands.check(functions.beta_tester)
     async def junior(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -373,7 +309,7 @@ class Utility(commands.Cog):
             )
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -388,7 +324,7 @@ class Utility(commands.Cog):
             pass
 
     # CMD-DATE
-    @commands.command()
+    @commands.command(aliases=['createdat'])
     @commands.check(functions.beta_tester)
     async def date(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -406,7 +342,7 @@ class Utility(commands.Cog):
             )
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -422,7 +358,7 @@ class Utility(commands.Cog):
     
 
     # CMD-NICKNAME
-    @commands.command()
+    @commands.command(aliases=['displayname'])
     @commands.check(functions.beta_tester)
     async def nickname(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -440,7 +376,7 @@ class Utility(commands.Cog):
             )
             embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -456,7 +392,7 @@ class Utility(commands.Cog):
 
 
     # CMD-LATEST
-    @commands.command()
+    @commands.command(aliases=['newest'])
     @commands.check(functions.beta_tester)
     async def latest(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -478,7 +414,7 @@ class Utility(commands.Cog):
                 print(f"{ctx.command} > {account['account_id']}, {account['username']}, Latest not found!")
                 embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared any pictures!")
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -514,7 +450,7 @@ class Utility(commands.Cog):
                 print(f"{ctx.command} > {account['account_id']}, {account['username']}, Oldest not found!")
                 embed = functions.error_msg(ctx, f"User `{account['username']}` hasn't shared any pictures!")
         else:
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -529,7 +465,7 @@ class Utility(commands.Cog):
             pass
 
     # CMD-OLDESTFEED
-    @commands.command()
+    @commands.command(aliases=['oldestappearance'])
     @commands.check(functions.beta_tester)
     async def oldestfeed(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -552,7 +488,7 @@ class Utility(commands.Cog):
                 embed = functions.error_msg(ctx, f"User `{account['username']}` isn't tagged in any post!")
 
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -567,7 +503,7 @@ class Utility(commands.Cog):
             pass
 
     # CMD-LATESTFEED
-    @commands.command()
+    @commands.command(aliases=['appearance'])
     @commands.check(functions.beta_tester)
     async def latestfeed(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -589,7 +525,7 @@ class Utility(commands.Cog):
                 print(f"{ctx.command} > {account['account_id']}, {account['username']}, latestfeed not found!")
                 embed = functions.error_msg(ctx, f"User `{account['username']}` isn't tagged in any post!")
         else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `{profile}` doesn't exist!") 
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -842,7 +778,7 @@ class Utility(commands.Cog):
 
 
     # CMD-APICHECK
-    @commands.command()
+    @commands.command(aliases=['apicheck', "ac"])
     @commands.check(functions.beta_tester)
     async def apistatus(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -904,7 +840,7 @@ class Utility(commands.Cog):
 
     
     #CMD-SHORTCUTS
-    @commands.command()
+    @commands.command(aliases=['sc'])
     @commands.check(functions.beta_tester)
     async def shortcuts(self, ctx, username=None):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -1014,7 +950,7 @@ class Utility(commands.Cog):
 
 
     # CMD-TAKENIN
-    @commands.command()
+    @commands.command(aliases=['ti'])
     @commands.check(functions.beta_tester)
     async def takenin(self, ctx, room, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -1086,7 +1022,7 @@ class Utility(commands.Cog):
                 await ctx.send(embed=embed)
 
         else: # room doesn't exist
-            embed = functions.error_msg(ctx, f"Room `{room}` doesn't exist!")
+            embed = functions.error_msg(ctx, f"Room `^{room}` doesn't exist!")
             await ctx.send(embed=embed)
 
     @takenin.error
@@ -1100,7 +1036,7 @@ class Utility(commands.Cog):
 
 
     # CMD-TAKENOF
-    @commands.command()
+    @commands.command(aliases=['to'])
     @commands.check(functions.beta_tester)
     async def takenof(self, ctx, of_user, by_user):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -1175,6 +1111,89 @@ class Utility(commands.Cog):
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in 2 users! Usage: `.takenof <of_user> <by_user>`")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+    # CMD-TAKENOFIN
+    @commands.command(aliases=['toi'])
+    @commands.check(functions.beta_tester)
+    async def takenofin(self, ctx, of_user, room):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        author = f"<@{ctx.author.id}>"
+
+        of_user_account = functions.check_account_existence_and_return(of_user)
+        room_data = functions.get_room_json(room)
+        
+        if of_user_account:#if both exist
+            if room_data:
+                of_user_feed = functions.id_to_feed(of_user_account['account_id'])
+                if of_user_feed: # if user appears anywhere
+                    msg = ""
+                    save_msg = ""
+                    photos_found = []
+                    exceeded_limit = False
+                    cheers = 0
+                    comments = 0
+                    for post in of_user_feed:
+                        if room_data['RoomId'] == post['RoomId']:
+                            photos_found.append(post['Id'])
+                            msg += f"<https://rec.net/image/{post['Id']}>\n"
+
+                            cheers += post['CheerCount']
+                            comments += post['CommentCount']
+
+                            save_msg += f"https://rec.net/image/{post['Id']}\n"
+                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                            save_msg += f"Cheers: {post['CheerCount']}\n"
+                            save_msg += f"Comments: {post['CommentCount']}\n"
+                            save_msg += "\n"
+
+                    if photos_found:
+                        if len(msg) > 1500:
+                            exceeded_limit = True
+                            # message exceeded
+                            msg = "*Message exceeded Discord's message length limit.*\n\n"
+                            with open("temp_txt.txt","w") as text_file:         
+                                text_file.write(save_msg)
+                            file_name = f"Taken of @{of_user_account['username']}, in ^{room_data['Name']}.txt"
+
+                        # first pic
+                        msg += f"\n**First picture:** https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
+                        # latest picture
+                        msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
+                        # cheers
+                        msg += f"**Cheers in total:** `{cheers}`\n"
+                        # comments
+                        msg += f"**Comments in total:** `{comments}`\n\n"
+                        # results
+                        msg += f"*Results:* `{len(photos_found)}`"
+
+                        if exceeded_limit:
+                            print("SEND")
+                            with open("temp_txt.txt","rb") as text_file:
+                                await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                        else:
+                            print("what")
+                            await ctx.send(f"{author}\n{msg}")
+                    
+                    else: # not found
+                        embed = functions.error_msg(ctx, f"Couldn't find any picture taken of `@{of_user_account['username']}` in `^{room_data['Name']}`!")
+                        await ctx.send(embed=embed)
+            else:
+                embed = functions.error_msg(ctx, f"Room `^{room}` doesn't exist!")
+                await ctx.send(embed=embed)
+
+        else: # either doesn't exist
+            embed = functions.error_msg(ctx, f"User `@{of_user}` doesn't exist!")
+            await ctx.send(embed=embed)
+
+    @takenofin.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an user and a room! Usage: `.takenofin <user> <room>`")
             
             await ctx.send(embed=embed)
         else:
@@ -1470,81 +1489,6 @@ class Utility(commands.Cog):
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
-
-
-    # CMD-SELFCHEERS
-    @commands.command(aliases=["selfc"])
-    @commands.check(functions.beta_tester)
-    async def selfcheers(self, ctx, profile):
-        functions.log(ctx.guild.name, ctx.author, ctx.command)
-
-        author = f"<@{ctx.author.id}>"
-
-        print("check account") #REMOVETHIS
-        account = functions.check_account_existence_and_return(profile)
-        if account:
-            print("check photos") #REMOVETHIS
-            photos = functions.id_to_photos(account['account_id'])
-            if photos:
-                print("check cheers") #REMOVETHIS
-                cheers_stats = functions.id_to_cheer_stats(account['account_id'])
-                if cheers_stats['total_cheers'] > 1:
-                    print("embed") #REMOVETHIS
-                    embed = discord.Embed(
-                        title=f"<a:spinning:804022054822346823> Getting @{account['username']}'s self cheered posts...",
-                        description="This might take a while. *It hasn't been properly optimized yet*",
-                        colour=discord.Colour.orange()
-                    )
-
-                    print("send embed loading") #REMOVETHIS
-                    functions.embed_footer(ctx, embed)
-                    loading = await ctx.send(embed=embed)
-
-
-                    #experimenting with multiprocessing
-                    self_cheers = functions.self_cheers(photos, account['account_id'])
-
-                    
-                    if self_cheers:
-                        percentage = round(self_cheers / len(photos) * 100, 2) 
-                        result_string = f"Self cheered: `{self_cheers}`\n*That's `{percentage}%` of their posts!*"
-
-                        embed = discord.Embed(
-                            title=f"@{account['username']}'s self cheered posts!",
-                            description=result_string,
-                            colour=discord.Colour.orange()
-                        )
-                    else:
-                        result_string = f"No self cheers, `@{account['username']}` is pure! <:CheerSport:803244185447956490>"
-                        embed = functions.error_msg(ctx, result_string)
-                else:
-                    print("no images") #REMOVETHIS
-                    result_string = f"None, `@{account['username']}` is pure! <:CheerSport:803244185447956490>"
-                    embed = functions.error_msg(ctx, result_string)
-                
-            else:
-                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture!")
-            
-        else: # account doesn't exist
-            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
-
-        try:
-            await loading.delete()
-            pfp = functions.id_to_pfp(account['account_id'], True)
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
-        except:
-            pass
-        functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(author, embed=embed)
-
-    @selfcheers.error
-    async def clear_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in an username!")
-            
-            await ctx.send(embed=embed)
-        else:
-            pass
 
 
     # CMD-LATESTIN

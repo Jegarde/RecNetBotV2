@@ -8,7 +8,7 @@ client = discord.Client()
 
 # Setting up
 intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
-client = commands.Bot(command_prefix = '.', intents = intents, help_command=None)
+client = commands.Bot(command_prefix = '.', intents = intents, help_command=None, case_insensitive=True)
 
 
 # When bot online
@@ -91,11 +91,10 @@ async def dbase(ctx, key=None, delete=False, set_val=False, val=None, int_=False
                 await ctx.send(db[key])
         except:
             await ctx.send("EROR")
+            
 
 def return_guild_count():
     return len(client.guilds)
-
-
  
 # Load cogs
 for filename in os.listdir("./cogs"):

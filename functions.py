@@ -453,7 +453,7 @@ def room_embed(room_name, is_json=False, ctx=None):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title = f"Statistics for ^{r_name}, by @{owner_username}",
-            description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{room['Description']}```{custom_warning}\n**Information**\n:calendar: `{room['CreatedAt'][:10]}` ⏰ `{room['CreatedAt'][11:16]} UTX` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count_string}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheer_count_string}` *(CHEERS)*\n⭐ `{favorite_count_string}` *(FAVORITES)*\n👤 `{visitor_count_string}` *(VISITORS)*\n👥 `{visit_count_string}` *(ROOM VISITS)*\n🔥 `#{placement_string}` *(HOT PLACEMENT)*\n💯 `{score_string}` *(AVG SCORE)*\n🖼️ `{images_shared_string}` *(PICTURES SHARED IN ROOM)*\n{last_check}"
+            description = f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{room['Description']}```{custom_warning}\n**Information**\n:calendar: `{room['CreatedAt'][:10]}` ⏰ `{room['CreatedAt'][11:16]} UTX` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count_string}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheer_count_string}` *(CHEERS)*\n⭐ `{favorite_count_string}` *(FAVORITES)*\n👤 `{visitor_count_string}` *(VISITORS)*\n👥 `{visit_count_string}` *(ROOM VISITS)*\n🔥 `#{placement_string}` *(HOT PLACEMENT)*\n💯 `{score_string}` *(AVG SCORE)*\n🖼️ `{images_shared_string}` *(PICTURES SHARED IN ROOM)*\n🏅 `{room['MinLevel']}` *(MINIMUM LEVEL)*\n{last_check}"
         )
         print("oimg")
         embed.set_image(url=f"https://img.rec.net/{room['ImageName']}?width=720")
@@ -506,7 +506,7 @@ def get_frontpage(amount=5):
     frontpage = requests.get(f"https://api.rec.net/api/images/v3/feed/global?take={amount}").json()
     return frontpage
 
-def get_tagged_accounts_string(post):
+def get_tagged_accounts_string(post, usernames_only=False):
     tagged = ""
     bulk = "https://accounts.rec.net/account/bulk?"
     if post['TaggedPlayerIds']:
@@ -518,7 +518,10 @@ def get_tagged_accounts_string(post):
         accounts = requests.get(bulk).json()
 
         for account in accounts:
-            tagged += f"[`@{account['username']}`](https://rec.net/user/{account['username']}) "
+            if usernames_only:
+                tagged += f"`@{account['username']}` "
+            else:
+                tagged += f"[`@{account['username']}`](https://rec.net/user/{account['username']}) "
 
     return tagged
 
