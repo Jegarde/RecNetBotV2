@@ -7229,5 +7229,129 @@
         "LastCheck": "2021-03-08T08:44:31.251325+00:00",
         "LastCheckUserId": 286636365058146325,
         "ImagesShared": 7200
+    },
+    "2600798": {
+        "RoomId": 2600798,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "F00Ty",
+        "Description": "This room is a blank canvas. Make it into whatever you like!",
+        "ImageName": "a51557d930cf48c394ad73e9286a7863.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 2472219,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "MinLevel": 0,
+        "CreatedAt": "2019-09-26T22:32:30.3132811Z",
+        "Stats": {
+            "CheerCount": 0,
+            "FavoriteCount": 1,
+            "VisitorCount": 3,
+            "VisitCount": 4
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 2633608,
+                "RoomId": 2600798,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "bb1903dd5d484599a2d7477bc07d8066.room",
+                "DataSavedAt": "2019-09-26T23:44:05.341532Z",
+                "IsSandbox": true,
+                "MaxPlayers": 40,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 2428131,
+                "Role": 30,
+                "LastChangedByAccountId": null,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2468777,
+                "Role": 30,
+                "LastChangedByAccountId": null,
+                "InvitedRole": 0
+            },
+            {
+                "AccountId": 2472219,
+                "Role": 255,
+                "LastChangedByAccountId": null,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 2600798,
+                "VisitType": 0,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 2600798,
+                "VisitType": 1,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 2600798,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 2600798,
+                "VisitType": 10,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 2600798,
+                "VisitType": 11,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 2600798,
+                "VisitType": 20,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 2600798,
+                "VisitType": 30,
+                "Score": 0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.0,
+        "LastCheck": "2021-03-10T07:09:16.959404+00:00",
+        "LastCheckUserId": null,
+        "ImagesShared": 0
     }
 }

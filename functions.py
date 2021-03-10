@@ -83,6 +83,25 @@ def self_cheers(photos, account_id):
             continue
     return self_cheers
 
+def image_embed(image_data):
+    tagged = get_tagged_accounts_string(image_data, False)
+
+    username = id_to_username(image_data['PlayerId'])
+    room_name = id_to_room_name(image_data['RoomId'])
+    if room_name:
+        room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
+    else:
+        room_string = "\n"
+
+    embed=discord.Embed(
+        colour=discord.Colour.orange(),
+        title=f"Taken by @{username}",
+        description=f"🔗 **[RecNet post](https://rec.net/image/{image_data['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{image_data['CheerCount']}` 💬 `{image_data['CommentCount']}`\n📆 `{image_data['CreatedAt'][:10]}` ⏰ `{image_data['CreatedAt'][11:16]} UTX`\n{tagged}"
+    )
+    embed.set_image(url=f"https://img.rec.net/{image_data['ImageName']}")
+    embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=id_to_pfp(image_data['PlayerId']))
+    return embed
+
 def cheers_in_room():
     images = requests.get("https://api.rec.net/api/images/v4/room/17274336?take=999999").json()
     print(len(images))
@@ -512,7 +531,6 @@ def get_tagged_accounts_string(post, usernames_only=False):
     if post['TaggedPlayerIds']:
         tagged = "👥 "
         for account_id in post['TaggedPlayerIds']:
-            #username = functions.id_to_username(account_id)
             bulk += f"&id={account_id}"
 
         accounts = requests.get(bulk).json()
@@ -549,10 +567,10 @@ def find_random_img():
     img_json = None
     while img_json == None:
       random_int = random.randint(1, 18200000)
-      img = requests.get(f"https://api.rec.net/api/images/v4/{random_int}")
-      if img.ok == False:
+      response = requests.get(f"https://api.rec.net/api/images/v4/{random_int}")
+      if response.ok == False:
             continue
-      img_json = img.json()
+      img_json = response.json()
     return img_json
 
 def find_random_room():

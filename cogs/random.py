@@ -4,6 +4,7 @@ import discord
 import random
 import json
 from discord.ext import commands
+from discord.ext import menus
 
 class Random(commands.Cog):
     def __init__(self, client):
@@ -59,8 +60,6 @@ class Random(commands.Cog):
     @commands.check(functions.beta_tester)
     async def cringebio(self, ctx, amount=1):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        
-        author = f"<@{ctx.author.id}>"
 
         if amount > 5:
             amount = 5
@@ -88,18 +87,16 @@ class Random(commands.Cog):
             bio = bio["bio"]
             embed.add_field(name=f"👤 **{display_name}** @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
-        embed.add_field(name=f"CHECK IF SOMEONE'S BIO IS CRINGE!", value=f"`.cbc <username>`", inline=False)
+        embed.add_field(name="CHECK IF SOMEONE'S BIO IS CRINGE!", value=f"`.cbc <username>`", inline=False)
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(author, embed=embed)
+        await ctx.send(embed=embed)
 
     # CMD-FASTRANDOMBIO
     @commands.command(aliases=["frb"])
     @commands.check(functions.beta_tester)
     async def fastrandombio(self, ctx, amount=1):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        
-        author = f"<@{ctx.author.id}>"
 
         if amount > 5:
             amount = 5
@@ -121,7 +118,7 @@ class Random(commands.Cog):
                 embed.add_field(name=f"👤 **{display_name}** @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(author, embed=embed)
+        await ctx.send(embed=embed)
 
 
     # CMD-RANDOMACCOUNT
@@ -129,8 +126,6 @@ class Random(commands.Cog):
     @commands.check(functions.beta_tester)
     async def randomaccount(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        
-        author = f"<@{ctx.author.id}>"
 
         account = functions.find_random_account()
         pfp = functions.id_to_pfp(account['accountId'])
@@ -147,7 +142,7 @@ class Random(commands.Cog):
         embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(author, embed=embed)
+        await ctx.send(embed=embed)
 
 
     # CMD-RANDOMPFP
@@ -155,8 +150,6 @@ class Random(commands.Cog):
     @commands.check(functions.beta_tester)
     async def randompfp(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        
-        author = f"<@{ctx.author.id}>"
 
         pfp = "DefaultProfileImage"
         while pfp == "DefaultProfileImage":
@@ -168,14 +161,14 @@ class Random(commands.Cog):
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
-            title = f"Random profile picture!",
+            title = "Random profile picture!",
             description = f"[🔗 RecNet post](https://rec.net/image/{pfp}) *(might not exist)*"
         )
         embed.set_image(url=f"https://img.rec.net/{pfp}")
         embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id))
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(author, embed=embed)
+        await ctx.send(embed=embed)
 
 
     # CMD-RANDOMLOADSCREEN
@@ -201,60 +194,30 @@ class Random(commands.Cog):
     # CMD-RANDOMIMG
     @commands.command(aliases=["rimg"])
     @commands.check(functions.beta_tester)
-    async def randomimg(self, ctx, amount=1):
+    async def randomimg(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        
-        author = f"<@{ctx.author.id}>"
-
-        if amount > 5:
-            amount = 5
-        elif amount < 1:
-            amount = 1
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
-            description = f"<a:spinning:804022054822346823> Searching for {amount} random image(s)..."
+            description = f"<a:spinning:804022054822346823> Searching for a random image..."
         )
         functions.embed_footer(ctx, embed)
         loading = await ctx.send(embed=embed)
 
-        img_string = ""
-        for x in range(amount):
-            random_img = functions.find_random_img()
+        random_img = functions.find_random_img()
 
-            tagged = functions.get_tagged_accounts_string(random_img, True)
-
-            if amount == 1:
-                username = functions.id_to_username(random_img['PlayerId'])
-                room_name = functions.id_to_room_name(random_img['RoomId'])
-                if room_name:
-                    room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
-                else:
-                    room_string = "\n"
-                    
-                embed=discord.Embed(
-                    colour=discord.Colour.orange(),
-                    title=f"Random image of @{username}, taken by @{functions.id_to_username(random_img['PlayerId'])}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_img['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n📆 `{random_img['CreatedAt'][:10]}` ⏰ `{random_img['CreatedAt'][11:16]} UTX`\n{tagged}"
-                )
-                embed.set_image(url=f"https://img.rec.net/{random_img['ImageName']}")
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(random_img['PlayerId']))
-            else:
-                img_string += f"https://rec.net/image/{random_img['Id']}\n**{functions.id_to_display_name(random_img['PlayerId'])}** @{functions.id_to_username(random_img['PlayerId'])}\n<:CheerGeneral:803244099510861885> `{random_img['CheerCount']}` 💬 `{random_img['CommentCount']}`\n{tagged}\n\n"
+        embed = functions.image_embed(random_img)
 
         await loading.delete()
-        if amount == 1:
-            await ctx.send(f"{author}\n",embed=embed)   
-        else:
-            await ctx.send(f"{author}\n{img_string}")
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(f"Random image",embed=embed)   
 
     # CMD-RANDOMROOM
     @commands.command(aliases=["rroom"])
     @commands.check(functions.beta_tester)
     async def randomroom(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        
-        author = f"<@{ctx.author.id}>"
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
@@ -269,7 +232,7 @@ class Random(commands.Cog):
         functions.embed_footer(ctx, room_embed) # get default footer from function
 
         await loading.delete()
-        await ctx.send(author, embed=room_embed)
+        await ctx.send(embed=room_embed)
 
 
     # CMD-RANDOMEVENT
@@ -313,29 +276,15 @@ class Random(commands.Cog):
             
             if feed:
                 random_feed = feed[random.randint(0, len(feed)-1)]
-                username = functions.id_to_username(account['account_id'])
-                tagged = functions.get_tagged_accounts_string(random_feed)
                 
-                room_name = functions.id_to_room_name(random_feed['RoomId'])
-                if room_name:
-                    room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
-                else:
-                    room_string = "\n"
-                    
-                embed=discord.Embed(
-                    colour=discord.Colour.orange(),
-                    title=f"Random image of @{username}, taken by @{functions.id_to_username(random_feed['PlayerId'])}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_feed['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{random_feed['CheerCount']}` 💬 `{random_feed['CommentCount']}`\n📆 `{random_feed['CreatedAt'][:10]}` ⏰ `{random_feed['CreatedAt'][11:16]} UTX`\n{tagged}"
-                )
-                embed.set_image(url=f"https://img.rec.net/{random_feed['ImageName']}")
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+                embed = functions.image_embed(random_feed)
             else:
                 embed = functions.error_msg(ctx, f"User `@{profile}` doesn't appear in any post!")
         else:
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(embed=embed)
+        await ctx.send(f"Random image of `@{account['username']}`", embed=embed)
 
     @randomimgof.error
     async def clear_error(self, ctx, error):
@@ -345,7 +294,6 @@ class Random(commands.Cog):
             await ctx.send(embed=embed)
         else:
             pass
-
 
     # CMD-RANDOMIMGBY
     @commands.command(aliases=["rimgby", "rib"])
@@ -359,29 +307,15 @@ class Random(commands.Cog):
             
             if photos:
                 random_photos = photos[random.randint(0, len(photos)-1)]
-                username = functions.id_to_username(account['account_id'])
-                tagged = functions.get_tagged_accounts_string(random_photos)
-                
-                room_name = functions.id_to_room_name(random_photos['RoomId'])
-                if room_name:
-                    room_string = f"\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n"
-                else:
-                    room_string = "\n"
 
-                embed=discord.Embed(
-                    colour=discord.Colour.orange(),
-                    title=f"Random image taken by @{username}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
-                )
-                embed.set_image(url=f"https://img.rec.net/{random_photos['ImageName']}")
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+                embed = functions.image_embed(random_photos)
             else:
                 embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single post!")
         else:
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(embed=embed)
+        await ctx.send(f"Random image by `@{account['username']}`", embed=embed)
 
     @randomimgby.error
     async def clear_error(self, ctx, error):
@@ -414,17 +348,8 @@ class Random(commands.Cog):
 
                     if found_photos:
                         random_photos = found_photos[random.randint(0, len(found_photos)-1)]
-                        username = functions.id_to_username(account['account_id'])
-                        tagged = functions.get_tagged_accounts_string(random_photos)
-                        
-                        room_name = functions.id_to_room_name(random_photos['RoomId'])
-                        embed=discord.Embed(
-                            colour=discord.Colour.orange(),
-                            title=f"Random image taken by @{username} in ^{room_name}",
-                            description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
-                        )
-                        embed.set_image(url=f"https://img.rec.net/{random_photos['ImageName']}")
-                        embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+
+                        embed = functions.image_embed(random_photos)
                     else:
                         embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single post in `^{room['Name']}`!")
                 else:
@@ -435,7 +360,7 @@ class Random(commands.Cog):
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(embed=embed)
+        await ctx.send(f"Random image by `@{account['username']}`, in `^{room['Name']}`", embed=embed)
 
     @randomimgbyin.error
     async def clear_error(self, ctx, error):
@@ -468,17 +393,8 @@ class Random(commands.Cog):
 
                     if found_photos:
                         random_photos = found_photos[random.randint(0, len(found_photos)-1)]
-                        username = functions.id_to_username(account['account_id'])
-                        tagged = functions.get_tagged_accounts_string(random_photos)
-                        
-                        room_name = functions.id_to_room_name(random_photos['RoomId'])
-                        embed=discord.Embed(
-                            colour=discord.Colour.orange(),
-                            title=f"Random image taken of @{username} in ^{room_name}",
-                            description=f"🔗 **[RecNet post](https://rec.net/image/{random_photos['Id']})**\n🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{random_photos['CheerCount']}` 💬 `{random_photos['CommentCount']}`\n📆 `{random_photos['CreatedAt'][:10]}` ⏰ `{random_photos['CreatedAt'][11:16]} UTX`\n{tagged}"
-                        )
-                        embed.set_image(url=f"https://img.rec.net/{random_photos['ImageName']}")
-                        embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account['account_id']))
+
+                        embed = functions.image_embed(random_photos)
                     else:
                         embed = functions.error_msg(ctx, f"User `@{account['username']}` doesn't appear in `^{room['Name']}`!")
                 else:
@@ -489,7 +405,7 @@ class Random(commands.Cog):
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(embed=embed)
+        await ctx.send(f"Random image of `@{account['username']}`, in `^{room['Name']}`", embed=embed)
 
 
     @randomimgofin.error
@@ -502,7 +418,6 @@ class Random(commands.Cog):
             pass
 
 
-
     # CMD-RANDOMIMGIN
     @commands.command(aliases=["rimgin", "rii"])
     @commands.check(functions.beta_tester)
@@ -511,7 +426,6 @@ class Random(commands.Cog):
 
         room = functions.get_room_json(room_name)
         if room:
-            author = f"<@{ctx.author.id}>"
 
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
@@ -523,19 +437,8 @@ class Random(commands.Cog):
             room_photos = functions.get_photos_in_room(room_name)
             if room_photos:
                 random_photo = room_photos[random.randint(0, len(room_photos)-1)]
-                tagged = functions.get_tagged_accounts_string(random_photo)
-                room_photo_count = len(room_photos)
-                if room_photo_count > 9999:
-                    room_photo_count = ">10000"
-
-                embed=discord.Embed(
-                    colour=discord.Colour.orange(),
-                    title=f"Random image taken in ^{room['Name']}",
-                    description=f"🔗 **[RecNet post](https://rec.net/image/{random_photo['Id']})**\n🚪 [`^{room['Name']}`](https://rec.net/room/{room['Name']})\n<:CheerGeneral:803244099510861885> `{random_photo['CheerCount']}` 💬 `{random_photo['CommentCount']}`\n📆 `{random_photo['CreatedAt'][:10]}` ⏰ `{random_photo['CreatedAt'][11:16]} UTX`\n{tagged}\n🖼️ Pictures shared in `^{room['Name']}`: `{room_photo_count}`"
-                )
-                embed.set_image(url=f"https://img.rec.net/{random_photo['ImageName']}")
-                username = functions.id_to_username(random_photo['PlayerId'])
-                embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(random_photo['PlayerId']))
+                
+                embed = functions.image_embed(random_photo)
             else:
                 embed = functions.error_msg(ctx, f"Not a single picture has been taken in `^{room['Name']}`")
         else:
@@ -543,7 +446,7 @@ class Random(commands.Cog):
 
         await loading.delete()
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(author, embed=embed)
+        await ctx.send(f"Random image in `^{room['Name']}`", embed=embed)
 
     @randomimgin.error
     async def clear_error(self, ctx, error):

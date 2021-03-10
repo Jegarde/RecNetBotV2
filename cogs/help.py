@@ -18,7 +18,7 @@ class Help(commands.Cog):
             )
             embed.add_field(name="👤 Accounts", value="`stats`, `bio`, `cringebiocheck` `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
 
-            embed.add_field(name="🖼️ Images", value="`latest`, `latestin`, `latestwith` `latestfeed`, `oldest`, `oldestin`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `takenofin`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`, `blacklisted`",inline=False)
+            embed.add_field(name="🖼️ Images", value="`latest`, `latestinby`, `latestwith` `latestfeed`, `oldest`, `oldestinby`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `takenofin`, `together`, `cheers`, `comments`, `pictures`, `sortby`, `bookmarked`, `blacklisted`",inline=False)
 
             embed.add_field(name="🚪 Rooms", value="`roominfo`, `roomsby`, `featured`, `placement`",inline=False)
 
