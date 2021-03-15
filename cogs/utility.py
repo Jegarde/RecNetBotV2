@@ -914,62 +914,22 @@ class Utility(commands.Cog):
     async def takenin(self, ctx, room, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
-        author = f"<@{ctx.author.id}>"
-
         room_data = functions.get_room_json(room)
         if room_data: #if room exists
             account = functions.check_account_existence_and_return(profile)
             if account: # if account exists
                 photos = functions.id_to_photos(account['account_id'])
                 if photos: # if user has posted anything
-                    msg = ""
-                    save_msg = ""
-                    photos_found = []
-                    exceeded_limit = False
-                    cheers = 0
-                    comments = 0
+                    global images
+                    images = []
                     for post in photos:
                         if post['RoomId'] == room_data['RoomId']:
-                            photos_found.append(post['Id'])
-                            msg += f"<https://rec.net/image/{post['Id']}>\n"
+                            images.append(post)
 
-                            cheers += post['CheerCount']
-                            comments += post['CommentCount']
-
-                            save_msg += f"https://rec.net/image/{post['Id']}\n"
-                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
-                            save_msg += f"Cheers: {post['CheerCount']}\n"
-                            save_msg += f"Comments: {post['CommentCount']}\n"
-                            save_msg += "\n"
-
-                    if photos_found:
-                        if len(msg) > 1500:
-                            exceeded_limit = True
-                            # message exceeded
-                            msg = "*Message exceeded Discord's message length limit.*\n\n"
-                            with open("temp_txt.txt","w") as text_file:         
-                                text_file.write(save_msg)
-                            file_name = f"Taken in ^{room_data['Name']}, by {account['username']}.txt"
-
-                        # first pic
-                        msg += f"\n**First picture in **`^{room_data['Name']}`: https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
-                        # latest picture
-                        msg += f"**Latest picture in **`^{room_data['Name']}`: https://rec.net/image/{photos_found[0]}\n\n"
-                        # cheers
-                        msg += f"**Cheers in total:** `{cheers}`\n"
-                        # comments
-                        msg += f"**Comments in total:** `{comments}`\n\n"
-                        # results
-                        msg += f"*Results:* `{len(photos_found)}`"
-
-                        if exceeded_limit:
-                            print("SEND")
-                            with open("temp_txt.txt","rb") as text_file:
-                                await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
-                        else:
-                            print("what")
-                            await ctx.send(f"{author}\n{msg}")
-
+                    if images:
+                        pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
+                        await pages.start(ctx)
+                        
                     else: # not found
                         embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single picture in `^{room_data['Name']}`!")
                         await ctx.send(embed=embed)
@@ -1000,60 +960,20 @@ class Utility(commands.Cog):
     async def takenof(self, ctx, of_user, by_user):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
-        author = f"<@{ctx.author.id}>"
-
         of_user_account = functions.check_account_existence_and_return(of_user)
-        by_user_account = account = functions.check_account_existence_and_return(by_user)
+        by_user_account = functions.check_account_existence_and_return(by_user)
         if of_user_account and by_user_account: #if both exist
             of_user_feed = functions.id_to_feed(of_user_account['account_id'])
             if of_user_feed: # if user appears anywhere
-                msg = ""
-                save_msg = ""
-                photos_found = []
-                exceeded_limit = False
-                cheers = 0
-                comments = 0
+                global images
+                images = []
                 for post in of_user_feed:
                     if by_user_account['account_id'] == post['PlayerId']:
-                        photos_found.append(post['Id'])
-                        msg += f"<https://rec.net/image/{post['Id']}>\n"
+                        images.append(post)
 
-                        cheers += post['CheerCount']
-                        comments += post['CommentCount']
-
-                        save_msg += f"https://rec.net/image/{post['Id']}\n"
-                        save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
-                        save_msg += f"Cheers: {post['CheerCount']}\n"
-                        save_msg += f"Comments: {post['CommentCount']}\n"
-                        save_msg += "\n"
-
-                if photos_found:
-                    if len(msg) > 1500:
-                        exceeded_limit = True
-                        # message exceeded
-                        msg = "*Message exceeded Discord's message length limit.*\n\n"
-                        with open("temp_txt.txt","w") as text_file:         
-                            text_file.write(save_msg)
-                        file_name = f"Taken of ^{of_user_account['username']}, by {by_user_account['username']}.txt"
-
-                    # first pic
-                    msg += f"\n**First picture:** https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
-                    # latest picture
-                    msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
-                    # cheers
-                    msg += f"**Cheers in total:** `{cheers}`\n"
-                    # comments
-                    msg += f"**Comments in total:** `{comments}`\n\n"
-                    # results
-                    msg += f"*Results:* `{len(photos_found)}`"
-
-                    if exceeded_limit:
-                        print("SEND")
-                        with open("temp_txt.txt","rb") as text_file:
-                            await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
-                    else:
-                        print("what")
-                        await ctx.send(f"{author}\n{msg}")
+                if images:
+                    pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
+                    await pages.start(ctx)
 
                 else: # not found
                     embed = functions.error_msg(ctx, f"Couldn't find any picture taken by `@{by_user_account['username']}`, that features `@{of_user_account['username']}`")
@@ -1081,8 +1001,6 @@ class Utility(commands.Cog):
     async def takenofin(self, ctx, of_user, room):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
-        author = f"<@{ctx.author.id}>"
-
         of_user_account = functions.check_account_existence_and_return(of_user)
         room_data = functions.get_room_json(room)
         
@@ -1090,53 +1008,15 @@ class Utility(commands.Cog):
             if room_data:
                 of_user_feed = functions.id_to_feed(of_user_account['account_id'])
                 if of_user_feed: # if user appears anywhere
-                    msg = ""
-                    save_msg = ""
-                    photos_found = []
-                    exceeded_limit = False
-                    cheers = 0
-                    comments = 0
+                    global images
+                    images = []
                     for post in of_user_feed:
                         if room_data['RoomId'] == post['RoomId']:
-                            photos_found.append(post['Id'])
-                            msg += f"<https://rec.net/image/{post['Id']}>\n"
+                            images.append(post)
 
-                            cheers += post['CheerCount']
-                            comments += post['CommentCount']
-
-                            save_msg += f"https://rec.net/image/{post['Id']}\n"
-                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
-                            save_msg += f"Cheers: {post['CheerCount']}\n"
-                            save_msg += f"Comments: {post['CommentCount']}\n"
-                            save_msg += "\n"
-
-                    if photos_found:
-                        if len(msg) > 1500:
-                            exceeded_limit = True
-                            # message exceeded
-                            msg = "*Message exceeded Discord's message length limit.*\n\n"
-                            with open("temp_txt.txt","w") as text_file:         
-                                text_file.write(save_msg)
-                            file_name = f"Taken of @{of_user_account['username']}, in ^{room_data['Name']}.txt"
-
-                        # first pic
-                        msg += f"\n**First picture:** https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
-                        # latest picture
-                        msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
-                        # cheers
-                        msg += f"**Cheers in total:** `{cheers}`\n"
-                        # comments
-                        msg += f"**Comments in total:** `{comments}`\n\n"
-                        # results
-                        msg += f"*Results:* `{len(photos_found)}`"
-
-                        if exceeded_limit:
-                            print("SEND")
-                            with open("temp_txt.txt","rb") as text_file:
-                                await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
-                        else:
-                            print("what")
-                            await ctx.send(f"{author}\n{msg}")
+                    if images:
+                        pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
+                        await pages.start(ctx)
                     
                     else: # not found
                         embed = functions.error_msg(ctx, f"Couldn't find any picture taken of `@{of_user_account['username']}` in `^{room_data['Name']}`!")
@@ -1165,61 +1045,16 @@ class Utility(commands.Cog):
     async def together(self, ctx, user1, user2):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
-        author = f"<@{ctx.author.id}>"
-
         user1_account = functions.check_account_existence_and_return(user1)
         user2_account = functions.check_account_existence_and_return(user2)
         if user1_account and user2_account: #if both exist
             user1_feed = functions.id_to_feed(user1_account['account_id'])
             if user1_feed: # if user appears anywhere
-                msg = ""
-                save_msg = ""
-                photos_found = []
-                exceeded_limit = False
-                cheers = 0
-                comments = 0
-                together_images = functions.together(user1_account['account_id'], user2_account['account_id'])
-                for post in together_images:
-                    photos_found.append(post['Id'])
-                    msg += f"<https://rec.net/image/{post['Id']}>\n"
-
-                    cheers += post['CheerCount']
-                    comments += post['CommentCount']
-
-                    save_msg += f"https://rec.net/image/{post['Id']}\n"
-                    save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
-                    save_msg += f"Cheers: {post['CheerCount']}\n"
-                    save_msg += f"Comments: {post['CommentCount']}\n"
-                    save_msg += "\n"
-
-                if photos_found:
-                    if len(msg) > 1500:
-                        exceeded_limit = True
-                        # message exceeded
-                        msg = "*Message exceeded Discord's message length limit.*\n\n"
-                        with open("temp_txt.txt","w") as text_file:         
-                            text_file.write(save_msg)
-                        file_name = f"Together ^{user1_account['username']} and {user2_account['username']}.txt"
-
-                    # first pic
-                    msg += f"\n**First picture:** https://rec.net/image/{photos_found[len(photos_found)-1]}\n"
-                    # latest picture
-                    msg += f"**Latest picture:** https://rec.net/image/{photos_found[0]}\n\n"
-                    # cheers
-                    msg += f"<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS IN TOTAL)*\n"
-                    # comments
-                    msg += f"💬 `{comments}` *(COMMENTS IN TOTAL)*\n\n"
-                    # results
-                    msg += f"*Results:* `{len(photos_found)}`"
-
-                    if exceeded_limit:
-                        print("SEND")
-                        with open("temp_txt.txt","rb") as text_file:
-                            await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
-                    else:
-                        print("what")
-                        await ctx.send(f"{author}\n{msg}")
-
+                global images
+                images = functions.together(user1_account['account_id'], user2_account['account_id'])
+                if images:
+                    pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
+                    await pages.start(ctx)
                 else: # not found
                     embed = functions.error_msg(ctx, f"Couldn't find any post that features both `@{user1_account['username']}` and `@{user2_account['username']}`!")
                 await ctx.send(embed=embed)
@@ -1256,38 +1091,25 @@ class Utility(commands.Cog):
                 reverse_sort = True
                 if mode == "cheers":
                     mode = lambda i: i["CheerCount"]
-                    file_name = f"Sorted by CHEERS {account['username']}.txt"
                     reverse_sort = True
                 elif mode == "comments":
                     mode = lambda i: i["CommentCount"]
-                    file_name = f"Sorted by COMMENTS {account['username']}.txt"
                     reverse_sort = True
                 elif mode == "oldest":
                     mode = lambda i: i["CreatedAt"]
-                    file_name = f"Sorted by OLDEST {account['username']}.txt"
                     reverse_sort = False
                 elif mode == "latest":
                     mode = lambda i: i["CreatedAt"]
-                    file_name = f"Sorted by LATEST {account['username']}.txt"
                     reverse_sort = True
                 else:
                     mode = None
                 
                 if mode:
-                    save_msg = ""
-                    sorted_photos = sorted(photos, key = mode, reverse = reverse_sort)
-                    with open("temp_txt.txt","w") as text_file:
-                        for photo in sorted_photos:
-                            save_msg += f"https://rec.net/image/{photo['Id']}\n"
-                            save_msg += f"Date: {photo['CreatedAt'][:10]} {photo['CreatedAt'][11:16]} UTX\n"
-                            save_msg += f"Cheers: {photo['CheerCount']}\n"
-                            save_msg += f"Comments: {photo['CommentCount']}\n"
-                            save_msg += "\n"
-                            
-                        text_file.write(save_msg)
-                        
-                    with open("temp_txt.txt","rb") as text_file:
-                        await ctx.send(file=discord.File(text_file, file_name))
+                    global images
+                    images = sorted(photos, key = mode, reverse = reverse_sort)
+
+                    pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
+                    await pages.start(ctx)
                 else:
                     embed = functions.error_msg(ctx, "Invalid mode! Modes are `cheers`, `comments`, `latest`, `oldest`") 
             else:
@@ -1713,9 +1535,9 @@ class Utility(commands.Cog):
     @commands.command()
     @commands.check(functions.beta_tester)
     async def frontpage(self, ctx):
-        global frontpage 
-        frontpage = requests.get("https://api.rec.net/api/images/v3/feed/global?take=51").json()
-        pages = menus.MenuPages(source=FrontpageMenu(range(1, 51)), clear_reactions_after=True)
+        global images
+        images = requests.get("https://api.rec.net/api/images/v3/feed/global?take=51").json()
+        pages = menus.MenuPages(source=ImageMenu(range(1, 51)), clear_reactions_after=True)
         await pages.start(ctx)
 
 
@@ -1726,10 +1548,10 @@ class Utility(commands.Cog):
         account = functions.check_account_existence_and_return(username)
 
         if account:
-            global feed
-            feed = requests.get(f"https://api.rec.net/api/images/v3/feed/player/{account['account_id']}?take=9999999").json()
-            if feed:
-                pages = menus.MenuPages(source=FeedMenu(range(1, len(feed)+1)), clear_reactions_after=True)
+            global images
+            images = requests.get(f"https://api.rec.net/api/images/v3/feed/player/{account['account_id']}?take=9999999").json()
+            if images:
+                pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
                 await pages.start(ctx)
             else:
                 embed = functions.error_msg(ctx, f"User `@{username}` isn't tagged in a single picture!")
@@ -1747,6 +1569,34 @@ class Utility(commands.Cog):
         else:
             pass
 
+
+    #CMD-PHOTOS
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def photos(self, ctx, username):
+        account = functions.check_account_existence_and_return(username)
+
+        if account:
+            global images
+            images = requests.get(f"https://api.rec.net/api/images/v4/player/{account['account_id']}?take=9999999").json()
+            if images:
+                pages = menus.MenuPages(source=ImageMenu(range(1, len(images)+1)), clear_reactions_after=True)
+                await pages.start(ctx)
+            else:
+                embed = functions.error_msg(ctx, f"User `@{username}` hasn't shared a single picture!")
+                await ctx.send(embed=embed)
+
+        else:
+            embed = functions.error_msg(ctx, f"User `@{username}` doesn't exist!")
+            await ctx.send(embed=embed)
+
+    @photos.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            await ctx.send(embed=embed)
+        else:
+            pass
 
 class FeedMenu(menus.ListPageSource):
     def __init__(self, data):
@@ -1807,36 +1657,6 @@ class FeedMenu(menus.ListPageSource):
 
         return embed
 
-
-    #CMD-PHOTOS
-    @commands.command()
-    @commands.check(functions.beta_tester)
-    async def photos(self, ctx, username):
-        account = functions.check_account_existence_and_return(username)
-
-        if account:
-            global photos
-            photos = requests.get(f"https://api.rec.net/api/images/v4/player/{account['account_id']}?take=9999999").json()
-            if photos:
-                pages = menus.MenuPages(source=PhotosMenu(range(1, len(photos)+1)), clear_reactions_after=True)
-                await pages.start(ctx)
-            else:
-                embed = functions.error_msg(ctx, f"User `@{username}` hasn't shared a single picture!")
-                await ctx.send(embed=embed)
-
-        else:
-            embed = functions.error_msg(ctx, f"User `@{username}` doesn't exist!")
-            await ctx.send(embed=embed)
-
-    @photos.error
-    async def clear_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in an username!")
-            await ctx.send(embed=embed)
-        else:
-            pass
-
-
 class PhotosMenu(menus.ListPageSource):
     def __init__(self, data):
         super().__init__(data, per_page=1)
@@ -1896,16 +1716,16 @@ class PhotosMenu(menus.ListPageSource):
 
         return embed
 
-class FrontpageMenu(menus.ListPageSource):
+class ImageMenu(menus.ListPageSource):
     def __init__(self, data):
         super().__init__(data, per_page=1)
         
 
     async def format_page(self, menu, entries):
-        global frontpage
+        global images
         offset = menu.current_page * self.per_page
 
-        post = frontpage[offset]
+        post = images[offset]
         
         tagged = functions.get_tagged_accounts_string(post)
         
@@ -1917,7 +1737,7 @@ class FrontpageMenu(menus.ListPageSource):
         room_name = functions.id_to_room_name(post['RoomId'])
         embed=discord.Embed(
             colour=discord.Colour.orange(),
-            title=f"🔗 Frontpage post #{offset+1}",
+            title=f"🔗 Post #{offset+1}",
             description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
             url=f"https://rec.net/image/{post['Id']}"
         )

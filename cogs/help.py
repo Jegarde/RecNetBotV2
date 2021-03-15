@@ -57,6 +57,13 @@ class Help(commands.Cog):
             embed.add_field(name="🖼️ Images", value="`imageid`",inline=False)
 
             embed.add_field(name="These commands are experimental!", value="They will probably all be combined into one command eventually. As of now, they're used to do simple API calls.")
+        elif menu == "menus":
+            embed = discord.Embed(
+                colour= discord.Colour.orange(),
+                title = "📟 Menu commands",
+                description = "These commands utilize the slick menu system! They can also be found in other categories."
+            )
+            embed.add_field(name="📟 Menus", value="`frontpage`, `photos`, `feed`, `sortby`, `together`, `takenin`, `takenof`, `takenofin`", inline=False)
         else:
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
@@ -65,6 +72,7 @@ class Help(commands.Cog):
 
             embed.add_field(name="🛠️ Utility", value="`.help utility`")
             embed.add_field(name="<:RRQuestion:803587583187746847> \"Random\"", value="`.help random`")
+            embed.add_field(name="📟 Menus", value="`.help menus`")
             embed.add_field(name="🔎 Search", value="`.help search`")
             embed.add_field(name="📲 API", value="`.help api`")
             embed.add_field(name="📖 Other", value="`.help other`")
