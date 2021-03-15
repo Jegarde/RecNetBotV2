@@ -8,14 +8,6 @@ class Utility(commands.Cog):
     def __init__(self, client):
         self.client = client
 
-    @commands.command()
-    @commands.check(functions.is_it_me)
-    async def addrole(self, ctx, role_):
-        member = ctx.message.author
-        var = discord.utils.get(ctx.guild.roles, name = role_)
-        await member.add_roles(var)
-
-
     # UTILITY COMMANDS
 
     @commands.command()
@@ -584,10 +576,10 @@ class Utility(commands.Cog):
         else:
             pass
 
-    # CMD-PICTURES
+    # CMD-PHOTOSTATS
     @commands.command()
     @commands.check(functions.beta_tester)
-    async def pictures(self, ctx, profile):
+    async def photostats(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         account = functions.check_account_existence_and_return(profile)
@@ -614,7 +606,7 @@ class Utility(commands.Cog):
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
 
-    @pictures.error
+    @photostats.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an username!")
@@ -1359,6 +1351,94 @@ class Utility(commands.Cog):
             pass
 
 
+    # CMD-CREATORSTATS
+    @commands.command(aliases=['cs'])
+    @commands.check(functions.beta_tester)
+    async def creatorstats(self, ctx, profile):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+
+        if account:
+            account_rooms = functions.id_to_rooms(account['account_id'])
+            if account_rooms:
+                best_room = {}
+                worst_room = {}
+                room_count = 0
+                cheers = 0
+                favorites = 0
+                visitors = 0
+                visits = 0
+                creator_score = 0
+
+                for room in account_rooms:
+                    cheers += room['Stats']['CheerCount']
+                    favorites += room['Stats']['FavoriteCount']
+                    visitors += room['Stats']['VisitorCount']
+                    visits += room['Stats']['VisitCount']
+                    
+                    temp_room_stats_sum = room['Stats']['CheerCount'] + room['Stats']['FavoriteCount'] + room['Stats']['VisitorCount'] + room['Stats']['VisitCount']
+                    creator_score += round((temp_room_stats_sum + room_count*1000) / 5)
+
+                    room_count += 1
+                    if room_count == 1:
+                        best_room = room
+                        best_room['RoomStatsSum'] = temp_room_stats_sum
+
+                        worst_room = room
+                        worst_room['RoomStatsSum'] = temp_room_stats_sum
+                    else:
+                        #print(f"BestRoom {best_room['Name']}: {best_room['RoomStatsSum']} vs {room['Name']}: {temp_room_stats_sum}")
+                        #print(f"WorstRoom {worst_room['Name']}: {worst_room['RoomStatsSum']} vs {room['Name']}: {temp_room_stats_sum}")
+                        if best_room['RoomStatsSum'] < temp_room_stats_sum:
+                            best_room = room
+                            best_room['RoomStatsSum'] = temp_room_stats_sum
+                        elif worst_room['RoomStatsSum'] > temp_room_stats_sum:
+                            worst_room = room
+                            worst_room['RoomStatsSum'] = temp_room_stats_sum
+                
+                embed=discord.Embed(
+                    colour=discord.Colour.orange(),
+                    title = f"@{account['username']}'s creator statistics",
+                    description = f"Rooms published: `{room_count}`\nCreator Score: `{creator_score}`"
+                )
+
+                embed.add_field(
+                    name="Total Room Statistics",value=f"<:CheerGeneral:803244099510861885> `{cheers}` *(CHEERS)*\n⭐ `{favorites}` *(FAVORITES)*\n👤 `{visitors}` *(VISITORS)*\n👥 `{visits}` *(VISITS)*",
+                    inline=False
+                )
+                embed.add_field(
+                    name="Best Room",
+                    value=f"🚪 [^{best_room['Name']}](https://rec.net/room/{best_room['Name']})",
+                    inline=True
+                )
+                embed.add_field(
+                    name="Worst Room",
+                    value=f"🚪 [^{worst_room['Name']}](https://rec.net/room/{worst_room['Name']})",
+                    inline=True
+                )
+                        
+                pfp = functions.id_to_pfp(account['account_id'], True)
+                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+
+            else:
+                embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single room!") 
+        else: # account doesn't exist
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
+
+        functions.embed_footer(ctx, embed) # get default footer from function
+        await ctx.send(embed=embed)
+
+    @roomsby.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
     # CMD-BOOKMARKED
     @commands.command(aliases=["bookmark", "favorites", "favorite"])
     @commands.check(functions.beta_tester)
@@ -1629,16 +1709,194 @@ class Utility(commands.Cog):
             pass
 
 
+    #CMD-FRONTPAGE
     @commands.command()
     @commands.check(functions.beta_tester)
     async def frontpage(self, ctx):
         global frontpage 
         frontpage = requests.get("https://api.rec.net/api/images/v3/feed/global?take=51").json()
-        pages = menus.MenuPages(source=MySource(range(1, 51)), clear_reactions_after=True)
+        pages = menus.MenuPages(source=FrontpageMenu(range(1, 51)), clear_reactions_after=True)
         await pages.start(ctx)
 
 
-class MySource(menus.ListPageSource):
+    #CMD-FEED
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def feed(self, ctx, username):
+        account = functions.check_account_existence_and_return(username)
+
+        if account:
+            global feed
+            feed = requests.get(f"https://api.rec.net/api/images/v3/feed/player/{account['account_id']}?take=9999999").json()
+            if feed:
+                pages = menus.MenuPages(source=FeedMenu(range(1, len(feed)+1)), clear_reactions_after=True)
+                await pages.start(ctx)
+            else:
+                embed = functions.error_msg(ctx, f"User `@{username}` isn't tagged in a single picture!")
+                await ctx.send(embed=embed)
+
+        else:
+            embed = functions.error_msg(ctx, f"User `@{username}` doesn't exist!")
+            await ctx.send(embed=embed)
+
+    @feed.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+class FeedMenu(menus.ListPageSource):
+    def __init__(self, data):
+        super().__init__(data, per_page=1)
+
+    async def format_page(self, menu, entries):
+        global feed
+        offset = menu.current_page * self.per_page
+
+        post = feed[offset]
+        
+        tagged = functions.get_tagged_accounts_string(post)
+        
+        self_cheer_string = ""
+        cheers = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/cheers").json()
+        if post['PlayerId'] in cheers:
+            self_cheer_string = "\n*SELF CHEERED!*"
+
+        room_name = functions.id_to_room_name(post['RoomId'])
+        embed=discord.Embed(
+            colour=discord.Colour.orange(),
+            title=f"🔗 Feed post #{offset+1}",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
+            url=f"https://rec.net/image/{post['Id']}"
+        )
+
+        comments = ""
+        if post['CommentCount']:
+            comment_json = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/comments").json()
+
+            bulk = "https://accounts.rec.net/account/bulk?"
+
+            comment_section = {}
+            comments = "💬 **Comments:**\n\n"
+            for comment in comment_json:
+                #commentor = functions.id_to_username(comment['PlayerId'])
+                bulk += f"&id={comment['PlayerId']}"
+                comment_section[comment['PlayerId']] = comment['Comment']
+
+            bulk_account_call = requests.get(bulk).json()
+
+            old_count = 0
+            count = 0
+            for account in bulk_account_call:
+                #comments += f"👤 [`@{account['username']}`](https://rec.net/user/{account['username']})\n💬 `{comment_json[count]['Comment']}` \n\n"
+                comments += f"[`@{account['username']}`](https://rec.net/user/{account['username']})\n`{comment_section[account['accountId']]}`\n\n"
+                count += 1
+                if len(comments) < 800:
+                    embed.add_field(name="⠀", value=comments, inline=True)
+                    comments = ""
+                    old_count = count
+            if count > old_count:
+                embed.add_field(name="⠀", value=comments, inline=True)
+
+        poster_username = functions.id_to_username(post['PlayerId'])
+        embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
+        embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
+
+        return embed
+
+
+    #CMD-PHOTOS
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def photos(self, ctx, username):
+        account = functions.check_account_existence_and_return(username)
+
+        if account:
+            global photos
+            photos = requests.get(f"https://api.rec.net/api/images/v4/player/{account['account_id']}?take=9999999").json()
+            if photos:
+                pages = menus.MenuPages(source=PhotosMenu(range(1, len(photos)+1)), clear_reactions_after=True)
+                await pages.start(ctx)
+            else:
+                embed = functions.error_msg(ctx, f"User `@{username}` hasn't shared a single picture!")
+                await ctx.send(embed=embed)
+
+        else:
+            embed = functions.error_msg(ctx, f"User `@{username}` doesn't exist!")
+            await ctx.send(embed=embed)
+
+    @photos.error
+    async def clear_error(self, ctx, error):
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in an username!")
+            await ctx.send(embed=embed)
+        else:
+            pass
+
+
+class PhotosMenu(menus.ListPageSource):
+    def __init__(self, data):
+        super().__init__(data, per_page=1)
+
+    async def format_page(self, menu, entries):
+        global photos
+        offset = menu.current_page * self.per_page
+
+        post = photos[offset]
+        
+        tagged = functions.get_tagged_accounts_string(post)
+        
+        self_cheer_string = ""
+        cheers = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/cheers").json()
+        if post['PlayerId'] in cheers:
+            self_cheer_string = "\n*SELF CHEERED!*"
+
+        room_name = functions.id_to_room_name(post['RoomId'])
+        embed=discord.Embed(
+            colour=discord.Colour.orange(),
+            title=f"🔗 Photo post #{offset+1}",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
+            url=f"https://rec.net/image/{post['Id']}"
+        )
+
+        comments = ""
+        if post['CommentCount']:
+            comment_json = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/comments").json()
+
+            bulk = "https://accounts.rec.net/account/bulk?"
+
+            comment_section = {}
+            comments = "💬 **Comments:**\n\n"
+            for comment in comment_json:
+                #commentor = functions.id_to_username(comment['PlayerId'])
+                bulk += f"&id={comment['PlayerId']}"
+                comment_section[comment['PlayerId']] = comment['Comment']
+
+            bulk_account_call = requests.get(bulk).json()
+
+            old_count = 0
+            count = 0
+            for account in bulk_account_call:
+                #comments += f"👤 [`@{account['username']}`](https://rec.net/user/{account['username']})\n💬 `{comment_json[count]['Comment']}` \n\n"
+                comments += f"[`@{account['username']}`](https://rec.net/user/{account['username']})\n`{comment_section[account['accountId']]}`\n\n"
+                count += 1
+                if len(comments) < 800:
+                    embed.add_field(name="⠀", value=comments, inline=True)
+                    comments = ""
+                    old_count = count
+            if count > old_count:
+                embed.add_field(name="⠀", value=comments, inline=True)
+
+        poster_username = functions.id_to_username(post['PlayerId'])
+        embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
+        embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
+
+        return embed
+
+class FrontpageMenu(menus.ListPageSource):
     def __init__(self, data):
         super().__init__(data, per_page=1)
         
@@ -1697,11 +1955,6 @@ class MySource(menus.ListPageSource):
         embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
 
         return embed
-
-    @menus.button('💬')
-    async def on_stop(self, payload):
-        self.stop()
-
 
 def setup(client):
     client.add_cog(Utility(client))

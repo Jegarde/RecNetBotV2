@@ -48,7 +48,7 @@ class Random(commands.Cog):
             username = functions.id_to_username(account_id)
             display_name = functions.id_to_display_name(account_id)
             bio = x["bio"]
-            embed.add_field(name=f"👤 {username} @{display_name}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
+            embed.add_field(name=f"👤 {display_name} @{username}", value=f"```{bio}```[🔗Profile](https://rec.net/user/{username})", inline=False)
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await loading.delete()
@@ -212,6 +212,8 @@ class Random(commands.Cog):
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(f"Random image",embed=embed)   
+
+
 
     # CMD-RANDOMROOM
     @commands.command(aliases=["rroom"])
