@@ -64,6 +64,13 @@ class Help(commands.Cog):
                 description = "These commands utilize the slick menu system! They can also be found in other categories."
             )
             embed.add_field(name="📟 Menus", value="`frontpage`, `photos`, `feed`, `sortby`, `together`, `takenin`, `takenof`, `takenofin`", inline=False)
+        elif menu == "legacy":
+            embed = discord.Embed(
+                colour= discord.Colour.orange(),
+                title = "👾 Legacy commands",
+                description = "These commands are the original versions of some reworked commands."
+            )
+            embed.add_field(name="👾 Legacy", value="`lfrontpage`, `lsortby`, `ltogether`, `ltakenin`, `ltakenof`, `ltakenofin`", inline=False)
         else:
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
@@ -75,7 +82,9 @@ class Help(commands.Cog):
             embed.add_field(name="📟 Menus", value="`.help menus`")
             embed.add_field(name="🔎 Search", value="`.help search`")
             embed.add_field(name="📲 API", value="`.help api`")
+            embed.add_field(name="👾 Legacy", value="`.help legacy`")
             embed.add_field(name="📖 Other", value="`.help other`")
+            
 
             rnb_stats = {}
             # total count
