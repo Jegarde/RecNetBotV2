@@ -19,6 +19,7 @@ def log(server, user, command):
         db["TotalCount"] = 1
     else:
         db["TotalCount"] += 1
+        
 
 def load(json_f):
     with open(json_f) as json_file:
