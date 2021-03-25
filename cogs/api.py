@@ -20,7 +20,7 @@ class API(commands.Cog):
             account = requests.get(
                 f"https://accounts.rec.net/account/{account_id}").json()
             embed = discord.Embed(colour=discord.Colour.orange())
-            embed.set_author(name=f"{account['username']}'s profile",
+            embed.set_author(name=f"🔗 {account['username']}'s profile",
                              url=f"https://rec.net/user/{account['username']}",
                              icon_url=functions.id_to_pfp(
                                  account['accountId'], True))
@@ -59,7 +59,7 @@ class API(commands.Cog):
                 f"https://accounts.rec.net/account/{account['account_id']}"
             ).json()
             embed = discord.Embed(colour=discord.Colour.orange())
-            embed.set_author(name=f"{account['username']}'s profile",
+            embed.set_author(name=f"🔗 {account['username']}'s profile",
                              url=f"https://rec.net/user/{account['username']}",
                              icon_url=functions.id_to_pfp(
                                  account['accountId'], True))
@@ -95,7 +95,7 @@ class API(commands.Cog):
                 f"https://api.rec.net/api/images/v4/{image_id}").json()
             embed = discord.Embed(colour=discord.Colour.orange())
             username = functions.id_to_username(image_data['PlayerId'])
-            embed.set_author(name=f"{username}'s profile",
+            embed.set_author(name=f"🔗 {username}'s profile",
                              url=f"https://rec.net/user/{username}",
                              icon_url=functions.id_to_pfp(
                                  image_data['PlayerId'], True))

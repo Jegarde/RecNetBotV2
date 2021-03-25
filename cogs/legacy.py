@@ -48,7 +48,7 @@ class Legacy(commands.Cog):
                     with open("temp_txt.txt","w") as text_file:
                         for photo in sorted_photos:
                             save_msg += f"https://rec.net/image/{photo['Id']}\n"
-                            save_msg += f"Date: {photo['CreatedAt'][:10]} {photo['CreatedAt'][11:16]} UTX\n"
+                            save_msg += f"Date: {photo['CreatedAt'][:10]} {photo['CreatedAt'][11:16]} UTC\n"
                             save_msg += f"Cheers: {photo['CheerCount']}\n"
                             save_msg += f"Comments: {photo['CommentCount']}\n"
                             save_msg += "\n"
@@ -104,7 +104,7 @@ class Legacy(commands.Cog):
                     comments += post['CommentCount']
 
                     save_msg += f"https://rec.net/image/{post['Id']}\n"
-                    save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                    save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTC\n"
                     save_msg += f"Cheers: {post['CheerCount']}\n"
                     save_msg += f"Comments: {post['CommentCount']}\n"
                     save_msg += "\n"
@@ -187,7 +187,7 @@ class Legacy(commands.Cog):
                             comments += post['CommentCount']
 
                             save_msg += f"https://rec.net/image/{post['Id']}\n"
-                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTC\n"
                             save_msg += f"Cheers: {post['CheerCount']}\n"
                             save_msg += f"Comments: {post['CommentCount']}\n"
                             save_msg += "\n"
@@ -272,7 +272,7 @@ class Legacy(commands.Cog):
                         comments += post['CommentCount']
 
                         save_msg += f"https://rec.net/image/{post['Id']}\n"
-                        save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                        save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTC\n"
                         save_msg += f"Cheers: {post['CheerCount']}\n"
                         save_msg += f"Comments: {post['CommentCount']}\n"
                         save_msg += "\n"
@@ -356,7 +356,7 @@ class Legacy(commands.Cog):
                             comments += post['CommentCount']
 
                             save_msg += f"https://rec.net/image/{post['Id']}\n"
-                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTX\n"
+                            save_msg += f"Date: {post['CreatedAt'][:10]} {post['CreatedAt'][11:16]} UTC\n"
                             save_msg += f"Cheers: {post['CheerCount']}\n"
                             save_msg += f"Comments: {post['CommentCount']}\n"
                             save_msg += "\n"

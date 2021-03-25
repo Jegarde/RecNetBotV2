@@ -46,7 +46,7 @@ class Utility(commands.Cog):
                 description = description
             )
             pfp = functions.id_to_pfp(account['account_id'])
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
 
         else:
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
@@ -78,7 +78,7 @@ class Utility(commands.Cog):
 
             embed=functions.default_embed()
             embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
         else:
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
@@ -147,7 +147,7 @@ class Utility(commands.Cog):
             else:
                 embed.add_field(name=cringe_check, value="||no bio = cringe 🙂||", inline=False)
 
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
         else:
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
@@ -179,7 +179,7 @@ class Utility(commands.Cog):
                 colour=discord.Colour.orange(),
                 description = f"[{account['username']}'s profile picture](https://rec.net/image/{functions.id_to_pfp(account['account_id'], False, False)})"
             )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
             embed.set_image(url=pfp)
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
@@ -220,7 +220,7 @@ class Utility(commands.Cog):
                     colour=discord.Colour.orange(),
                     description = f"[{account['username']}'s banner](https://rec.net/image/{functions.id_to_banner(account['account_id'], False)})"
                 )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id']))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id']))
             embed.set_image(url=banner)
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
@@ -257,7 +257,7 @@ class Utility(commands.Cog):
             embed=discord.Embed(
                 colour=discord.Colour.orange()
             )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
             embed.add_field(name="Display name", value=f"`{display_name}`", inline=True)
             embed.add_field(name="Created at", value=f"`{created_at[:10]}`", inline=True)
             embed.add_field(name="Is junior?", value=f"`{is_junior}`", inline=True)
@@ -299,7 +299,7 @@ class Utility(commands.Cog):
                 colour=discord.Colour.orange(),
                 title = title
             )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
@@ -330,9 +330,9 @@ class Utility(commands.Cog):
             embed=discord.Embed(
                 colour=discord.Colour.orange(),
                 title = f"{account['username']}'s account was created at",
-                description = f"📆 `{created_at[:10]}`\n⏰ `{created_at[11:16]} UTX`"
+                description = f"📆 `{created_at[:10]}`\n⏰ `{created_at[11:16]} UTC`"
             )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
@@ -366,7 +366,7 @@ class Utility(commands.Cog):
                 title=f"{account['username']}'s display name is",
                 description=f"`{display_name}`"
             )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
@@ -521,7 +521,7 @@ class Utility(commands.Cog):
             )
             print("set image")
             embed.set_image(url=f"https://img.rec.net/{cheer_data['most_cheered']['ImageName']}?width=720")
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
@@ -560,7 +560,7 @@ class Utility(commands.Cog):
             )
             print("set image")
             embed.set_image(url=f"https://img.rec.net/{comment_data['most_commented']['ImageName']}?width=720")
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
@@ -599,7 +599,7 @@ class Utility(commands.Cog):
                 title = f"{account['username']} has shared {total_pictures} pictures!",
                 description = f"<:CheerGeneral:803244099510861885> `{pictures_cheered}` of them are cheered!\n💬 `{pictures_commented}` of them have been commented!"
             )
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
@@ -682,7 +682,7 @@ class Utility(commands.Cog):
 
                 embed.set_thumbnail(url=functions.id_to_pfp(account['account_id'], True))
 
-                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
+                embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=functions.id_to_pfp(account['account_id'], True))
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
 
@@ -1153,7 +1153,7 @@ class Utility(commands.Cog):
                         break
                         
                 pfp = functions.id_to_pfp(account['account_id'], True)
-                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+                embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
                 
             else:
                 embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single room!") 
@@ -1241,7 +1241,7 @@ class Utility(commands.Cog):
                 )
                         
                 pfp = functions.id_to_pfp(account['account_id'], True)
-                embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+                embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
 
             else:
                 embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single room!") 
@@ -1305,7 +1305,7 @@ class Utility(commands.Cog):
                                     embed.add_field(name=f"{count}. \"{comment['Comment'].replace('bookmark', '')}\"", value=f"https://rec.net/image/{comment['SavedImageId']}", inline=False)
             
             pfp = functions.id_to_pfp(account['account_id'], True)
-            embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+            embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
                 
         else: # account doesn't exist
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!") 
@@ -1619,7 +1619,7 @@ class FeedMenu(menus.ListPageSource):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title=f"🔗 Feed post #{offset+1}",
-            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTC`\n{tagged}\n",
             url=f"https://rec.net/image/{post['Id']}"
         )
 
@@ -1652,7 +1652,7 @@ class FeedMenu(menus.ListPageSource):
                 embed.add_field(name="⠀", value=comments, inline=True)
 
         poster_username = functions.id_to_username(post['PlayerId'])
-        embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
+        embed.set_author(name=f"🔗 {poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
         embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
 
         return embed
@@ -1678,7 +1678,7 @@ class PhotosMenu(menus.ListPageSource):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title=f"🔗 Photo post #{offset+1}",
-            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTC`\n{tagged}\n",
             url=f"https://rec.net/image/{post['Id']}"
         )
 
@@ -1711,7 +1711,7 @@ class PhotosMenu(menus.ListPageSource):
                 embed.add_field(name="⠀", value=comments, inline=True)
 
         poster_username = functions.id_to_username(post['PlayerId'])
-        embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
+        embed.set_author(name=f"🔗 {poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
         embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
 
         return embed
@@ -1738,7 +1738,7 @@ class ImageMenu(menus.ListPageSource):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title=f"🔗 Post #{offset+1}",
-            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTX`\n{tagged}\n",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTC`\n{tagged}\n",
             url=f"https://rec.net/image/{post['Id']}"
         )
 
@@ -1771,7 +1771,7 @@ class ImageMenu(menus.ListPageSource):
                 embed.add_field(name="⠀", value=comments, inline=True)
 
         poster_username = functions.id_to_username(post['PlayerId'])
-        embed.set_author(name=f"{poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
+        embed.set_author(name=f"🔗 {poster_username}'s profile", url=f"https://rec.net/user/{poster_username}", icon_url=functions.id_to_pfp(post['PlayerId'], True))
         embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
 
         return embed

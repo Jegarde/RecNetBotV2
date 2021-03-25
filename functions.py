@@ -100,7 +100,7 @@ def image_embed(image_data):
         description=f"🔗 **[RecNet post](https://rec.net/image/{image_data['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{image_data['CheerCount']}` 💬 `{image_data['CommentCount']}`\n📆 `{image_data['CreatedAt'][:10]}` ⏰ `{image_data['CreatedAt'][11:16]} UTX`\n{tagged}"
     )
     embed.set_image(url=f"https://img.rec.net/{image_data['ImageName']}")
-    embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=id_to_pfp(image_data['PlayerId']))
+    embed.set_author(name=f"🔗 {username}'s profile", url=f"https://rec.net/user/{username}", icon_url=id_to_pfp(image_data['PlayerId']))
     return embed
 
 def cheers_in_room():

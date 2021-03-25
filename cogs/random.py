@@ -139,7 +139,7 @@ class Random(commands.Cog):
         embed.add_field(name="Is junior?", value=f"`{account['isJunior']}`", inline=True)
         embed.add_field(name="Bio", value=f"```{functions.id_to_bio(account['accountId'])}```")
         embed.set_image(url=pfp)
-        embed.set_author(name=f"{account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
+        embed.set_author(name=f"🔗 {account['username']}'s profile", url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -165,7 +165,7 @@ class Random(commands.Cog):
             description = f"[🔗 RecNet post](https://rec.net/image/{pfp}) *(might not exist)*"
         )
         embed.set_image(url=f"https://img.rec.net/{pfp}")
-        embed.set_author(name=f"{username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id))
+        embed.set_author(name=f"🔗 {username}'s profile", url=f"https://rec.net/user/{username}", icon_url=functions.id_to_pfp(account_id))
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -183,7 +183,7 @@ class Random(commands.Cog):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title = load_screen["Title"],
-            description = f"{load_screen['Message']}\n\n*Made in*\n📆 `{load_screen['CreatedAt'][:10]}`\n⏰ `{load_screen['CreatedAt'][11:16]} UTX`"
+            description = f"{load_screen['Message']}\n\n*Made in*\n📆 `{load_screen['CreatedAt'][:10]}`\n⏰ `{load_screen['CreatedAt'][11:16]} UTC`"
         )
         embed.set_image(url=f"https://img.rec.net/{load_screen['ImageName']}?width=720")
 
@@ -256,11 +256,11 @@ class Random(commands.Cog):
         embed=discord.Embed(
             colour=discord.Colour.orange(),
             title = f"{event['Name'] }",
-            description = f"**Description**```{event_description}```\n**Information**\n🚪 Room: {event_room}\n👥 Attendees: `{event['AttendeeCount']}`\n📆 Start time: `{event['StartTime'][:10]}`, at ⏰ `{event['StartTime'][11:16]} UTX`\n🚷 End time: `{event['EndTime'][:10]}`, at ⏰ `{event['EndTime'][11:16]} UTX`",
+            description = f"**Description**```{event_description}```\n**Information**\n🚪 Room: {event_room}\n👥 Attendees: `{event['AttendeeCount']}`\n📆 Start time: `{event['StartTime'][:10]}`, at ⏰ `{event['StartTime'][11:16]} UTC`\n🚷 End time: `{event['EndTime'][:10]}`, at ⏰ `{event['EndTime'][11:16]} UTC`",
             url=f"https://rec.net/event/{event['PlayerEventId']}"
         )
 
-        embed.set_author(name=f"{event_creator}'s profile", url=f"https://rec.net/user/{event_creator}", icon_url=functions.id_to_pfp(event['CreatorPlayerId']))
+        embed.set_author(name=f"🔗 {event_creator}'s profile", url=f"https://rec.net/user/{event_creator}", icon_url=functions.id_to_pfp(event['CreatorPlayerId']))
         embed.set_image(url=f"https://img.rec.net/{event['ImageName']}?width=720")
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
@@ -274,6 +274,7 @@ class Random(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
+            profile = account['username']
             feed = functions.id_to_feed(account['account_id'])
             
             if feed:
@@ -286,7 +287,7 @@ class Random(commands.Cog):
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(f"Random image of `@{account['username']}`", embed=embed)
+        await ctx.send(f"Random image of `@{profile}`", embed=embed)
 
     @randomimgof.error
     async def clear_error(self, ctx, error):
@@ -305,19 +306,20 @@ class Random(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
+            profile = account['username']
             photos = functions.id_to_photos(account['account_id'])
             
             if photos:
                 random_photos = photos[random.randint(0, len(photos)-1)]
-
                 embed = functions.image_embed(random_photos)
+
             else:
                 embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared a single post!")
         else:
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(f"Random image by `@{account['username']}`", embed=embed)
+        await ctx.send(f"Random image by `@{profile}`", embed=embed)
 
     @randomimgby.error
     async def clear_error(self, ctx, error):
@@ -327,8 +329,7 @@ class Random(commands.Cog):
             await ctx.send(embed=embed)
         else:
             pass
-
-    
+  
     # CMD-RANDOMIMGBYIN
     @commands.command(aliases=["rimgbyin", "ribi"])
     @commands.check(functions.beta_tester)
@@ -337,6 +338,7 @@ class Random(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
+            profile = account['username']
             room = functions.get_room_json(room_name)
             if room:
                 photos = functions.id_to_photos(account['account_id'])
@@ -362,7 +364,7 @@ class Random(commands.Cog):
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(f"Random image by `@{account['username']}`, in `^{room['Name']}`", embed=embed)
+        await ctx.send(f"Random image by `@{profile}`, in `^{room['Name']}`", embed=embed)
 
     @randomimgbyin.error
     async def clear_error(self, ctx, error):
@@ -382,6 +384,7 @@ class Random(commands.Cog):
 
         account = functions.check_account_existence_and_return(profile)
         if account:
+            profile = account['username']
             room = functions.get_room_json(room_name)
             if room:
                 photos = functions.id_to_feed(account['account_id'])
@@ -407,7 +410,7 @@ class Random(commands.Cog):
             embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
 
         functions.embed_footer(ctx, embed) # get default footer from function
-        await ctx.send(f"Random image of `@{account['username']}`, in `^{room['Name']}`", embed=embed)
+        await ctx.send(f"Random image of `@{profile}`, in `^{room['Name']}`", embed=embed)
 
 
     @randomimgofin.error
