@@ -1,0 +1,25 @@
+[
+    { 
+        "name": "Salted Pretzels",
+        "tokens": 75, 
+        "category": "other", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/UhWJAbs.png"
+    },
+
+    { 
+        "name": "Popcorn",
+        "tokens": 100, 
+        "category": "other", 
+        "rarity": 4 , 
+        "img_url": "https://i.imgur.com/DMUAdG1.png"
+    },
+
+    { 
+        "name": "Assorted Chocolates",
+        "tokens": 250, 
+        "category": "other", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/QVajWzQ.png"
+    }
+]

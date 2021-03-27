@@ -1,0 +1,190 @@
+{
+    "Black & White Film": {
+        "tokens": 20, 
+        "category": "film", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/zGuTErB.png"
+    },
+
+    "Dawn Film": { 
+        "tokens": 20, 
+        "category": "film", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/Cn9lL4v.png"
+    },
+
+    "Sepia Film": {
+        "tokens": 20, 
+        "category": "film", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/B253SQD.png"
+    },
+
+    "Salted Pretzels": { 
+        "tokens": 75, 
+        "category": "other", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/UhWJAbs.png"
+    },
+
+    "Popcorn": { 
+        "tokens": 100, 
+        "category": "other", 
+        "rarity": 4 , 
+        "img_url": "https://i.imgur.com/DMUAdG1.png"
+    },
+
+    "Assorted Chocolates": { 
+        "tokens": 250, 
+        "category": "other", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/QVajWzQ.png"
+    },
+
+    "Cheese Pizza": {
+        "tokens": 85, 
+        "category": "pizza", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    "Pepperoni Pizza": {
+        "tokens": 90, 
+        "category": "pizza", 
+        "rarity": 2, "img_url": 
+        "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    "Supreme Pizza": {
+        "tokens": 95, 
+        "category": "pizza", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    "Hawaiian Pizza": {
+        "tokens": 95, 
+        "category": "pizza", 
+        "rarity": 2, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    "Root Beer": { 
+        "tokens": 50, 
+        "category": "drinks", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/vsXdsKM.png"
+    },
+
+    "Fancy Bubbly": {
+        "tokens": 1000,
+        "category": "drinks", 
+        "rarity": 5, 
+        "img_url": "https://i.imgur.com/HKPMhjF.png"
+    },
+
+    "Assorted Donuts": {
+        "tokens": 100, 
+        "category": "donuts",
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+    },
+
+    "Chocolate Donuts": { 
+        "tokens": 95, 
+        "category": "donuts", 
+        "rarity": 2, 
+        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+    },
+
+    "Glazed Donuts": { 
+        "tokens": 90, 
+        "category": "donuts", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+    },
+
+    "Chocolate Cake": {
+        "tokens": 500, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/7u9Fnfv.png"
+    },
+
+    "Red Valvet Cake": { 
+        "tokens": 500, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/x1MxWTw.png"
+    },
+
+    "Celebration Cake": {
+        "tokens": 600, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/noMjqAa.png"
+    },
+
+    "87 Flavor Cake": { 
+        "tokens": 600, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/yLkYQ02.png"
+    },
+
+    "KO Icon - Bear Claw": {
+        "tokens": 200, 
+        "category": "ko", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/ehdJJUv.png"
+    },
+
+    "KO Icon - Grenade": {  
+        "tokens": 150, 
+        "category": "ko", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/El5l8RH.png"
+    },
+
+    "KO Icon - Star Power": { 
+        "tokens": 200, 
+        "category": "ko", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/xKRmx1q.png"
+    },
+
+    "KO Icon - Shield and Sword": { 
+        "tokens": 150, 
+        "category": "ko", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/I2iueIH.png"
+    },
+
+    "KO Icon - Winged Skull": { 
+        "tokens": 100, 
+        "category": "ko", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/vljU6PN.png"
+    },
+
+    "10 Tokens": { 
+        "tokens": 10, 
+        "category": "tokens", 
+        "rarity": 0, 
+        "img_url": "https://i.imgur.com/zaiBWYo.png"
+    },
+
+    "50 Tokens": { 
+        "tokens": 50, 
+        "category": "tokens", 
+        "rarity": 0, 
+        "img_url": "https://i.imgur.com/eLwuV5a.png"
+    },
+
+    "100 Tokens": { 
+        "tokens": 100, 
+        "category": "tokens", 
+        "rarity": 0, 
+        "img_url": "https://i.imgur.com/eLwuV5a.png"
+    }
+}

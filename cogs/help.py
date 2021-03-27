@@ -99,7 +99,8 @@ class Help(commands.Cog):
             except:
                 rnb_stats['GuildCount'] = "None"
 
-            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands executed: `{rnb_stats['TotalCount']}`\nGuild count: `{rnb_stats['GuildCount']}`", inline=False)
+            #embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands executed: `{rnb_stats['TotalCount']}`\nGuild count: `{rnb_stats['GuildCount']}`", inline=False)
+            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands executed: `{rnb_stats['TotalCount']}`", inline=False)
         
        
         functions.embed_footer(ctx, embed)

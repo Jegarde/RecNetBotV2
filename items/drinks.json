@@ -1,0 +1,17 @@
+[
+    {
+        "name": "Root Beer", 
+        "tokens": 50, 
+        "category": "drinks", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/vsXdsKM.png"
+    },
+
+    {
+        "name": "Fancy Bubbly",
+        "tokens": 1000,
+        "category": "drinks", 
+        "rarity": 5, 
+        "img_url": "https://i.imgur.com/HKPMhjF.png"
+    }
+]

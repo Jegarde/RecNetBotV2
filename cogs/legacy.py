@@ -3,6 +3,10 @@ import requests
 import discord
 from discord.ext import commands
 
+def reset_txt(txt):
+    print("Reset")
+    open(txt, 'w').close()
+
 
 class Legacy(commands.Cog):
     def __init__(self, client):
@@ -57,6 +61,7 @@ class Legacy(commands.Cog):
                         
                     with open("temp_txt.txt","rb") as text_file:
                         await ctx.send(file=discord.File(text_file, file_name))
+                    reset_txt("temp_txt.txt")
                 else:
                     embed = functions.error_msg(ctx, "Invalid mode! Modes are `cheers`, `comments`, `latest`, `oldest`") 
             else:
@@ -66,7 +71,8 @@ class Legacy(commands.Cog):
 
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
-
+        
+        
     @lsortby.error
     async def clear_error(self, ctx, error):
         if isinstance(error, commands.MissingRequiredArgument):
@@ -133,6 +139,7 @@ class Legacy(commands.Cog):
                         print("SEND")
                         with open("temp_txt.txt","rb") as text_file:
                             await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                        reset_txt("temp_txt.txt")
                     else:
                         print("what")
                         await ctx.send(f"{author}\n{msg}")
@@ -199,6 +206,7 @@ class Legacy(commands.Cog):
                             msg = "*Message exceeded Discord's message length limit.*\n\n"
                             with open("temp_txt.txt","w") as text_file:         
                                 text_file.write(save_msg)
+                            reset_txt("temp_txt.txt")
                             file_name = f"Taken in ^{room_data['Name']}, by {account['username']}.txt"
 
                         # first pic
@@ -253,7 +261,7 @@ class Legacy(commands.Cog):
         author = f"<@{ctx.author.id}>"
 
         of_user_account = functions.check_account_existence_and_return(of_user)
-        by_user_account = account = functions.check_account_existence_and_return(by_user)
+        by_user_account = functions.check_account_existence_and_return(by_user)
         if of_user_account and by_user_account: #if both exist
             of_user_feed = functions.id_to_feed(of_user_account['account_id'])
             if of_user_feed: # if user appears anywhere
@@ -301,6 +309,7 @@ class Legacy(commands.Cog):
                         print("SEND")
                         with open("temp_txt.txt","rb") as text_file:
                             await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                        reset_txt("temp_txt.txt")
                     else:
                         print("what")
                         await ctx.send(f"{author}\n{msg}")
@@ -385,6 +394,7 @@ class Legacy(commands.Cog):
                             print("SEND")
                             with open("temp_txt.txt","rb") as text_file:
                                 await ctx.send(f"{author}\n{msg}",file=discord.File(text_file, file_name))
+                            reset_txt("temp_txt.txt")
                         else:
                             print("what")
                             await ctx.send(f"{author}\n{msg}")

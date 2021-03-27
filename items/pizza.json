@@ -1,0 +1,33 @@
+[
+    {
+        "name": "Cheese Pizza",
+        "tokens": 85, 
+        "category": "pizza", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    {
+        "name": "Pepperoni Pizza",
+        "tokens": 90, 
+        "category": "pizza", 
+        "rarity": 2, "img_url": 
+        "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    {
+        "name": "Supreme Pizza",
+        "tokens": 95, 
+        "category": "pizza", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png"
+    },
+
+    {
+        "name": "Hawaiian Pizza",
+        "tokens": 95, 
+        "category": "pizza", 
+        "rarity": 2, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png"
+    }
+]

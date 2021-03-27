@@ -1,0 +1,25 @@
+[
+    { 
+        "name": "Red Valvet Cake",
+        "tokens": 500, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/x1MxWTw.png"
+    },
+
+    {
+        "name": "Celebration Cake",
+        "tokens": 600, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/noMjqAa.png"
+    },
+
+    { 
+        "name": "87 Flavor Cake",
+        "tokens": 600, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/yLkYQ02.png"
+    }
+]

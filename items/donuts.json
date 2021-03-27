@@ -1,0 +1,33 @@
+[
+    {
+        "name": "Assorted Donuts",
+        "tokens": 100, 
+        "category": "donuts",
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+    },
+
+    { 
+        "name": "Chocolate Donuts",
+        "tokens": 95, 
+        "category": "donuts", 
+        "rarity": 2, 
+        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+    },
+
+    { 
+        "name": "Glazed Donuts",
+        "tokens": 90, 
+        "category": "donuts", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+    },
+
+    {
+        "name": "Chocolate Cake",
+        "tokens": 500, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/7u9Fnfv.png"
+    }
+]

@@ -11421,5 +11421,248 @@
         "LastCheck": "2021-03-25T06:45:02.400657+00:00",
         "LastCheckUserId": 371115887794847755,
         "ImagesShared": ">10000"
+    },
+    "170142": {
+        "RoomId": 170142,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "RecRoyaleVR",
+        "Description": "Squads of three battle it out on Frontier Island. Last squad standing wins!",
+        "ImageName": "kwY0jaO6bk2EoenvzhGsOw",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 1,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": false,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": false,
+        "SupportsVRLow": false,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": false,
+        "MinLevel": 0,
+        "CreatedAt": "2018-08-28T15:44:47.5492849Z",
+        "Stats": {
+            "CheerCount": 277,
+            "FavoriteCount": 1806,
+            "VisitorCount": 1346775,
+            "VisitCount": 1364307
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": false,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": true,
+                "SubRoomId": 170144,
+                "RoomId": 170142,
+                "UnitySceneId": "253fa009-6e65-4c90-91a1-7137a56a267f",
+                "Name": "Home",
+                "DataBlob": null,
+                "DataSavedAt": null,
+                "IsSandbox": false,
+                "MaxPlayers": 18,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 1,
+                "Role": 255,
+                "LastChangedByAccountId": null,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "pvp",
+                "Type": 0
+            },
+            {
+                "Tag": "battleroyale",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [],
+        "PromoExternalContent": [
+            {
+                "Type": 0,
+                "Reference": "wdxjfCHqirA"
+            }
+        ],
+        "Scores": [
+            {
+                "RoomId": 170142,
+                "VisitType": 0,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170142,
+                "VisitType": 1,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170142,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170142,
+                "VisitType": 10,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170142,
+                "VisitType": 11,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170142,
+                "VisitType": 20,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 170142,
+                "VisitType": 30,
+                "Score": 0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.0,
+        "LastCheck": "2021-03-26T01:11:56.708221+00:00",
+        "LastCheckUserId": 525323437263159307,
+        "ImagesShared": 1727
+    },
+    "5066681": {
+        "RoomId": 5066681,
+        "IsDorm": false,
+        "CloningAllowed": false,
+        "DisableMicAutoMute": false,
+        "DisableRoomComments": false,
+        "EncryptVoiceChat": false,
+        "LoadScreenLocked": false,
+        "Name": "RiverorianRangerTraining",
+        "Description": "The Riverorian Ranger recruits train here. (The Ranger unit is a unit in the Riverorian sub-faction!)",
+        "ImageName": "2a221dda32dd42e1b0988142f7abb22c.jpg",
+        "WarningMask": 0,
+        "CustomWarning": null,
+        "CreatorAccountId": 3219789,
+        "State": 0,
+        "Accessibility": 1,
+        "SupportsLevelVoting": false,
+        "IsRRO": false,
+        "SupportsScreens": true,
+        "SupportsWalkVR": true,
+        "SupportsTeleportVR": true,
+        "SupportsVRLow": true,
+        "SupportsQuest2": true,
+        "SupportsMobile": true,
+        "SupportsJuniors": true,
+        "MinLevel": 0,
+        "CreatedAt": "2020-03-18T18:37:33.3900366Z",
+        "Stats": {
+            "CheerCount": 0,
+            "FavoriteCount": 0,
+            "VisitorCount": 13,
+            "VisitCount": 20
+        },
+        "SubRooms": [
+            {
+                "SupportsJoinInProgress": true,
+                "UseLevelBasedMatchmaking": false,
+                "UseAgeBasedMatchmaking": false,
+                "UseRecRoyaleMatchmaking": false,
+                "SubRoomId": 5178666,
+                "RoomId": 5066681,
+                "UnitySceneId": "a75f7547-79eb-47c6-8986-6767abcb4f92",
+                "Name": "Home",
+                "DataBlob": "4961c6212bc3434180d15e703f704822.room",
+                "DataSavedAt": "2020-04-09T11:29:00.4311676Z",
+                "IsSandbox": true,
+                "MaxPlayers": 40,
+                "Accessibility": 1
+            }
+        ],
+        "Roles": [
+            {
+                "AccountId": 3219789,
+                "Role": 255,
+                "LastChangedByAccountId": null,
+                "InvitedRole": 0
+            }
+        ],
+        "Tags": [
+            {
+                "Tag": "hangout",
+                "Type": 0
+            }
+        ],
+        "PromoImages": [],
+        "PromoExternalContent": [],
+        "Scores": [
+            {
+                "RoomId": 5066681,
+                "VisitType": 0,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5066681,
+                "VisitType": 1,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5066681,
+                "VisitType": 2,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5066681,
+                "VisitType": 10,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5066681,
+                "VisitType": 11,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5066681,
+                "VisitType": 20,
+                "Score": 0,
+                "BackupScore": null
+            },
+            {
+                "RoomId": 5066681,
+                "VisitType": 30,
+                "Score": 0,
+                "BackupScore": null
+            }
+        ],
+        "LoadScreens": [],
+        "Placement": "<1000",
+        "Score": 0.0,
+        "LastCheck": "2021-03-27T10:24:32.019283+00:00",
+        "LastCheckUserId": null,
+        "ImagesShared": 0
     }
 }

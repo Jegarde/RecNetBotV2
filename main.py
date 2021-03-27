@@ -7,8 +7,9 @@ from replit import db
 client = discord.Client()
 
 # Setting up
-intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
-client = commands.Bot(command_prefix = '.', intents = intents, help_command=None, case_insensitive=True)
+#intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
+#client = commands.Bot(command_prefix = '.', intents = intents, help_command=None, case_insensitive=True)
+client = commands.Bot(command_prefix = '.', help_command=None, case_insensitive=True)
 
 
 # When bot online

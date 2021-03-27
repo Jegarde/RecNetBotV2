@@ -1361,7 +1361,7 @@ class Utility(commands.Cog):
 
 
     # CMD-LATESTINBY
-    @commands.command()
+    @commands.command(aliases=["latestin"])
     @commands.check(functions.beta_tester)
     async def latestinby(self, ctx, room, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -1399,7 +1399,7 @@ class Utility(commands.Cog):
 
 
     # CMD-OLDESTINBY
-    @commands.command()
+    @commands.command(aliases=["oldestin"])
     @commands.check(functions.beta_tester)
     async def oldestinby(self, ctx, room, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)

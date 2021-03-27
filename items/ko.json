@@ -1,0 +1,41 @@
+[
+    {
+        "name": "KO Icon - Bear Claw",
+        "tokens": 200, 
+        "category": "ko", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/ehdJJUv.png"
+    },
+
+    {  
+        "name": "KO Icon - Grenade",
+        "tokens": 150, 
+        "category": "ko", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/El5l8RH.png"
+    },
+
+    { 
+        "name": "KO Icon - Star Power",
+        "tokens": 200, 
+        "category": "ko", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/xKRmx1q.png"
+    },
+
+    { 
+        "name": "KO Icon - Shield and Sword",
+        "tokens": 150, 
+        "category": "ko", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/I2iueIH.png"
+    },
+
+    {
+        "name": "KO Icon - Winged Skull", 
+        "tokens": 100, 
+        "category": "ko", 
+        "rarity": 3, 
+        "img_url": "https://i.imgur.com/vljU6PN.png"
+    }
+]
