@@ -27,21 +27,21 @@ def return_drops(category=False):
 async def random_drop():
     chance = random.randint(1, 200)
     print(str(chance) + "%")
-    if chance > 180:
+    if chance > 120:
         # Film
         item_pool = return_drops("film")
     elif chance > 60:
         # Pizza / Donuts / Pretzels / Root Beer
         item_pool = return_drops("pizza") + return_drops("donuts") + [return_drops("other")[0]] + [return_drops("drinks")[0]]
-    elif chance > 55:
+    elif chance > 20:
         # Popcorn / KO
         item_pool = return_drops("ko") + [return_drops("other")[1]]
-    elif chance > 50:
-        # Cake
-        item_pool = return_drops('cake')
-    elif chance > 5:
+    elif chance > 10:
         # 10 / 25 Tokens
         item_pool = [return_drops("tokens")[0]] + [return_drops("tokens")[1]]
+    elif chance > 3:
+        # 50 Tokens / Cake
+        item_pool = [return_drops("tokens")[2]] + return_drops('cake')
     elif chance > 1:
         # 100 Tokens
         item_pool = [return_drops("tokens")[2]]
@@ -180,26 +180,44 @@ class Economy(commands.Cog):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
         await set_tokens(mention.id, amount)
 
-
+    
     @commands.command(aliases=['inv'])
-    async def inventory(self, ctx):
+    async def inventory(self, ctx, mention: discord.User = None):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        auth_inv = await load_inv(ctx.author.id, True)
+        if mention:
+            auth_inv = await load_inv(mention.id, True)
+        else:
+            mention = ctx.author
+            auth_inv = await load_inv(ctx.author.id, True)
 
+        inventory = []
         inventory_string = ""
         networth_tokens = 0
         for item in auth_inv:
             if item == "tokens":
                 continue
             item_data = await get_item_data(item)
+
+            inventory.append({"name": item, "rarity": item_data['rarity'], "amount": auth_inv[item]['amount']})
+
+            #inventory_string += f"{item}: `{auth_inv[item]['amount']}`\n"
             item_worth = item_data['tokens'] * auth_inv[item]['amount']
-            inventory_string += f"{item}: `{auth_inv[item]['amount']}`\n"
-            
             networth_tokens += item_worth
+        
+        def sort_by_amount(list):
+            return list['amount']
+
+        inventory.sort(key=sort_by_amount, reverse=True)
+
+        for item in inventory:
+            if item['rarity'] == 5:
+                inventory_string += f"**{item['name']}**: `{item['amount']}`\n"
+            else:
+                inventory_string += f"{item['name']}: `{item['amount']}`\n"
 
         embed = discord.Embed(
             colour= discord.Colour.orange(),
-            title = "Inventory",
+            title = f"{mention}'s Inventory",
             description = inventory_string
         )
 
@@ -209,6 +227,8 @@ class Economy(commands.Cog):
         embed.add_field(name="Item net worth", value=f"<:RRtoken:825288414789107762> `{networth_tokens}`", inline=False)
 
         print(auth_inv)
+        embed.set_thumbnail(url=mention.avatar_url)
+        embed = functions.embed_footer(ctx,embed)
         await ctx.send(embed=embed)
 
     @commands.command()
@@ -230,17 +250,20 @@ class RewardSelection(menus.Menu):
     global reward_instance
 
     async def send_initial_message(self, ctx, channel):
+        reward_instance[self._author_id]['ctx'] = ctx
+
         embed = discord.Embed(
-            colour= discord.Colour.orange(),
-            title = "Your rewards!"
+            colour = 0x2f3136,
+            title = "Choose a reward!"
         )
 
         rewards = reward_instance[self._author_id]['rewards']
 
         for item in rewards:
             stars = ""
-            for i in range(item['rarity']):
-                stars += "<:RRStar:825357537209090098> " 
+            if item['category'] != "tokens":
+                for i in range(item['rarity']):
+                    stars += "<:RRStar:825357537209090098> " 
             embed.add_field(name=item['name'], value=f"<:RRtoken:825288414789107762> `{item['tokens']}`\n{stars}", inline=True)
 
         #embed.add_field(name="DEBUG", value=reward_instance.keys())
@@ -256,19 +279,31 @@ class RewardSelection(menus.Menu):
     async def update_menu(self, reward):
         global reward_instance
         item = reward_instance[self._author_id]['rewards'][reward]
+        ctx = reward_instance[self._author_id]['ctx']
 
-        inventories = await load_inv(self._author_id)
+        if item['rarity'] == 5:
+            color = discord.Colour.orange()
+        elif item['rarity'] == 4:
+            color = discord.Colour.purple()
+        elif item['rarity'] == 3:
+            color = discord.Colour.blue()
+        elif item['rarity'] == 2:
+            color = discord.Colour.green()
+        else:
+            color = discord.Colour.dark_gray()
 
         embed = discord.Embed(
-            colour= discord.Colour.orange(),
+            colour=color,
             title = "Reward chosen!"
         )
 
         stars = ""
-        for i in range(item['rarity']):
-            stars += "<:RRStar:825357537209090098> " 
+        if item['category'] != "tokens":
+            for i in range(item['rarity']):
+                stars += "<:RRStar:825357537209090098> " 
 
         embed.add_field(name=item['name'], value=f"<:RRtoken:825288414789107762> `{item['tokens']}`\n{stars}", inline=False)
+        embed.set_footer(text=f"Given to {ctx.author}", icon_url=ctx.author.avatar_url)
         embed.set_thumbnail(url=item['img_url'])
 
         await self.message.edit(embed=embed)
