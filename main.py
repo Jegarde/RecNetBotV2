@@ -1,6 +1,7 @@
 import discord
 import os
 import functions
+from discord.ext.commands import CommandNotFound
 from discord.ext import commands
 from replit import db
 
@@ -23,6 +24,13 @@ async def on_ready():
         print(f"{guild.owner}")
         print(f"Members: {len(guild.members)}\n")
     await client.change_presence(status=discord.Status.online, activity=discord.Game(".help | bit.ly/RecNetBot"))
+
+
+@client.event
+async def on_command_error(ctx,error):
+    if isinstance(error, CommandNotFound):
+        return
+    raise error
 
 
 # Commands
@@ -54,7 +62,7 @@ async def reload(ctx, extension):
     except:
         await ctx.send(f"`{extension}` couldn't be loaded!")
 
-@client.command()
+@client.command(aliases=['rall'])
 @commands.check(functions.is_it_me)
 async def reloadall(ctx):
     for filename in os.listdir("./cogs"):

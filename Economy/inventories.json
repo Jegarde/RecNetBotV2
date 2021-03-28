@@ -1,397 +1,315 @@
 {
     "293008770957836299": {
-        "KO Icon - Shield and Sword": {
-            "amount": 1
+        "donuts:0": {
+            "amount": 0
         },
-        "Popcorn": {
-            "amount": 6
+        "pizza:2": {
+            "amount": 0
         },
-        "Dawn Film": {
-            "amount": 16
+        "film:2": {
+            "amount": 0
         },
-        "Red Valvet Cake": {
-            "amount": 4
+        "donuts:1": {
+            "amount": 0
         },
-        "Celebration Cake": {
-            "amount": 7
+        "drinks:1": {
+            "amount": 0
         },
-        "tokens": 410,
-        "Fancy Bubbly": {
-            "amount": 4
-        },
-        "Root Beer": {
-            "amount": 3
-        },
-        "Pepperoni Pizza": {
-            "amount": 1
-        },
-        "Cheese Pizza": {
-            "amount": 1
-        },
-        "87 Flavor Cake": {
-            "amount": 7
-        },
-        "Supreme Pizza": {
-            "amount": 3
-        },
-        "Chocolate Donuts": {
+        "pizza:1": {
             "amount": 2
         },
-        "Hawaiian Pizza": {
+        "cake:0": {
             "amount": 1
         },
-        "KO Icon - Bear Claw": {
-            "amount": 1
-        },
-        "Sepia Film": {
-            "amount": 2
-        },
-        "Salted Pretzels": {
-            "amount": 2
-        },
-        "Chocolate Cake": {
-            "amount": 1
-        },
-        "Assorted Donuts": {
-            "amount": 3
-        },
-        "Glazed Donuts": {
-            "amount": 2
+        "potions:0": {
+            "amount": 100
         }
     },
     "594513771947491328": {
-        "Chocolate Donuts": {
-            "amount": 2
-        },
-        "Celebration Cake": {
-            "amount": 1
-        },
-        "Chocolate Cake": {
+        "drinks:1": {
             "amount": 8
         },
-        "Red Valvet Cake": {
+        "cake:3": {
+            "amount": 8
+        },
+        "other:2": {
             "amount": 1
         },
-        "tokens": 780,
-        "Popcorn": {
+        "tokens": 485,
+        "ko:1": {
+            "amount": 4
+        },
+        "other:1": {
+            "amount": 16
+        },
+        "pizza:1": {
+            "amount": 10
+        },
+        "film:2": {
             "amount": 1
         },
-        "Fancy Bubbly": {
+        "film:1": {
+            "amount": 3
+        },
+        "ko:2": {
+            "amount": 5
+        },
+        "ko:4": {
             "amount": 7
         },
-        "Cheese Pizza": {
+        "drinks:0": {
+            "amount": 10
+        },
+        "donuts:1": {
+            "amount": 7
+        },
+        "donuts:0": {
+            "amount": 10
+        },
+        "film:0": {
+            "amount": 3
+        },
+        "ko:3": {
+            "amount": 3
+        },
+        "pizza:2": {
+            "amount": 10
+        },
+        "cake:1": {
             "amount": 2
         },
-        "Pepperoni Pizza": {
-            "amount": 1
-        },
-        "Assorted Donuts": {
+        "cake:2": {
             "amount": 2
         },
-        "87 Flavor Cake": {
-            "amount": 2
+        "pizza:0": {
+            "amount": 7
         },
-        "KO Icon - Star Power": {
-            "amount": 1
+        "ko:0": {
+            "amount": 3
         },
-        "Glazed Donuts": {
-            "amount": 1
+        "donuts:2": {
+            "amount": 7
         },
-        "Root Beer": {
+        "pizza:3": {
+            "amount": 6
+        },
+        "other:0": {
+            "amount": 5
+        },
+        "cake:0": {
             "amount": 1
         }
     },
-    "397156272157491200": {
-        "tokens": 5945,
-        "Fancy Bubbly": {
-            "amount": 11
+    "723420261440946227": {
+        "drinks:1": {
+            "amount": 1
         },
-        "Root Beer": {
+        "film:1": {
             "amount": 2
         },
-        "Celebration Cake": {
-            "amount": 24
-        },
-        "Glazed Donuts": {
-            "amount": 11
-        },
-        "Chocolate Cake": {
-            "amount": 33
-        },
-        "Pepperoni Pizza": {
-            "amount": 11
-        },
-        "Cheese Pizza": {
-            "amount": 9
-        },
-        "Assorted Donuts": {
-            "amount": 22
-        },
-        "Supreme Pizza": {
-            "amount": 18
-        },
-        "Salted Pretzels": {
+        "donuts:1": {
             "amount": 3
         },
-        "KO Icon - Grenade": {
-            "amount": 3
-        },
-        "Hawaiian Pizza": {
-            "amount": 11
-        },
-        "Chocolate Donuts": {
-            "amount": 17
-        },
-        "Red Valvet Cake": {
-            "amount": 28
-        },
-        "87 Flavor Cake": {
-            "amount": 19
-        },
-        "Popcorn": {
-            "amount": 6
-        },
-        "KO Icon - Bear Claw": {
-            "amount": 6
-        },
-        "KO Icon - Star Power": {
+        "cake:0": {
             "amount": 4
         },
-        "KO Icon - Shield and Sword": {
+        "other:1": {
+            "amount": 4
+        },
+        "ko:2": {
+            "amount": 5
+        },
+        "film:0": {
+            "amount": 5
+        },
+        "ko:3": {
+            "amount": 6
+        },
+        "ko:4": {
+            "amount": 5
+        },
+        "tokens": 1000095,
+        "donuts:0": {
+            "amount": 8
+        },
+        "cake:2": {
             "amount": 2
         },
-        "Sepia Film": {
+        "donuts:2": {
             "amount": 2
         },
-        "KO Icon - Winged Skull": {
-            "amount": 3
+        "ko:1": {
+            "amount": 7
         },
-        "Dawn Film": {
-            "amount": 3
+        "pizza:3": {
+            "amount": 5
         },
-        "Black & White Film": {
-            "amount": 3
+        "ko:0": {
+            "amount": 10
+        },
+        "drinks:0": {
+            "amount": 1
+        },
+        "potions:0": {
+            "amount": 100
+        },
+        "potions:1": {
+            "amount": 100
+        },
+        "potions:2": {
+            "amount": 100
+        },
+        "other:0": {
+            "amount": 2
+        },
+        "pizza:0": {
+            "amount": 2
+        },
+        "cake:3": {
+            "amount": 2
+        },
+        "pizza:2": {
+            "amount": 1
+        }
+    },
+    "788632031835324456": {
+        "drinks:1": {
+            "amount": 2
+        },
+        "other:1": {
+            "amount": 0
+        },
+        "donuts:0": {
+            "amount": 1
+        },
+        "pizza:2": {
+            "amount": 2
+        },
+        "film:2": {
+            "amount": 1
+        },
+        "donuts:1": {
+            "amount": 1
+        }
+    },
+    "720264770992996422": {
+        "tokens": 255,
+        "film:2": {
+            "amount": 1
+        },
+        "pizza:0": {
+            "amount": 1
+        },
+        "drinks:1": {
+            "amount": 1
+        },
+        "film:1": {
+            "amount": 1
+        },
+        "pizza:3": {
+            "amount": 1
+        },
+        "pizza:2": {
+            "amount": 1
+        },
+        "ko:2": {
+            "amount": 1
+        },
+        "donuts:0": {
+            "amount": 1
+        },
+        "donuts:1": {
+            "amount": 2
+        },
+        "ko:1": {
+            "amount": 1
+        },
+        "cake:0": {
+            "amount": 1
+        },
+        "ko:3": {
+            "amount": 1
+        },
+        "film:0": {
+            "amount": 1
+        },
+        "ko:0": {
+            "amount": 1
+        }
+    },
+    "537068961661976587": {
+        "cake:1": {
+            "amount": 1
+        },
+        "drinks:1": {
+            "amount": 1
+        }
+    },
+    "525323437263159307": {
+        "ko:2": {
+            "amount": 1
+        },
+        "film:1": {
+            "amount": 0
+        },
+        "drinks:1": {
+            "amount": -1
+        },
+        "pizza:2": {
+            "amount": 5
+        }
+    },
+    "327358097041653772": {
+        "pizza:3": {
+            "amount": 1
+        },
+        "film:2": {
+            "amount": 1
+        },
+        "pizza:0": {
+            "amount": 1
+        },
+        "tokens": 25,
+        "ko:3": {
+            "amount": 1
+        },
+        "ko:0": {
+            "amount": 1
+        },
+        "donuts:0": {
+            "amount": 1
         }
     },
     "799008491481989162": {
-        "tokens": 101280,
-        "Chocolate Cake": {
-            "amount": 14
-        },
-        "Assorted Donuts": {
-            "amount": 7
-        },
-        "Pepperoni Pizza": {
-            "amount": 4
-        },
-        "Supreme Pizza": {
-            "amount": 7
-        },
-        "Root Beer": {
-            "amount": 1
-        },
-        "87 Flavor Cake": {
-            "amount": 4
-        },
-        "Fancy Bubbly": {
-            "amount": 5
-        },
-        "KO Icon - Winged Skull": {
-            "amount": 1
-        },
-        "Popcorn": {
-            "amount": 1
-        },
-        "Hawaiian Pizza": {
-            "amount": 8
-        },
-        "Red Valvet Cake": {
-            "amount": 8
-        },
-        "Dawn Film": {
+        "other:1": {
             "amount": 2
         },
-        "Salted Pretzels": {
+        "ko:3": {
             "amount": 1
         },
-        "Celebration Cake": {
-            "amount": 6
-        },
-        "Black & White Film": {
+        "drinks:0": {
             "amount": 3
         },
-        "Sepia Film": {
-            "amount": 1
-        },
-        "Chocolate Donuts": {
-            "amount": 3
-        },
-        "KO Icon - Star Power": {
-            "amount": 1
-        },
-        "Glazed Donuts": {
-            "amount": 1
-        },
-        "Cheese Pizza": {
-            "amount": 1
-        }
-    },
-    "495795242709286923": {
-        "Assorted Donuts": {
-            "amount": 3
-        },
-        "Red Valvet Cake": {
-            "amount": 3
-        },
-        "Fancy Bubbly": {
-            "amount": 1
-        },
-        "Root Beer": {
+        "pizza:3": {
             "amount": 2
         },
-        "Dawn Film": {
+        "tokens": 60,
+        "pizza:0": {
             "amount": 1
         },
-        "tokens": 200
-    },
-    "723420261440946227": {
-        "Assorted Donuts": {
+        "pizza:1": {
             "amount": 1
         },
-        "Pepperoni Pizza": {
-            "amount": 2
-        },
-        "Chocolate Cake": {
+        "donuts:1": {
             "amount": 1
         },
-        "Celebration Cake": {
-            "amount": 2
-        },
-        "Fancy Bubbly": {
+        "ko:2": {
             "amount": 1
         },
-        "KO Icon - Star Power": {
-            "amount": 3
-        },
-        "KO Icon - Bear Claw": {
+        "other:0": {
             "amount": 1
         },
-        "tokens": 200,
-        "Hawaiian Pizza": {
-            "amount": 2
-        },
-        "Cheese Pizza": {
-            "amount": 1
-        },
-        "Supreme Pizza": {
-            "amount": 2
-        },
-        "KO Icon - Winged Skull": {
-            "amount": 1
-        },
-        "Black & White Film": {
-            "amount": 1
-        }
-    },
-    "282768465121640448": {
-        "Hawaiian Pizza": {
-            "amount": 1
-        },
-        "Celebration Cake": {
-            "amount": 2
-        },
-        "tokens": 110,
-        "Assorted Donuts": {
-            "amount": 1
-        },
-        "Salted Pretzels": {
-            "amount": 1
-        },
-        "Cheese Pizza": {
-            "amount": 1
-        },
-        "Dawn Film": {
-            "amount": 1
-        }
-    },
-    "495540932909989888": {
-        "Supreme Pizza": {
-            "amount": 3
-        },
-        "Red Valvet Cake": {
-            "amount": 5
-        },
-        "tokens": 1180,
-        "Fancy Bubbly": {
-            "amount": 8
-        },
-        "Root Beer": {
-            "amount": 1
-        },
-        "87 Flavor Cake": {
-            "amount": 5
-        },
-        "Hawaiian Pizza": {
-            "amount": 3
-        },
-        "Celebration Cake": {
-            "amount": 8
-        },
-        "Assorted Donuts": {
-            "amount": 6
-        },
-        "Sepia Film": {
-            "amount": 2
-        },
-        "Pepperoni Pizza": {
-            "amount": 5
-        },
-        "Chocolate Donuts": {
-            "amount": 4
-        },
-        "Chocolate Cake": {
-            "amount": 2
-        },
-        "KO Icon - Star Power": {
-            "amount": 1
-        },
-        "KO Icon - Bear Claw": {
-            "amount": 1
-        },
-        "Cheese Pizza": {
-            "amount": 1
-        },
-        "Salted Pretzels": {
-            "amount": 1
-        },
-        "KO Icon - Grenade": {
-            "amount": 1
-        }
-    },
-    "453837838404943873": {
-        "Popcorn": {
-            "amount": 1
-        }
-    },
-    "469690018982527005": {
-        "Chocolate Donuts": {
-            "amount": 1
-        },
-        "Cheese Pizza": {
-            "amount": 2
-        },
-        "Celebration Cake": {
-            "amount": 1
-        },
-        "KO Icon - Shield and Sword": {
-            "amount": 1
-        }
-    },
-    "521851361676099592": {
-        "tokens": 25
-    },
-    "411865155937370112": {
-        "Celebration Cake": {
+        "film:1": {
             "amount": 1
         }
     }

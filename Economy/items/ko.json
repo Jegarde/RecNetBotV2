@@ -4,7 +4,8 @@
         "tokens": 200, 
         "category": "ko", 
         "rarity": 4, 
-        "img_url": "https://i.imgur.com/ehdJJUv.png"
+        "img_url": "https://i.imgur.com/ehdJJUv.png",
+        "emoji_icon": "<:KOBearClaw:825646277479366658>"
     },
 
     {  
@@ -12,7 +13,8 @@
         "tokens": 150, 
         "category": "ko", 
         "rarity": 3, 
-        "img_url": "https://i.imgur.com/El5l8RH.png"
+        "img_url": "https://i.imgur.com/El5l8RH.png",
+        "emoji_icon": "<:KOGrenade:825646277374902284>"
     },
 
     { 
@@ -20,15 +22,17 @@
         "tokens": 200, 
         "category": "ko", 
         "rarity": 4, 
-        "img_url": "https://i.imgur.com/xKRmx1q.png"
+        "img_url": "https://i.imgur.com/xKRmx1q.png",
+        "emoji_icon": "<:KOStarPower:825646277780963328>"
     },
 
     { 
-        "name": "KO Icon - Shield and Sword",
+        "name": "KO Icon - Sword and Shield",
         "tokens": 150, 
         "category": "ko", 
         "rarity": 3, 
-        "img_url": "https://i.imgur.com/I2iueIH.png"
+        "img_url": "https://i.imgur.com/I2iueIH.png",
+        "emoji_icon": "<:KOSwordShield:825646278263832596>"
     },
 
     {
@@ -36,6 +40,7 @@
         "tokens": 100, 
         "category": "ko", 
         "rarity": 3, 
-        "img_url": "https://i.imgur.com/vljU6PN.png"
+        "img_url": "https://i.imgur.com/vljU6PN.png",
+        "emoji_icon": "<:KOWinged:825646277932220476>"
     }
 ]

@@ -71,6 +71,13 @@ class Help(commands.Cog):
                 description = "These commands are the original versions of some reworked commands."
             )
             embed.add_field(name="👾 Legacy", value="`lfrontpage`, `lsortby`, `ltogether`, `ltakenin`, `ltakenof`, `ltakenofin`", inline=False)
+        elif menu == "economy":
+            embed = discord.Embed(
+                colour= discord.Colour.orange(),
+                title = "<:RRtoken:825288414789107762> Economy commands",
+                description = "Economy is under development."
+            )
+            embed.add_field(name="<:RRtoken:825288414789107762> Economy", value="`randombox`\nOpen and pick a random prize!\n\n`inventory`\nCheck your inventory!\n\n`gift`\nGift an item to somebody!", inline=False)
         else:
             embed = discord.Embed(
                 colour= discord.Colour.orange(),

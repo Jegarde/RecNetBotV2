@@ -1,0 +1,245 @@
+{
+    "293008770957836299": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 25,
+        "boxes_opened": 10,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "pizza:2",
+                "amount": 3
+            },
+            {
+                "item": "pizza:1",
+                "amount": 2
+            },
+            {
+                "item": "cake:3",
+                "amount": 1
+            },
+            {
+                "item": "ko:1",
+                "amount": 1
+            },
+            {
+                "item": "donuts:1",
+                "amount": 1
+            },
+            {
+                "item": "pizza:0",
+                "amount": 1
+            }
+        ]
+    },
+    "594513771947491328": {
+        "level": "swag",
+        "exp": 0,
+        "tokens": 2425,
+        "boxes_opened": 268,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "drinks:1",
+                "amount": 15
+            },
+            {
+                "item": "cake:3",
+                "amount": 15
+            },
+            {
+                "item": "donuts:0",
+                "amount": 25
+            },
+            {
+                "item": "pizza:1",
+                "amount": 11
+            },
+            {
+                "item": "pizza:2",
+                "amount": 14
+            },
+            {
+                "item": "donuts:1",
+                "amount": 11
+            },
+            {
+                "item": "ko:0",
+                "amount": 12
+            },
+            {
+                "item": "ko:1",
+                "amount": 20
+            },
+            {
+                "item": "pizza:3",
+                "amount": 7
+            },
+            {
+                "item": "potions:0",
+                "amount": 1
+            },
+            {
+                "item": "cake:1",
+                "amount": 8
+            },
+            {
+                "item": "cake:0",
+                "amount": 4
+            },
+            {
+                "item": "pizza:0",
+                "amount": 8
+            },
+            {
+                "item": "film:2",
+                "amount": 7
+            },
+            {
+                "item": "drinks:0",
+                "amount": 8
+            },
+            {
+                "item": "donuts:2",
+                "amount": 11
+            },
+            {
+                "item": "film:0",
+                "amount": 12
+            },
+            {
+                "item": "ko:3",
+                "amount": 9
+            },
+            {
+                "item": "other:1",
+                "amount": 16
+            },
+            {
+                "item": "cake:2",
+                "amount": 2
+            },
+            {
+                "item": "ko:4",
+                "amount": 7
+            },
+            {
+                "item": "ko:2",
+                "amount": 5
+            },
+            {
+                "item": "film:1",
+                "amount": 5
+            },
+            {
+                "item": "other:0",
+                "amount": 7
+            },
+            {
+                "item": "potions:2",
+                "amount": 14
+            },
+            {
+                "item": "potions:1",
+                "amount": 3
+            }
+        ]
+    },
+    "723420261440946227": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 0,
+        "boxes_opened": 0,
+        "badges": [],
+        "inventory": []
+    },
+    "503356401100390422": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 0,
+        "boxes_opened": 0,
+        "badges": [],
+        "inventory": []
+    },
+    "495540932909989888": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 0,
+        "boxes_opened": 1,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "donuts:2",
+                "amount": 1
+            }
+        ]
+    },
+    "566743810701393961": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 0,
+        "boxes_opened": 0,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "donuts:2",
+                "amount": 1
+            }
+        ]
+    },
+    "720264770992996422": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 0,
+        "boxes_opened": 0,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "donuts:2",
+                "amount": 1
+            }
+        ]
+    },
+    "709852475737243700": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 0,
+        "boxes_opened": 0,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "donuts:2",
+                "amount": 1
+            }
+        ]
+    },
+    "397156272157491200": {
+        "level": 0,
+        "level_next": 25,
+        "exp": 0,
+        "tokens": 60,
+        "boxes_opened": 4,
+        "badges": [],
+        "inventory": [
+            {
+                "item": "donuts:2",
+                "amount": 1
+            },
+            {
+                "item": "potions:1",
+                "amount": 1
+            },
+            {
+                "item": "ko:1",
+                "amount": 1
+            }
+        ]
+    }
+}

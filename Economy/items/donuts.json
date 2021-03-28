@@ -4,7 +4,8 @@
         "tokens": 100, 
         "category": "donuts",
         "rarity": 3, 
-        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+        "img_url": "https://i.imgur.com/JkL3Nnx.png",
+        "emoji_icon": "<:DonutBox:825646190527250443>"
     },
 
     { 
@@ -12,7 +13,8 @@
         "tokens": 95, 
         "category": "donuts", 
         "rarity": 2, 
-        "img_url": "https://i.imgur.com/JkL3Nnx.png"
+        "img_url": "https://i.imgur.com/JkL3Nnx.png",
+        "emoji_icon": "<:DonutBox:825646190527250443>"
     },
 
     { 
@@ -20,14 +22,7 @@
         "tokens": 90, 
         "category": "donuts", 
         "rarity": 1, 
-        "img_url": "https://i.imgur.com/JkL3Nnx.png"
-    },
-
-    {
-        "name": "Chocolate Cake",
-        "tokens": 500, 
-        "category": "cake", 
-        "rarity": 4, 
-        "img_url": "https://i.imgur.com/7u9Fnfv.png"
+        "img_url": "https://i.imgur.com/JkL3Nnx.png",
+        "emoji_icon": "<:DonutBox:825646190527250443>"
     }
 ]

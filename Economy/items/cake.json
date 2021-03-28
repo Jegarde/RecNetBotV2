@@ -1,10 +1,11 @@
 [
     { 
-        "name": "Red Valvet Cake",
+        "name": "Red Velvet Cake",
         "tokens": 500, 
         "category": "cake", 
         "rarity": 4, 
-        "img_url": "https://i.imgur.com/x1MxWTw.png"
+        "img_url": "https://i.imgur.com/x1MxWTw.png",
+        "emoji_icon": "<:RedVelvetCake:825646166539763732>"
     },
 
     {
@@ -12,7 +13,8 @@
         "tokens": 600, 
         "category": "cake", 
         "rarity": 4, 
-        "img_url": "https://i.imgur.com/noMjqAa.png"
+        "img_url": "https://i.imgur.com/noMjqAa.png",
+        "emoji_icon": "<:CelebrationCake:825646166405808168>"
     },
 
     { 
@@ -20,6 +22,16 @@
         "tokens": 600, 
         "category": "cake", 
         "rarity": 4, 
-        "img_url": "https://i.imgur.com/yLkYQ02.png"
+        "img_url": "https://i.imgur.com/yLkYQ02.png",
+        "emoji_icon": "<:87FlavorCake:825646165654634507>"
+    },
+
+    {
+        "name": "Chocolate Cake",
+        "tokens": 500, 
+        "category": "cake", 
+        "rarity": 4, 
+        "img_url": "https://i.imgur.com/7u9Fnfv.png",
+        "emoji_icon": "<:ChocolateCake:825646166254682193>"
     }
 ]

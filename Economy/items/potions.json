@@ -1,0 +1,28 @@
+[
+    { 
+        "name": "Ego Potion",
+        "tokens": 200, 
+        "category": "potions", 
+        "rarity": 5, 
+        "img_url": "https://i.imgur.com/RlcOyJH.png",
+        "emoji_icon": "<:EgoPotion:825646341890900040>"
+    },
+
+    { 
+        "name": "Gold Potion",
+        "tokens": 30, 
+        "category": "potions", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/zckp0Y4.png",
+        "emoji_icon": "<:GoldPotion:825646342055133195>"
+    },
+
+    { 
+        "name": "Magic Potion",
+        "tokens": 30, 
+        "category": "potions", 
+        "rarity": 1, 
+        "img_url": "https://i.imgur.com/7o7F4cJ.png",
+        "emoji_icon": "<:MagicPotion:825646341992087563>"
+    }
+]

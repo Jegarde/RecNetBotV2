@@ -4,7 +4,8 @@
         "tokens": 75, 
         "category": "other", 
         "rarity": 1, 
-        "img_url": "https://i.imgur.com/UhWJAbs.png"
+        "img_url": "https://i.imgur.com/UhWJAbs.png",
+        "emoji_icon": "<:SaltedPretzels:825646300610560021>"
     },
 
     { 
@@ -12,7 +13,8 @@
         "tokens": 100, 
         "category": "other", 
         "rarity": 4 , 
-        "img_url": "https://i.imgur.com/DMUAdG1.png"
+        "img_url": "https://i.imgur.com/DMUAdG1.png",
+        "emoji_icon": "<:Popcorn:825646300375547904>"
     },
 
     { 
@@ -20,6 +22,7 @@
         "tokens": 250, 
         "category": "other", 
         "rarity": 4, 
-        "img_url": "https://i.imgur.com/QVajWzQ.png"
+        "img_url": "https://i.imgur.com/QVajWzQ.png",
+        "emoji_icon": "<:AssortedChocolates:825646300262563880>"
     }
 ]

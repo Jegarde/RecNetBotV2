@@ -4,7 +4,8 @@
         "tokens": 50, 
         "category": "drinks", 
         "rarity": 1, 
-        "img_url": "https://i.imgur.com/vsXdsKM.png"
+        "img_url": "https://i.imgur.com/vsXdsKM.png",
+        "emoji_icon": "<:RootBeer:825646217471983646>"
     },
 
     {
@@ -12,6 +13,7 @@
         "tokens": 1000,
         "category": "drinks", 
         "rarity": 5, 
-        "img_url": "https://i.imgur.com/HKPMhjF.png"
+        "img_url": "https://i.imgur.com/HKPMhjF.png",
+        "emoji_icon": "<:Bubbly:825646215256866817>"
     }
 ]

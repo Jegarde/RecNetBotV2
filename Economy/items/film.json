@@ -4,7 +4,8 @@
         "tokens": 20, 
         "category": "film", 
         "rarity": 1, 
-        "img_url": "https://i.imgur.com/zGuTErB.png"
+        "img_url": "https://i.imgur.com/zGuTErB.png",
+        "emoji_icon": "<:BlackWhiteFilm:825646249319464990>"
     },
 
     {
@@ -12,7 +13,8 @@
         "tokens": 20, 
         "category": "film", 
         "rarity": 1, 
-        "img_url": "https://i.imgur.com/Cn9lL4v.png"
+        "img_url": "https://i.imgur.com/Cn9lL4v.png",
+        "emoji_icon": "<:DawnFilm:825646249008824360>"
     },
 
     {
@@ -20,6 +22,7 @@
         "tokens": 20, 
         "category": "film", 
         "rarity": 1, 
-        "img_url": "https://i.imgur.com/B253SQD.png"
+        "img_url": "https://i.imgur.com/B253SQD.png",
+        "emoji_icon": "<:SepiaFilm:825646249868132362>"
     }
 ]
