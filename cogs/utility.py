@@ -755,7 +755,7 @@ class Utility(commands.Cog):
         ) 
         # Rooms
         try:
-            api = requests.get("https://api.rec.net/roomserver/rooms/search?query=paintball", timeout=10)
+            api = requests.get("https://rooms.rec.net/rooms?name=paintball", timeout=10)
             if api.ok:
                 embed.add_field(name="Room API call",value="`✅ Successful!`", inline=False)
             else: 

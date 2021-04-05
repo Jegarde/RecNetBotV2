@@ -126,30 +126,26 @@ def cheers_in_room():
 def get_room_json(room, is_id=False):
     try:
         if not is_id:
-            room_data = requests.get(f"https://api.rec.net/roomserver/rooms/search?query={room}", timeout=10).json()
-            if room_data["TotalResults"] == 0:
-                # Room doesn't exist!
+            room_data = requests.get(f"https://rooms.rec.net/rooms?name={room}", timeout=10).json()
+            if room_data:
+                room_id = room_data["RoomId"]
+            else:
                 return None
-
-            for x in room_data["Results"]:
-                if x["Name"].casefold() == room.casefold():
-                    room_id = x["RoomId"]
-                    break
         else:
-            if requests.get(f"https://api.rec.net/roomserver/rooms/{room}", timeout=10).ok:
+            if requests.get(f"https://rooms.rec.net/rooms/{room}", timeout=10).ok:
                 room_id = room
             else:
                 return None
 
         print(room_id)
-        room_json = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}/?include=366").json()
+        room_json = requests.get(f"https://rooms.rec.net/rooms/{room_id}/?include=366").json()
 
         return room_json
     except:
         return None
         
 def get_room_placement(room):
-    hot_rooms = requests.get("https://api.rec.net/roomserver/rooms/hot?take=1000").json()["Results"]
+    hot_rooms = requests.get("https://rooms.rec.net/rooms/hot?take=1000").json()["Results"]
     print("get_room_placement")
 
     placement = 0
@@ -398,8 +394,11 @@ def room_embed(room_name, is_json=False, ctx=None):
 
             # Role count
             print("Role count")
-            if len(cached_data['Roles']) < role_count:
-                role_count_string += f" (+{role_count - cached_data['Roles']})"
+            try:
+                if len(cached_data['Roles']) < role_count:
+                    role_count_string += f" (+{role_count - cached_data['Roles']})"
+            except:
+                role_count_string = role_count
 
             # Cheer count
             print("Cheer count")
@@ -503,7 +502,7 @@ def room_embed(room_name, is_json=False, ctx=None):
 
 def id_to_room_name(room_id):
     try:
-        room_name = requests.get(f"https://api.rec.net/roomserver/rooms/{room_id}").json()['Name']
+        room_name = requests.get(f"https://rooms.rec.net/rooms/{room_id}").json()['Name']
     except:
         room_name = None
     return room_name
@@ -578,7 +577,7 @@ def find_random_room():
     room = None
     while not room:
         random_int = random.randint(1, 12000000)
-        room_data = requests.get(f"https://api.rec.net/roomserver/rooms/{random_int}?include=366")
+        room_data = requests.get(f"https://rooms.rec.net/rooms/{random_int}?include=366")
         if not room_data.ok:
             continue
         else:
@@ -606,7 +605,7 @@ def get_photos_in_room(room_name, amount=10000, return_photos=False):
         return None
 
 def id_to_rooms(account_id):
-    return requests.get(f"https://api.rec.net/roomserver/rooms/createdby/{account_id}").json()
+    return requests.get(f"https://rooms.rec.net/rooms/createdby/{account_id}").json()
 
 def get_bio(account_id):
     # Get someones bio with their account's id

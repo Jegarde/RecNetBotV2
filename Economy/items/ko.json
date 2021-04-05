@@ -1,46 +1,81 @@
 [
     {
         "name": "KO Icon - Bear Claw",
-        "tokens": 200, 
+        "tokens": 300, 
         "category": "ko", 
         "rarity": 4, 
         "img_url": "https://i.imgur.com/ehdJJUv.png",
-        "emoji_icon": "<:KOBearClaw:825646277479366658>"
+        "emoji_icon": "<:KOBearClaw:825646277479366658>",
+        "wearable": false,
+        "desc": "Rawr..",
+        "boost": 300,
+        "usable": true,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {  
         "name": "KO Icon - Grenade",
-        "tokens": 150, 
+        "tokens": 250, 
         "category": "ko", 
         "rarity": 3, 
         "img_url": "https://i.imgur.com/El5l8RH.png",
-        "emoji_icon": "<:KOGrenade:825646277374902284>"
+        "emoji_icon": "<:KOGrenade:825646277374902284>",
+        "wearable": false,
+        "desc": "Fire in the hole!",
+        "boost": 200,
+        "usable": true,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     { 
         "name": "KO Icon - Star Power",
-        "tokens": 200, 
+        "tokens": 300, 
         "category": "ko", 
         "rarity": 4, 
         "img_url": "https://i.imgur.com/xKRmx1q.png",
-        "emoji_icon": "<:KOStarPower:825646277780963328>"
+        "emoji_icon": "<:KOStarPower:825646277780963328>",
+        "wearable": false,
+        "desc": "🎵 Shooting Stars 🌠",
+        "boost": 300,
+        "usable": true,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     { 
         "name": "KO Icon - Sword and Shield",
-        "tokens": 150, 
+        "tokens": 250, 
         "category": "ko", 
         "rarity": 3, 
         "img_url": "https://i.imgur.com/I2iueIH.png",
-        "emoji_icon": "<:KOSwordShield:825646278263832596>"
+        "emoji_icon": "<:KOSwordShield:825646278263832596>",
+        "wearable": false,
+        "desc": "Wait, this isn't Pokémon..",
+        "boost": 200,
+        "usable": true,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {
         "name": "KO Icon - Winged Skull", 
-        "tokens": 100, 
+        "tokens": 200, 
         "category": "ko", 
-        "rarity": 3, 
+        "rarity": 2, 
         "img_url": "https://i.imgur.com/vljU6PN.png",
-        "emoji_icon": "<:KOWinged:825646277932220476>"
+        "emoji_icon": "<:KOWinged:825646277932220476>",
+        "wearable": false,
+        "desc": "Only use if you're a badass.",
+        "boost": 100,
+        "usable": true,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     }
 ]

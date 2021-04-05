@@ -1,0 +1,77 @@
+{
+    "badges":
+    [
+        {
+            "name": "Early Supporter",
+            "desc": "Given to people who played before initial release.",
+            "img_url": "https://i.imgur.com/h8BO5RT.png",
+            "emoji_icon": "<:Badge:826145537195114497>"
+        },
+        {
+            "name": "Developer",
+            "desc": "Given to the only developer of RecNetBot, Jegarde!",
+            "img_url": "https://i.imgur.com/h8BO5RT.png",
+            "emoji_icon": "<a:spinning:804022054822346823>"
+        },
+        {
+            "name": "Let's get this party started!",
+            "desc": "Get your first Fancy Bubbly!",
+            "img_url": "https://i.imgur.com/6tZuAnt.png",
+            "emoji_icon": "<:Bubbly:825646215256866817>"
+        },
+        {
+            "name": "Bug Hunter",
+            "desc": "Find an impactful bug!",
+            "img_url": "https://pics.freeicons.io/uploads/icons/png/20716690701555931396-512.png",
+            "emoji_icon": "🐛"
+        },
+        {
+            "name": "White Hat",
+            "desc": "Have the White Hat in Rec Room!",
+            "img_url": "",
+            "emoji_icon": "<:WhiteHat:826383712366231562>"
+        },
+        {
+            "name": "Dabloon Man",
+            "desc": "Given to the one and only Dabloon Man",
+            "img_url": "https://i.imgur.com/SmKPBJi.png",
+            "emoji_icon": "<:dabloon:826207644775219272>"
+        },
+        {
+            "name": "Creative Mind",
+            "desc": "Given to people who give a good suggestion for the bot! bit.ly/RecNetBot",
+            "img_url": "",
+            "emoji_icon": "🧠"
+        },
+        {
+            "name": "Nitro Supporter",
+            "desc": "Given to people who have boosted RecNetBot's home server! bit.ly/RecNetBot",
+            "img_url": "",
+            "emoji_icon": "<:nitro:826451974236012544>"
+        },
+        {
+            "name": "Ascended Flush",
+            "desc": "The wielder of this badge has ASCENDED in the name of FLUSH.",
+            "img_url": "https://i.imgur.com/IMjoBqs.png",
+            "emoji_icon": "<:ascendedflush:826487530773413898>"
+        },
+        {
+            "name": "First Supporter",
+            "desc": "Given to the first Nitro Supporter!",
+            "img_url": "https://i.imgur.com/IMjoBqs.png",
+            "emoji_icon": "<:goldnitro:826714778801274902>"
+        },
+        {
+            "name": "Paintball Beginner",
+            "desc": "Get Paintball gear!",
+            "img_url": "https://i.imgur.com/gv6d1aY.png",
+            "emoji_icon": "<:PaintballVestBlack:827496080169238560>"
+        },
+        {
+            "name": "Geared up!",
+            "desc": "Get all Paintball gear!",
+            "img_url": "https://i.imgur.com/gv6d1aY.png",
+            "emoji_icon": "<:PBAllBadge:827638642796658759>"
+        }
+    ]
+}

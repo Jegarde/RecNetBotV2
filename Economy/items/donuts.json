@@ -5,7 +5,11 @@
         "category": "donuts",
         "rarity": 3, 
         "img_url": "https://i.imgur.com/JkL3Nnx.png",
-        "emoji_icon": "<:DonutBox:825646190527250443>"
+        "emoji_icon": "<:DonutBox:825646190527250443>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     { 
@@ -14,7 +18,11 @@
         "category": "donuts", 
         "rarity": 2, 
         "img_url": "https://i.imgur.com/JkL3Nnx.png",
-        "emoji_icon": "<:DonutBox:825646190527250443>"
+        "emoji_icon": "<:DonutBox:825646190527250443>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     { 
@@ -23,6 +31,10 @@
         "category": "donuts", 
         "rarity": 1, 
         "img_url": "https://i.imgur.com/JkL3Nnx.png",
-        "emoji_icon": "<:DonutBox:825646190527250443>"
+        "emoji_icon": "<:DonutBox:825646190527250443>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     }
 ]

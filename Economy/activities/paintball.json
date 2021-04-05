@@ -1,0 +1,62 @@
+{
+    "dialogue":
+    [
+        [
+            "{user} got killed several times times, yet they still won!",
+            "{user} decided to focus on kills, yet they still won!",
+            "{user} didn't capture the flag at all, but still managed to win!",
+            "{user} let his team do the objective, and his plan seemed to work.",
+            "{user} was lazy and didn't capture the flag at all, but still won.",
+            "{user} didn't quite feel like doing the objective, but it was alright.",
+            "{user} attempted to capture the flag numorous times, but their teammates were more successful.",
+            "{user} killed a few people, and didn't capture the flag at all. Still won, though.",
+            "{user} got carried by their team, big time.",
+
+            "{user} absolutely slaughtered the opponent team!",
+            "{user} killed it!",
+            "{user} likes flags!",
+            
+            "{user} killed it with many kills!",
+            "{user} had a great time killing people!",
+            "{user} won with a bunch of kills!",
+            "{user} shot a bunch children with a paintball gun!",
+            "{user} won!"
+        ],
+
+        [
+            "{user} lost the game, and so did their opponents.",
+            "{user} tied.",
+            "{user} tied the game, fantastic.",
+            "{user} didn't win, nor did they lose.",
+            "{user} feels rusty.",
+            "{user} didn't feel it that game.",
+            "{user} is upset.",
+            "{user} is glad, because their opponents didn't win."
+        ],
+
+        [
+            "{user} lost the game for them!",
+            "{user} died many times...",
+            "{user} killed lots of people.. and lost..",
+            "{user} didn't win.",
+            "{user} got votekicked for teleporting!",
+            "{user} triggered mirror people, and got votekicked!",
+            "{user}'s lobby was broken!",
+            "{user} failed to do the main objective - win.",
+            "{user} got votekicked!",
+            "{user} didn't win, but that's alright, hush..",
+            "{user} won, SIKE!",
+            "{user} lost, not a surprise..",
+            "{user} lost, as usual.",
+            "{user} didn't feel like winning today.",
+            "{user} is having a bad day today.",
+            "{user} wasn't doing their best.",
+            "{user} could've done better.",
+            "{user} blamed their teammates for their defeat.",
+            "{user} got motion sick during the match.",
+            "{user}'s performance wasn't good.",
+            "{user} got screwed up by poor networking.",
+            "{user} got upset."
+        ]
+    ]
+}

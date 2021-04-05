@@ -5,7 +5,11 @@
         "category": "cake", 
         "rarity": 4, 
         "img_url": "https://i.imgur.com/x1MxWTw.png",
-        "emoji_icon": "<:RedVelvetCake:825646166539763732>"
+        "emoji_icon": "<:RedVelvetCake:825646166539763732>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {
@@ -14,7 +18,11 @@
         "category": "cake", 
         "rarity": 4, 
         "img_url": "https://i.imgur.com/noMjqAa.png",
-        "emoji_icon": "<:CelebrationCake:825646166405808168>"
+        "emoji_icon": "<:CelebrationCake:825646166405808168>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     { 
@@ -23,7 +31,11 @@
         "category": "cake", 
         "rarity": 4, 
         "img_url": "https://i.imgur.com/yLkYQ02.png",
-        "emoji_icon": "<:87FlavorCake:825646165654634507>"
+        "emoji_icon": "<:87FlavorCake:825646165654634507>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {
@@ -32,6 +44,10 @@
         "category": "cake", 
         "rarity": 4, 
         "img_url": "https://i.imgur.com/7u9Fnfv.png",
-        "emoji_icon": "<:ChocolateCake:825646166254682193>"
+        "emoji_icon": "<:ChocolateCake:825646166254682193>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     }
 ]

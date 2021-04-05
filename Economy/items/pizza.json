@@ -5,16 +5,24 @@
         "category": "pizza", 
         "rarity": 1, 
         "img_url": "https://i.imgur.com/jIQr9AR.png",
-        "emoji_icon": "<:PizzaBox:825646320978231336>"
+        "emoji_icon": "<:PizzaBox:825646320978231336>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {
         "name": "Pepperoni Pizza",
         "tokens": 90, 
         "category": "pizza", 
-        "rarity": 2, "img_url": 
-        "https://i.imgur.com/jIQr9AR.png",
-        "emoji_icon": "<:PizzaBox:825646320978231336>"
+        "rarity": 2, 
+        "img_url": "https://i.imgur.com/jIQr9AR.png",
+        "emoji_icon": "<:PizzaBox:825646320978231336>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {
@@ -23,7 +31,11 @@
         "category": "pizza", 
         "rarity": 3, 
         "img_url": "https://i.imgur.com/jIQr9AR.png",
-        "emoji_icon": "<:PizzaBox:825646320978231336>"
+        "emoji_icon": "<:PizzaBox:825646320978231336>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     },
 
     {
@@ -32,6 +44,10 @@
         "category": "pizza", 
         "rarity": 2, 
         "img_url": "https://i.imgur.com/jIQr9AR.png",
-        "emoji_icon": "<:PizzaBox:825646320978231336>"
+        "emoji_icon": "<:PizzaBox:825646320978231336>",
+        "wearable": false,
+        "purchasable": true,
+        "tradable": true,
+        "sellable": true
     }
 ]

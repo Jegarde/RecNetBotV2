@@ -1,0 +1,8 @@
+[
+    {"name": "Challenge completed!", "requirement": null, "reward": null, "amount": null},
+    {"name": "Challenge complete!", "requirement": null, "reward": null, "amount": null},
+    {"name": "Play 50 games of Paintball", "requirement": 50, "reward": "boxes:0", "amount": 10},
+    {"name": "Beg 50 times.", "requirement": 50, "reward": "tokens:4", "amount": 1},
+    {"name": "Acquire 3 <:Bubbly:825646215256866817> Fancy Bubblies.", "requirement": 3, "reward": "drinks:1", "amount": 1},
+    {"name": "Open 50 boxes.", "requirement": 50, "reward": "boxes:0", "amount": 15}
+]

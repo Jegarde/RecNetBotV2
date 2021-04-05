@@ -77,7 +77,7 @@ class Help(commands.Cog):
                 title = "<:RRtoken:825288414789107762> Economy commands",
                 description = "Economy is under development."
             )
-            embed.add_field(name="<:RRtoken:825288414789107762> Economy", value="`randombox`\nOpen and pick a random prize!\n\n`inventory`\nCheck your inventory!\n\n`gift`\nGift an item to somebody!", inline=False)
+            embed.add_field(name="<:RRtoken:825288414789107762> Economy", value="`econprofile (ep)`, `econstats (estats)`, `inventory (inv)`, `play`, `boxes`, `unbox (ub)` `buy`, `gift`, `sell`, `sellall`, `badges`, `daily`, `beg`, `leaderboard`, `boosters`, `use`, `upgrade`, `mirror`, `equip`, `unequip`, `item`", inline=False)
         else:
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
@@ -91,6 +91,7 @@ class Help(commands.Cog):
             embed.add_field(name="📲 API", value="`.help api`")
             embed.add_field(name="👾 Legacy", value="`.help legacy`")
             embed.add_field(name="📖 Other", value="`.help other`")
+            embed.add_field(name="<:RRtoken:825288414789107762> Economy (Early Alpha)", value="`.help economy`")
             
 
             rnb_stats = {}
