@@ -3,14 +3,15 @@ import os
 import functions
 from discord.ext.commands import CommandNotFound
 from discord.ext import commands
-from replit import db
+
+config = functions.load("config.json")
 
 client = discord.Client()
 
 # Setting up
 #intents = discord.Intents(messages = True, guilds = True, reactions = True, members = True, presences = True)
 #client = commands.Bot(command_prefix = '.', intents = intents, help_command=None, case_insensitive=True)
-client = commands.Bot(command_prefix = '.', help_command=None, case_insensitive=True)
+client = commands.Bot(command_prefix = config['prefix'], help_command=None, case_insensitive=True)
 
 
 # When bot online
@@ -30,10 +31,14 @@ async def on_ready():
 async def on_command_error(ctx,error):
     if isinstance(error, CommandNotFound):
         return
-    raise error
 
 
 # Commands
+@client.command()
+async def ping(ctx):
+    await ctx.send(f'Pong! {int(client.latency*1000)}!')
+
+
 @client.command()
 @commands.check(functions.is_it_me)
 async def unload(ctx, extension):
@@ -80,35 +85,14 @@ async def guilds(ctx):
         string += f"-{guild.name}\n"
     await ctx.send(string)
 
-@client.command()
-@commands.check(functions.is_it_me)
-async def dbase(ctx, key=None, delete=False, set_val=False, val=None, int_=False):
-    if not key:
-        await ctx.send(db.keys())
-    else:
-        try:
-            if delete:
-                del db[key]
-                await ctx.send(f"`{key}` deleted!!")
-            elif set_val and val:
-                if int_:
-                    db[key] = int(val)
-                else:
-                    db[key] = val
-                await ctx.send(f"`{key}` set to {db[key]}\nInt = {int_}")
-            else:
-                await ctx.send(db[key])
-        except:
-            await ctx.send("EROR")
-            
 
 def return_guild_count():
     return len(client.guilds)
- 
+
 # Load cogs
 for filename in os.listdir("./cogs"):
     if filename.endswith(".py"):
         client.load_extension(f"cogs.{filename[:-3]}")
 
 # token
-client.run(os.getenv('TOKEN'))
+client.run(config['token'])
