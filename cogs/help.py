@@ -1,7 +1,7 @@
 import functions
 import discord
+from discord.ext import menus
 from discord.ext import commands
-from replit import db
 from main import return_guild_count
 
 class Help(commands.Cog):
@@ -16,7 +16,7 @@ class Help(commands.Cog):
                 colour= discord.Colour.orange(),
                 title = "🛠️ Utility commands",
             )
-            embed.add_field(name="👤 Accounts", value="`stats`, `creatorstats`, `bio`, `cringebiocheck` `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
+            embed.add_field(name="👤 Accounts", value="`stats`, `creatorstats`, `topsubscribed`, `topcreators`, `bio`, `pfp`, `banner`, `profile`, `junior`, `date`, `nickname`",inline=False)
 
             embed.add_field(name="🖼️ Images", value="`photos`, `feed`, `latest`, `latestinby`, `latestwith` `latestfeed`, `oldest`, `oldestinby`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, `takenofin`, `together`, `cheers`, `comments`, `photostats`, `sortby`, `bookmarked`, `blacklisted`",inline=False)
 
@@ -28,11 +28,11 @@ class Help(commands.Cog):
                 colour= discord.Colour.orange(),
                 title = "📖 Other commands",
                 description = "`doc`, `invite`"
-            )   
+            )
         elif menu == "random":
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
-                title = "<:RRQuestion:803587583187746847> \"Random\" commands",  
+                title = "<:RRQuestion:803587583187746847> \"Random\" commands",
             )
 
             embed.add_field(name="🖼️ Images", value="`randomimg`, `randomimgof`, `randomimgofin`,`randomimgby`, `randomimgbyin`, `randomimgin`, `randompfp`",inline=False)
@@ -71,15 +71,23 @@ class Help(commands.Cog):
                 description = "These commands are the original versions of some reworked commands."
             )
             embed.add_field(name="👾 Legacy", value="`lfrontpage`, `lsortby`, `ltogether`, `ltakenin`, `ltakenof`, `ltakenofin`", inline=False)
-        elif menu == "economy":
+        elif menu == "economyy":
             embed = discord.Embed(
                 colour= discord.Colour.orange(),
                 title = "<:RRtoken:825288414789107762> Economy commands",
                 description = "Economy is under development."
             )
             embed.add_field(name="<:RRtoken:825288414789107762> Economy", value="`econprofile (ep)`, `econstats (estats)`, `inventory (inv)`, `play`, `boxes`, `unbox (ub)` `buy`, `gift`, `sell`, `sellall`, `badges`, `daily`, `beg`, `leaderboard`, `boosters`, `use`, `upgrade`, `mirror`, `equip`, `unequip`, `item`", inline=False)
-        else:
+        elif menu == "fun":
             embed = discord.Embed(
+                colour= discord.Colour.orange(),
+                title = "😹 Fun commands"
+            )
+            embed.add_field(name="🎮 Minigames", value="`boxsim`", inline=False)
+            embed.add_field(name="📑 Checks", value="`cringebiocheck`, `cringenamecheck`, `selfcheers`", inline=False)
+            embed.add_field(name="<:wholesome:796100757354053653> Other", value="`adjectiveanimal`", inline=False)
+        else:
+            embed = discord.Embed(  
                 colour= discord.Colour.orange(),
                 title = "RecNetBotV2 Command List"
             )
@@ -88,31 +96,20 @@ class Help(commands.Cog):
             embed.add_field(name="<:RRQuestion:803587583187746847> \"Random\"", value="`.help random`")
             embed.add_field(name="📟 Menus", value="`.help menus`")
             embed.add_field(name="🔎 Search", value="`.help search`")
+            embed.add_field(name="😹 Fun", value="`.help fun`")
             embed.add_field(name="📲 API", value="`.help api`")
             embed.add_field(name="👾 Legacy", value="`.help legacy`")
             embed.add_field(name="📖 Other", value="`.help other`")
-            embed.add_field(name="<:RRtoken:825288414789107762> Economy (Early Alpha)", value="`.help economy`")
-            
+            #embed.add_field(name="<:RRtoken:825288414789107762> Economy (Early Alpha)", value="`.help economy`")
 
-            rnb_stats = {}
-            # total count
-            try:
-                rnb_stats['TotalCount'] = db['TotalCount']
-            except:
-                rnb_stats['TotalCount'] = "None"
-            
-            # server count
-            try:
-                rnb_stats['GuildCount'] = return_guild_count()
-            except:
-                rnb_stats['GuildCount'] = "None"
+            rnb_stats = {'TotalCount': None, 'GuildCount': len(self.client.guilds)}
 
-            #embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands executed: `{rnb_stats['TotalCount']}`\nGuild count: `{rnb_stats['GuildCount']}`", inline=False)
-            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=8&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\nCommands executed: `{rnb_stats['TotalCount']}`", inline=False)
-        
-       
+            embed.add_field(name="Other", value=f"[Invite bot](https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=322624&scope=bot) | [Discord](https://discord.gg/GPVdhMa2zK)\n<:discord:803539862435135510> Server count: `{rnb_stats['GuildCount']}`", inline=False)
+
+
         functions.embed_footer(ctx, embed)
         await ctx.send(embed=embed)
+
 
 def setup(client):
     client.add_cog(Help(client))
