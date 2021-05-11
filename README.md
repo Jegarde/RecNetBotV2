@@ -20,7 +20,9 @@ This bot is a must have for any Rec Room related server out there.
 You can try out the 50+ commands in the testing channels here! (#test, #test2, #test3) Use the command `.help` to get you started!
  
 If you have any suggestions for the bot, such as command ideas, ways to make the bot better in general, etc; feel free to let me know in the Discord server!
+
 https://discord.gg/GPVdhMa2zK
 
-If you are interested in inviting @RecNetBot#2157 to your server, you can get the invite link here:
+If you are interested in inviting RecNetBot into your server, you can get the invite link here:
+
 https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=322624&scope=bot
