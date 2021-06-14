@@ -26,3 +26,5 @@ https://discord.gg/GPVdhMa2zK
 If you are interested in inviting RecNetBot into your server, you can get the invite link here:
 
 https://discord.com/api/oauth2/authorize?client_id=788632031835324456&permissions=322624&scope=bot
+
+The source code is quite messy, but I hope you can get something out of it. :P
