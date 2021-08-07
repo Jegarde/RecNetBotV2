@@ -37,5 +37,13 @@ class Other(commands.Cog):
         functions.embed_footer(ctx, embed) # get default footer from function
         await ctx.send(embed=embed)
 
+    #CMD-CRINGEBIOS
+    @commands.command()
+    async def cringebios(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        with open("cringe_bios.json", "rb") as bios:
+            await ctx.send(file=discord.File(bios, "Cringe bio list.json"))
+
 def setup(client):
     client.add_cog(Other(client))

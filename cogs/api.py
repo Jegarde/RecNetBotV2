@@ -36,6 +36,7 @@ class API(commands.Cog):
 
     @accountid.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an account id!")
 
@@ -77,6 +78,7 @@ class API(commands.Cog):
 
     @accountdata.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an username!")
 
@@ -113,6 +115,7 @@ class API(commands.Cog):
 
     @imageid.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(
                 ctx,

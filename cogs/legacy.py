@@ -75,6 +75,7 @@ class Legacy(commands.Cog):
         
     @lsortby.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an username and mode! \nUsage: `.lsortby <user> <latest|oldest|cheers|comments>`")
             
@@ -157,6 +158,7 @@ class Legacy(commands.Cog):
 
     @ltogether.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in 2 users! Usage: `.ltogether <user1> <user2>`")
             
@@ -244,6 +246,7 @@ class Legacy(commands.Cog):
 
     @ltakenin.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in a room and an user! Usage: `.ltakenin <room> <user>`")
             
@@ -327,6 +330,7 @@ class Legacy(commands.Cog):
 
     @ltakenof.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in 2 users! Usage: `.ltakenof <of_user> <by_user>`")
             
@@ -412,6 +416,7 @@ class Legacy(commands.Cog):
 
     @ltakenofin.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an user and a room! Usage: `.ltakenofin <user> <room>`")
             

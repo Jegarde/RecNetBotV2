@@ -4,26 +4,47 @@ import discord
 import json
 import random
 import os
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 from discord.ext import commands
 from discord.ext import menus
+from discord.ext import owoify
 
 
 class Fun(commands.Cog):
     def __init__(self, client):
         self.client = client
+        self.session_message = {}
+        self.buttons = {
+            "default": {
+                "aa": [
+                    [
+                        Button(style=ButtonStyle.red, label="Redo")
+                    ],
+                ]
+            },
+            "disabled": {
+                "aa": [
+                    [
+                        Button(style=ButtonStyle.red, label="Redo", disabled=True)
+                    ]
+                ]
+            }
+        }
 
     # CMD-ADJECTIVEANIMAL
     @commands.command(aliases=['aa'])
     async def adjectiveanimal(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
+        m_session = random.randint(0, 999999)
+        self.session_message[ctx.author.id] = m_session
 
         adjectives = [
             "Polite",
             "Sizzling",
             "Joyful",
-            "Zany"
+            "Zany",
             "Selfish",
-            "Sleepy"
+            "Sleepy",
             "Agreeable",
             "Friendly",
             "Wise",
@@ -56,7 +77,7 @@ class Fun(commands.Cog):
             "Plucky",
             "Grimy",
             "Nimble",
-            "Strict"
+            "Strict",
             "Pleasant",
             "Wild"
         ]
@@ -98,11 +119,11 @@ class Fun(commands.Cog):
             "Monkey",
             "Cheetah",
             "Walrus",
-            "Badger",
+            "Badger"
         ]
 
-        adjective = adjectives[random.randint(0, len(adjectives)-1)]
-        animal = animals[random.randint(0, len(animals)-1)]
+        adjective = random.choice(adjectives)
+        animal = random.choice(animals)
 
         name = adjective + animal
 
@@ -125,10 +146,27 @@ class Fun(commands.Cog):
             colour=discord.Colour.orange()
         )
 
-        embed = functions.embed_footer(ctx,embed)
+        embed = functions.embed_footer(ctx, embed)
 
-        await ctx.send(embed=embed)
+        m = await ctx.send(
+            embed=embed,
+            components=self.buttons['default']['aa']
+        )
 
+        def check(res):
+            return ctx.author == res.user and res.channel == ctx.channel and self.session_message[ctx.author.id] == m_session
+
+        try:
+            res = await self.client.wait_for("button_click", check=check, timeout=30)
+            await res.respond(type=6)
+        except:
+            return await m.edit(components=self.buttons['disabled']['aa'])
+
+        if res.component.label == "Redo":
+            await m.edit(
+                components=self.buttons['disabled']['aa']
+            )
+            await self.adjectiveanimal(ctx)
 
     # CMD-CRINGENAMECHECK
     @commands.command(aliases=["cnc"])
@@ -192,84 +230,13 @@ class Fun(commands.Cog):
 
     @cringenamecheck.error
     async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in an username!")
 
             await ctx.send(embed=embed)
         else:
             pass
-
-    # CMD-CRINGEBIOCHECK
-    @commands.command(aliases=["cbc"])
-    @commands.check(functions.beta_tester)
-    async def cringebiocheck(self, ctx, profile):
-        functions.log(ctx.guild.name, ctx.author, ctx.command)
-
-        account = functions.check_account_existence_and_return(profile)
-        if account:
-            bio = functions.get_bio(account['account_id'])
-            pfp = functions.id_to_pfp(account['account_id'], True)
-
-            print(f"{ctx.command} > {account['account_id']}, {account['username']}, {bio}, {pfp}")
-
-            embed = functions.default_embed()
-            embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
-
-            flags = ""
-            cringe_check_list = functions.load("cringe_word_list.json")
-            cringe_score = 0
-            cringe_rating_dict = {
-                0: "Not cringe!",
-                1: "A little cringe!",
-                2: "Cringe!",
-                3: "Very cringe!",
-                4: "Yikes..!",
-                5: "Radically cringe!",
-                6: "Super cringe!",
-                7: "Mega cringe!",
-                8: "Ultra cringe!",
-                9: "THE CRINGIEST!",
-                10: "All hope for humanity has been lost!"
-            }
-
-            if bio:
-                split_bio = bio.split(" ")
-                for word in split_bio:
-                    for flag in cringe_check_list:
-                        if flag.casefold() in word.casefold():
-                            cringe_score += 1
-                            flags += f"`{flag}`, "
-
-                if cringe_score > len(cringe_rating_dict) - 1:
-                    cringe_rating = cringe_rating_dict[len(cringe_rating_dict) - 1]
-                else:
-                    cringe_rating = cringe_rating_dict[cringe_score]
-
-                embed.add_field(name="Cringe score", value=f"`{cringe_score}` ({cringe_rating})",
-                                inline=False)
-
-                if flags:
-                    embed.add_field(name="Flags",
-                                    value=f"||{flags}||\nThis command is just for fun, and not meant to shame anybody!",
-                                    inline=False)
-
-            embed.set_author(name=f"🔗 {account['username']}'s profile",
-                             url=f"https://rec.net/user/{account['username']}", icon_url=pfp)
-        else:
-            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
-
-        functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(embed=embed)
-
-    @cringebiocheck.error
-    async def clear_error(self, ctx, error):
-        if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in an username!")
-
-            await ctx.send(embed=embed)
-        else:
-            pass
-
 
     # CMD-BOXSIM
     @commands.command(aliases=['bsim'])
@@ -295,7 +262,7 @@ async def reward_selection(amount=3, categories=[], dupes=False):
         item = None
         while not item:
             item = await random_drop()
-            if (await get_id(item['name']) not in rewards) or dupes: # Check for duplicate
+            if (await get_id(item['name']) not in rewards) or dupes:  # Check for duplicate
                 # No duplicate tokens
                 if item['category'] == "tokens":
                     if is_token_reward:
@@ -491,6 +458,7 @@ class RewardSelection(menus.Menu):
     @menus.button('3️⃣')
     async def reward_three(self, payload):
         await self.update_menu(2)
+
 
 def setup(client):
     client.add_cog(Fun(client))
