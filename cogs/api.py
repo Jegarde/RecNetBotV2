@@ -2,6 +2,7 @@ import functions
 import requests
 import discord
 from discord.ext import commands
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 
 
 class API(commands.Cog):
@@ -129,6 +130,108 @@ class API(commands.Cog):
             await ctx.send(embed=embed)
         else:
             pass
+
+    # CMD-roomid
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def roomid(self, ctx, room):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        room_data = functions.id_to_room_data(room)
+        if not room_data:
+            embed = functions.error_msg(ctx, f"Room with the id `{room}` doesn't exist!")
+            return await ctx.send(embed=embed)
+
+        embed = discord.Embed(colour=discord.Colour.orange())
+        count = 0
+        for item in room_data:
+            if count == 25:
+                await ctx.send(embed=embed)
+                embed = discord.Embed(colour=discord.Colour.orange())
+                count = 0
+            em_value = str(room_data[item])
+            em_value = em_value.replace("'", "\"")
+            em_value = em_value.replace("None", "null")
+            em_value = em_value.replace("True", "true")
+            em_value = em_value.replace("False", "false")
+            if len(em_value) > 6000:
+                embed.add_field(name=item, value=f"```Too much data to handle!```", inline=False)
+            else:
+                embed.add_field(name=item, value=f"```json\n{em_value}```", inline=False)
+            count += 1
+
+        if count:
+            await ctx.send(
+                embed=embed,
+                components=[
+                    [
+                        Button(style=ButtonStyle.URL, label="Room Link",
+                               url=f"https://rec.net/room/{room_data['Name']}"),
+                        Button(style=ButtonStyle.URL, label="Creator Link",
+                               url=f"https://rec.net/user/{functions.id_to_username(room_data['CreatorAccountId'])}")
+                    ]
+                ]
+            )
+
+    @roomid.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room id!")
+
+            await ctx.send(embed=embed)
+        else:
+            raise error
+
+    # CMD-roomdata
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def roomdata(self, ctx, room):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        room_data = functions.name_to_room_data(room)
+        if not room_data:
+            embed = functions.error_msg(ctx, f"Room `^{room}` doesn't exist!")
+            return await ctx.send(embed=embed)
+
+        embed = discord.Embed(colour=discord.Colour.orange())
+        count = 0
+        for item in room_data:
+            if count == 25:
+                await ctx.send(embed=embed)
+                embed = discord.Embed(colour=discord.Colour.orange())
+                count = 0
+            em_value = str(room_data[item])
+            em_value = em_value.replace("'", "\"")
+            em_value = em_value.replace("None", "null")
+            em_value = em_value.replace("True", "true")
+            em_value = em_value.replace("False", "false")
+            if len(em_value) > 6000:
+                embed.add_field(name=item, value=f"```Too much data to handle!```", inline=False)
+            else:
+                embed.add_field(name=item, value=f"```json\n{em_value}```", inline=False)
+            count += 1
+
+        if count:
+            await ctx.send(
+                embed=embed,
+                components=[
+                    [
+                        Button(style=ButtonStyle.URL, label="Room Link",
+                               url=f"https://rec.net/room/{room_data['Name']}"),
+                        Button(style=ButtonStyle.URL, label="Creator Link",
+                               url=f"https://rec.net/user/{functions.id_to_username(room_data['CreatorAccountId'])}")
+                    ]
+                ]
+            )
+
+    @roomdata.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room name!")
+
+            await ctx.send(embed=embed)
+        else:
+            raise error
 
 
 

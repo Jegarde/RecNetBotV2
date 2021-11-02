@@ -10,7 +10,7 @@ from discord.ext import commands
 class Beta(commands.Cog):
     def __init__(self, client):
         self.client = client
-        self.session_message = {}
+        self.session = {}
         DiscordComponents(client)
 
     async def cosmetic_embed(self, item):
@@ -85,8 +85,8 @@ class Beta(commands.Cog):
     @commands.check(functions.beta_tester)
     async def cosmetic(self, ctx, *item_name):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        m_session = random.randint(0, 999999)
-        self.session_message[ctx.author.id] = m_session
+        session = random.randint(0, 999999)
+        self.session[ctx.author.id] = session
         pure_name = ' '.join(item_name)
         item_name = '+'.join(item_name)
 
@@ -120,8 +120,8 @@ class Beta(commands.Cog):
         )
 
         def check(m):
-            return m.author == ctx.author and m.content.isdigit() and self.session_message[
-                ctx.author.id] == m_session
+            return m.author == ctx.author and m.content.isdigit() and self.session[
+                ctx.author.id] == session
 
         try:
             choice = await self.client.wait_for('message', check=check, timeout=30.0)
@@ -192,7 +192,10 @@ class Beta(commands.Cog):
 
         em.add_field(name="Reward", value=f"Name: `{item['Name']}`\nItem: `{item['Item']}`", inline=False)
         em.add_field(name="Challenges", value="`" + challenges + "`", inline=False)
-        em.set_image(url="https://i.imgur.com/paO6CDA.png")
+        if item['ImageName']:
+            em.set_image(url=f"https://www.recdb.xyz/CDN/Images/{item['ImageName']}")
+        else:
+            em.set_image(url="https://i.imgur.com/paO6CDA.png")
 
         functions.embed_footer(ctx, em)  # get default footer from function
         return await ctx.send(embed=em)
@@ -200,6 +203,147 @@ class Beta(commands.Cog):
     @weekly.error
     async def clear_error(self, ctx, error):
         raise error
+
+
+    @commands.command()
+    async def quiz(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        session = random.randint(0, 999999)
+        self.session[ctx.author.id] = session
+
+        em = discord.Embed(
+            title="Rec Room Quizzes",
+            color=0x2f3136
+        )
+
+        em.add_field(name="1. Obtainable or not?", value="One of the items isn't obtainable. Which one is it?",
+                     inline=True)
+
+        m = await ctx.send(
+            embed=em,
+            components=[
+                [
+                    Button(style=ButtonStyle.red, label="1")
+                ]
+            ]
+        )
+
+        def check(res):
+            return ctx.author == res.user and res.channel == ctx.channel and self.session[
+                ctx.author.id] == session
+
+        try:
+            res = await self.client.wait_for("button_click", check=check, timeout=60)
+            await res.respond(type=6)
+        except:
+            return
+
+        if res.component.label == "1":
+            await m.delete()
+            await self.consumablequiz(ctx)
+
+    @quiz.error
+    async def on_command_error(self, ctx, error):
+        raise error
+
+
+    @commands.command()
+    async def consumablequiz(self, ctx):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+        session = random.randint(0, 999999)
+        self.session[ctx.author.id] = session
+
+        em = discord.Embed(
+            title="Which one is NOT obtainable?",
+            color=0x2f3136
+        )
+
+        obtainable = requests.get("https://www.recdb.xyz/api/clothing/v1/random?limit=2&obtainable=true&hasimage=true").json()
+        not_obtainable = requests.get("https://www.recdb.xyz/api/clothing/v1/random?limit=1&obtainable=false&hasimage=true").json()
+
+        answer = not_obtainable[0]
+
+        # don't even ask, wouldn't work otherwise.
+        items = []
+        items += obtainable
+        items += not_obtainable
+
+        random.shuffle(items)
+
+        for item in items:
+            em.add_field(name=item['Name'], value=f"Slot: `{item['Type']}`", inline=True)
+
+        m = await ctx.send(
+            embed=em,
+            components=[
+                [
+                    Button(style=ButtonStyle.red, label=items[0]['Name']),
+                    Button(style=ButtonStyle.red, label=items[1]['Name']),
+                    Button(style=ButtonStyle.red, label=items[2]['Name'])
+                ]
+            ]
+        )
+
+        def check(res):
+            return ctx.author == res.user and res.channel == ctx.channel and self.session[
+                ctx.author.id] == session
+
+        try:
+            res = await self.client.wait_for("button_click", check=check, timeout=60)
+            await res.respond(type=6)
+        except:
+            em = discord.Embed(
+                title="Timed out!",
+                description=f"The correct answer was `{answer['Name']}`!",
+                color=0x2f3136
+            )
+            if answer['ImageName']:
+                em.set_image(url=f"https://www.recdb.xyz/CDN/Images/{answer['ImageName']}")
+            else:
+                em.set_image(url="https://i.imgur.com/paO6CDA.png")
+            return await m.edit(embed=em, components=[])
+
+        if res.component.label == answer['Name']:
+            em = discord.Embed(
+                title="Correct answer!",
+                description=answer['Name'],
+                color=0x2f3136
+            )
+            if answer['ImageName']:
+                em.set_image(url=f"https://www.recdb.xyz/CDN/Images/{answer['ImageName']}")
+            else:
+                em.set_image(url="https://i.imgur.com/paO6CDA.png")
+            await m.edit(embed=em, components=[[
+                Button(style=ButtonStyle.red, label="Again"),
+                Button(style=ButtonStyle.red, label="Lookup Item")
+            ]])
+        else:
+            em = discord.Embed(
+                title="Wrong answer!",
+                description=f"The correct answer was `{answer['Name']}`!",
+                color=0x2f3136
+            )
+            if answer['ImageName']:
+                em.set_image(url=f"https://www.recdb.xyz/CDN/Images/{answer['ImageName']}")
+            else:
+                em.set_image(url="https://i.imgur.com/paO6CDA.png")
+            await m.edit(embed=em, components=[[
+                Button(style=ButtonStyle.red, label="Again"),
+                Button(style=ButtonStyle.red, label="Lookup Item")
+            ]])
+
+        try:
+            res = await self.client.wait_for("button_click", check=check, timeout=60)
+            await res.respond(type=6)
+        except:
+            return
+
+        if res.component.label == "Again":
+            await m.delete()
+            await self.consumablequiz(ctx)
+        elif res.component.label == "Lookup Item":
+            await m.delete()
+            await self.cosmeticsearch(ctx, answer['Name'])
 
 
 def setup(client):

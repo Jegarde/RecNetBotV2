@@ -2,6 +2,7 @@ import functions
 import requests
 import discord
 import random
+import aiohttp
 import json
 from asyncio import TimeoutError, sleep
 from discord.ext import commands
@@ -64,8 +65,8 @@ class Random(commands.Cog):
         
         author = f"<@{ctx.author.id}>"
 
-        if amount > 5:
-            amount = 5
+        if amount > 20:
+            amount = 20
         elif amount < 1:
             amount = 1
 
@@ -78,9 +79,22 @@ class Random(commands.Cog):
 
         bio_list = []
 
-        for x in range(amount):
-            bio = functions.find_random_bio()
-            bio_list.append(bio)
+        async with aiohttp.ClientSession() as session:
+            for x in range(amount):
+                bio = None
+                while not bio:
+                    account_id = random.randint(1, 20000000)
+                    try:
+                        async with session.get(url=f"https://accounts.rec.net/account/{account_id}/bio") as resp:
+                            bio = await resp.json()
+                            bio = bio["bio"]
+                        if len(bio) < 5:
+                            bio = None
+                            continue
+                    except:
+                        continue
+                bio_list.append({"account_id": account_id, "bio": bio})
+
 
         embed=discord.Embed(
             colour=discord.Colour.orange(),
@@ -98,7 +112,6 @@ class Random(commands.Cog):
         functions.embed_footer(ctx, embed) # get default footer from function
         await loading.delete()
         m = await ctx.send(
-            author,
             embed=embed,
             components=self.buttons['default']
         )
@@ -116,7 +129,7 @@ class Random(commands.Cog):
             await m.edit(
                 components=self.buttons['disabled']
             )
-            await self.randombio(ctx)
+            await self.randombio(ctx, amount)
 
 
     # CMD-CRINGEBIO
@@ -127,8 +140,8 @@ class Random(commands.Cog):
         m_session = random.randint(0, 999999)
         self.session_message[ctx.author.id] = m_session
 
-        if amount > 5:
-            amount = 5
+        if amount > 20:
+            amount = 20
         elif amount < 1:
             amount = 1
 
@@ -177,7 +190,7 @@ class Random(commands.Cog):
             await m.edit(
                 components=self.buttons['disabled']
             )
-            await self.cringebio(ctx)
+            await self.cringebio(ctx, amount)
 
     # CMD-FASTRANDOMBIO
     @commands.command(aliases=["frb"])
@@ -187,8 +200,8 @@ class Random(commands.Cog):
         m_session = random.randint(0, 999999)
         self.session_message[ctx.author.id] = m_session
 
-        if amount > 5:
-            amount = 5
+        if amount > 20:
+            amount = 20
         elif amount < 1:
             amount = 1
 
@@ -225,7 +238,7 @@ class Random(commands.Cog):
             await m.edit(
                 components=self.buttons['disabled']
             )
-            await self.fastrandombio(ctx)
+            await self.fastrandombio(ctx, amount)
 
 
     # CMD-RANDOMACCOUNT
@@ -424,7 +437,7 @@ class Random(commands.Cog):
         room = functions.find_random_room()
         room_embed = functions.room_embed(room, True)
 
-        functions.embed_footer(ctx, room_embed) # get default footer from function
+        functions.embed_footer(ctx, room_embed)  # get default footer from function
 
         await loading.delete()
         m = await ctx.send(
@@ -446,6 +459,11 @@ class Random(commands.Cog):
                 components=self.buttons['disabled']
             )
             await self.randomroom(ctx)
+
+    @randomroom.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        raise error
 
 
     # CMD-RANDOMEVENT

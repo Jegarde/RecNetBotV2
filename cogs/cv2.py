@@ -64,15 +64,15 @@ class Cv2(commands.Cog):
                 return chip
 
         # if wasn't found, find a similar one
-        similar_chip = {'chip': '', 'data': None, 'similarity': 0.0}
+        similar_chip = {'chip': '', 'player_data': None, 'similarity': 0.0}
         for chip in circuits:
             name = chip['ReadonlyName'].lower()
             similarity = self.similar(name, chip_name)
             if similarity > similar_chip['similarity']:
-                similar_chip = {'chip': '', 'data': chip, 'similarity': similarity}
+                similar_chip = {'chip': '', 'player_data': chip, 'similarity': similarity}
 
         if similar_chip['similarity']:  # if a similar one was found
-            chip = similar_chip['data']
+            chip = similar_chip['player_data']
             chip['Similar'] = True
             return chip
 

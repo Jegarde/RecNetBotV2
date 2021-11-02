@@ -2,10 +2,12 @@ import functions
 import httpx
 import requests
 import discord
+import aiohttp
 import operator
 import random
 import asyncio
 from datetime import date
+from discord.ext import tasks
 from discord.ext import owoify
 from discord.ext import commands
 from discord.ext import menus
@@ -195,6 +197,52 @@ class Utility(commands.Cog):
 
     # UTILITY COMMANDS
 
+    # CMD-TRACKROOM
+    @commands.command()
+    @commands.has_permissions(administrator=True)
+    @commands.check(functions.is_it_me)
+    async def trackroom(self, ctx, room_name, channel: discord.TextChannel = None):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        if not channel:
+            channel = ctx.channel
+
+        room = functions.get_room_json(room_name)
+        if not room:
+            embed = functions.error_msg(ctx, f"Room `^{room_name}` doesn't exist or is private!")
+            embed = functions.embed_footer(ctx, embed)
+            return await ctx.send(embed=embed)
+
+        em = discord.Embed(
+            title="Track Room Statistics",
+            description=f"This will automatically send room statistics for [`^{room['Name']}`](https://rec.net/rooms/{room['Name']}) in <#{channel.id}> every day for 7 days.\nConfirm?",
+            colour=discord.Colour.orange()
+        )
+        confirm = await Confirm(em).prompt(ctx)
+        if confirm:
+            self.trackroomtask.start(ctx, room_name)
+
+    @tasks.loop(hours=24, count=7)
+    async def trackroomtask(self, ctx, room):
+        room_embed = functions.room_embed_stats(room, False, ctx)
+        functions.embed_footer(ctx, room_embed)
+        date_ = str(date.today())
+        await ctx.send(f"{date_[8:10]}. {functions.months[date_[5:7]]} {date_[0:4]}", embed=room_embed)
+
+    @trackroom.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        if isinstance(error, commands.CheckFailure):
+            embed = functions.error_msg(ctx, "You must be an administrator to use this command.")
+
+            await ctx.send(embed=embed)
+        elif isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx, "Please include in a room!")
+
+            await ctx.send(embed=embed)
+        else:
+            raise error
+
     """
     Cringe bio check is here just to make my life easier. yayayayayayayayayayay
     """
@@ -216,7 +264,12 @@ class Utility(commands.Cog):
             embed.add_field(name=f"{account['username']}'s bio:", value=f"```{bio}```")
 
             flags = ""
-            cringe_check_list = functions.load("cringe_word_list.json")
+            cringe_check_list = requests.get(
+                "https://raw.githubusercontent.com/Jegarde/RecNetBotV2/master/cringe_word_list.json")
+            if cringe_check_list.ok:
+                cringe_check_list = cringe_check_list.json()
+            else:
+                cringe_check_list = functions.load("cringe_word_list.json")
             cringe_score = 0
             cringe_rating_dict = {
                 0: "Not cringe!",
@@ -427,15 +480,20 @@ class Utility(commands.Cog):
             role_stats = {
                 "255": 0,
                 "30": 0,
+                "31": 0,
                 "20": 0,
-                "10": 0
+                "10": 0,
+                "0": 0
             }
 
             i = 0
             users = []
             user_bulk = "https://accounts.rec.net/account/bulk?"
             for user in roles_data:
+                if not user['Role']:
+                    continue
                 user_bulk += F"&id={user['AccountId']}"
+                print(str(user['Role']))
                 role_stats[str(user['Role'])] += 1
                 i += 1
                 if i >= 100:
@@ -457,9 +515,11 @@ class Utility(commands.Cog):
             for user in users:
                 role_dict = {
                     255: "**Owner**",
+                    31: "Unknown!",
                     30: "`Co-Owner`",
                     20: "*Moderator*",
-                    10: "Host"
+                    10: "Host",
+                    0: "Unknown!!"
                 }
 
                 role = "UNKNOWN"
@@ -526,7 +586,7 @@ class Utility(commands.Cog):
         if account:
             print("embed")  # REMOVETHIS
             embed = discord.Embed(
-                title=f"<a:spinning:804022054822346823> Getting @{account['username']}'s self cheered posts...",
+                title=f"<a:spinning:804022054822346823> Getting @{account['username']}'s self-cheered posts...",
                 description="This shouldn't take too long.",
                 colour=discord.Colour.orange()
             )
@@ -546,10 +606,10 @@ class Utility(commands.Cog):
             pfp = functions.id_to_pfp(account['account_id'])
             if self_cheers:
                 percentage = round(self_cheers / len(photos) * 100, 2)
-                result_string = f"Self cheered: `{self_cheers}`\n*That's `{percentage}%` of their posts!*\n\n[Latest self cheered post](https://rec.net/image/{latest_self_cheer['Id']})"
+                result_string = f"Self cheered: `{self_cheers}`\n*That's `{percentage}%` of their posts!*\n\n[Latest self-cheered post](https://rec.net/image/{latest_self_cheer['Id']})"
 
                 embed = discord.Embed(
-                    title=f"@{account['username']}'s self cheered posts!",
+                    title=f"@{account['username']}'s self-cheered posts!",
                     description=result_string,
                     colour=discord.Colour.orange()
                 )
@@ -611,21 +671,21 @@ class Utility(commands.Cog):
                     break
 
             if blacklisted:
-                title_string = f"@{account['username']} is not in frontpage!"
-                description = f"No `@{account['username']}`'s post was found in [RecNet](https://rec.net)'s frontpage!"
+                title_string = f"@{account['username']} is not in front page!"
+                description = f"No `@{account['username']}`'s post was found in [RecNet](https://rec.net)'s front page!"
             else:
                 response = requests.get(f"https://api.rec.net/api/images/v1/{post['Id']}/comments")
                 if response.ok:
                     comments = response.json()
                     if comments:
                         latest_comment = {"user": functions.id_to_username(comments[-1]['PlayerId']),
-                                      "comment": comments[-1]['Comment']}
+                                          "comment": comments[-1]['Comment']}
                     else:
                         latest_comment = ""
                 else:
                     latest_comment = ""
 
-                title_string = f"@{account['username']} is in frontpage!"
+                title_string = f"@{account['username']} is in front page!"
                 description = f"Their [post](https://rec.net/image/{post['Id']}) appears in `#{count - 1}`.\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`"
 
             embed = discord.Embed(
@@ -938,32 +998,38 @@ class Utility(commands.Cog):
         bulk = "https://accounts.rec.net/account/bulk?"
 
         creator_score = 0
-        for user in top_creators:
-            account_rooms = functions.id_to_rooms(user['accountId'])
-            if account_rooms:
-                room_count = 0
-                cheers = 0
-                favorites = 0
-                visitors = 0
-                visits = 0
-                creator_score = 0
 
-                for room in account_rooms:
-                    cheers += room['Stats']['CheerCount']
-                    favorites += room['Stats']['FavoriteCount']
-                    visitors += room['Stats']['VisitorCount']
-                    visits += room['Stats']['VisitCount']
+        async with aiohttp.ClientSession() as session:
+            for user in top_creators:
+                async with session.get(url=f"https://rooms.rec.net/rooms/ownedby/{user['accountId']}") as resp:
+                    account_rooms = await resp.json()
+                    if account_rooms:
+                        room_count = 0
+                        cheers = 0
+                        favorites = 0
+                        visitors = 0
+                        visits = 0
+                        creator_score = 0
 
-                    temp_room_stats_sum = room['Stats']['CheerCount'] + room['Stats']['FavoriteCount'] + room['Stats'][
-                        'VisitorCount'] + room['Stats']['VisitCount']
+                        for room in account_rooms:
+                            if room['Name'] == "RecCenter":
+                                continue
+                            cheers += room['Stats']['CheerCount']
+                            favorites += room['Stats']['FavoriteCount']
+                            visitors += room['Stats']['VisitorCount']
+                            visits += room['Stats']['VisitCount']
 
-                    room_count += 1
-                    creator_score += round((temp_room_stats_sum + room_count * 1000) / 5)
+                            temp_room_stats_sum = room['Stats']['CheerCount'] + room['Stats']['FavoriteCount'] + \
+                                                  room['Stats'][
+                                                      'VisitorCount'] + room['Stats']['VisitCount']
 
-            creators.append({"account_id": user['accountId'], "username": None, "display_name": None,
-                             "subscribers": user['subscriberCount'], "creator_score": creator_score})
+                            room_count += 1
+                            creator_score += round((cheers + favorites) / visitors * visits)
 
-            bulk += f"&id={user['accountId']}"
+                    creators.append({"account_id": user['accountId'], "username": None, "display_name": None,
+                                     "subscribers": user['subscriberCount'], "creator_score": creator_score})
+
+                    bulk += f"&id={user['accountId']}"
 
         print(creators)
         response = requests.get(bulk)
@@ -1008,11 +1074,16 @@ class Utility(commands.Cog):
                             inline=False)
 
         embed.add_field(name="Based on my creator score algorithm!",
-                        value="Calculated with total room statistics!\n||`(cheers + favorites + visits + visitors + room count * 1,000) / 5`||\nFor the official leaderboard, do `.ts`.",
+                        value="Calculated with total room statistics!\n||`(cheers+favorites) / visitors * visits`||\nFor the official leaderboard, do `.ts`.",
                         inline=False)
 
         embed = functions.embed_footer(ctx, embed)
         await ctx.send(embed=embed)
+
+    @topcreators.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        raise error
 
     # CMD-BANNER
     @commands.command()
@@ -1205,7 +1276,6 @@ class Utility(commands.Cog):
         functions.embed_footer(ctx, embed)  # get default footer from function
         return await ctx.send(embed=embed)
 
-
     @older.error
     async def clear_error(self, ctx, error):
         await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
@@ -1215,7 +1285,6 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
         else:
             raise error
-
 
     # CMD-JUNIOR
     @commands.command(aliases=['jr'])
@@ -1359,7 +1428,6 @@ class Utility(commands.Cog):
         else:
             raise error
 
-
     # CMD-NICKNAME
     @commands.command(aliases=['displayname'])
     @commands.check(functions.beta_tester)
@@ -1447,7 +1515,16 @@ class Utility(commands.Cog):
             return await ctx.send(embed=embed)
 
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(f"Latest from `@{account['username']}`", embed=embed)
+        await ctx.send(
+            f"Latest from `@{account['username']}`",
+            embed=embed,
+            components=[
+                [
+                    Button(style=ButtonStyle.URL, label="Post", url=f"https://rec.net/image/{latest['Id']}"),
+                    Button(style=ButtonStyle.URL, label="Direct Link", url=f"https://img.rec.net/{latest['ImageName']}")
+                ]
+            ]
+        )
 
     @latest.error
     async def clear_error(self, ctx, error):
@@ -1479,7 +1556,14 @@ class Utility(commands.Cog):
             return await ctx.send(embed=embed)
 
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(f"Oldest from `@{account['username']}`", embed=embed)
+        await ctx.send(f"Oldest from `@{account['username']}`", embed=embed,
+                       components=[
+                           [
+                               Button(style=ButtonStyle.URL, label="Post", url=f"https://rec.net/image/{oldest['Id']}"),
+                               Button(style=ButtonStyle.URL, label="Direct Link",
+                                      url=f"https://img.rec.net/{oldest['ImageName']}")
+                           ]
+                       ])
 
     @oldest.error
     async def clear_error(self, ctx, error):
@@ -1508,7 +1592,15 @@ class Utility(commands.Cog):
             return await ctx.send(embed=embed)
 
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(f"Oldest feed from `@{account['username']}`", embed=embed)
+        await ctx.send(f"Oldest feed from `@{account['username']}`", embed=embed,
+                       components=[
+                           [
+                               Button(style=ButtonStyle.URL, label="Post",
+                                      url=f"https://rec.net/image/{oldestfeed['Id']}"),
+                               Button(style=ButtonStyle.URL, label="Direct Link",
+                                      url=f"https://img.rec.net/{oldestfeed['ImageName']}")
+                           ]
+                       ])
 
     @oldestfeed.error
     async def clear_error(self, ctx, error):
@@ -1541,7 +1633,15 @@ class Utility(commands.Cog):
             return await ctx.send(embed=embed)
 
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(f"Latest feed from `@{account['username']}`", embed=embed)
+        await ctx.send(f"Latest feed from `@{account['username']}`", embed=embed,
+                       components=[
+                           [
+                               Button(style=ButtonStyle.URL, label="Post",
+                                      url=f"https://rec.net/image/{latestfeed['Id']}"),
+                               Button(style=ButtonStyle.URL, label="Direct Link",
+                                      url=f"https://img.rec.net/{latestfeed['ImageName']}")
+                           ]
+                       ])
 
     @latestfeed.error
     async def clear_error(self, ctx, error):
@@ -1812,6 +1912,7 @@ class Utility(commands.Cog):
     @commands.command(aliases=["rinfo", "roominfo"])
     @commands.check(functions.beta_tester)
     async def room(self, ctx, room_name):
+        return
         functions.log(ctx.guild.name, ctx.author, ctx.command)
         m_session = random.randint(0, 999999)
         self.session_message[ctx.author.id] = m_session
@@ -1831,7 +1932,6 @@ class Utility(commands.Cog):
             room_embed = functions.room_embed(room_name, False, ctx)
             functions.embed_footer(ctx, room_embed)
             m = await ctx.send(
-                author,
                 embed=room_embed,
                 components=self.buttons['default']['rinfo']
             )
@@ -1866,6 +1966,7 @@ class Utility(commands.Cog):
 
     @room.error
     async def clear_error(self, ctx, error):
+        return
         await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
             embed = functions.error_msg(ctx, "Please include in a room!")
@@ -1875,65 +1976,52 @@ class Utility(commands.Cog):
             raise error
 
     # CMD-APICHECK
-    @commands.command(aliases=['apicheck', "ac"])
+    @commands.command(aliases=['apicheck', "ac", "apihealth", "health"])
     @commands.check(functions.beta_tester)
     async def apistatus(self, ctx):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
-        author = f"<@{ctx.author.id}>"
-        embed = discord.Embed(
-            description="<a:loading:794930501597003786> Calling API to check its status...",
-            colour=discord.Colour.orange()
-        )
-        functions.embed_footer(ctx, embed)
-        loading = await ctx.send(embed=embed)
 
         embed = discord.Embed(
             title="API call results!",
             colour=discord.Colour.orange()
         )
-        # Rooms
-        try:
-            api = requests.get("https://rooms.rec.net/rooms?name=paintball", timeout=10)
-            if api.ok:
-                embed.add_field(name="Room API call", value="`✅ Successful!`", inline=False)
-            else:
-                embed.add_field(name="Room API call", value="`❌ Failure.`", inline=False)
-        except:
-            embed.add_field(name="Room API call", value="`❌ Failure.`", inline=False)
 
-        # Accounts
-        try:
-            api = requests.get("https://accounts.rec.net/account?username=coach", timeout=10)
-            if api.ok:
-                embed.add_field(name="Account API call", value="`✅ Successful!`", inline=False)
-            else:
-                embed.add_field(name="Account API call", value="`❌ Failure.`", inline=False)
-        except:
-            embed.add_field(name="Account API call", value="`❌ Failure.`", inline=False)
+        async with aiohttp.ClientSession() as session:
+            async with session.get('https://ns.rec.net/') as r:
+                if r.status == 200:
+                    endpoints = await r.json()
+                else:
+                    embed = functions.error_msg(ctx, "Name server down! This isn't good, lamo.")
+                    return await ctx.send(embed=embed)
 
-        # Images
-        try:
-            api = requests.get("https://api.rec.net/api/images/v3/feed/global?take=5", timeout=10)
-            if api.ok:
-                embed.add_field(name="Image API call", value="`✅ Successful!`", inline=False)
-            else:
-                embed.add_field(name="Image API call", value="`❌ Failure.`", inline=False)
-        except:
-            embed.add_field(name="Image API call", value="`❌ Failure.`", inline=False)
+            checked = 0
+            healthy = 0
+            for endpoint in endpoints:
+                if endpoint == "CDN":
+                    continue
+                checked += 1
+                async with session.get(endpoints[endpoint] + "/health") as r:
+                    if r.status == 200:
+                        health = await r.text()
+                        if health == "Healthy":
+                            emoji = "✅"
+                            healthy += 1
+                        else:
+                            emoji = "❌"
+                    else:
+                        health = "Down!"
+                        emoji = "❌"
 
-        # Events
-        try:
-            api = requests.get("https://api.rec.net/api/playerevents/v1?take=5", timeout=10)
-            if api.ok:
-                embed.add_field(name="Event API call", value="`✅ Successful!`", inline=False)
-            else:
-                embed.add_field(name="Event API call", value="`❌ Failure.`", inline=False)
-        except:
-            embed.add_field(name="Event API call", value="`❌ Failure.`", inline=False)
+                    embed.add_field(name=endpoint, value=f"{emoji} `{health}`")
 
-        await loading.delete()
+        embed.description = f"Healthy: `{healthy}/{checked}`"
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(author, embed=embed)
+        await ctx.send(embed=embed)
+
+    @apistatus.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        raise error
 
     # CMD-SHORTCUTS
     @commands.command(aliases=['sc'])
@@ -1983,20 +2071,39 @@ class Utility(commands.Cog):
     # CMD-PLACEMENT
     @commands.command()
     @commands.check(functions.beta_tester)
-    async def placement(self, ctx, room):
+    async def placement(self, ctx, room, *tags_arg):
+        if tags_arg:
+            tags = " %23" + ' %23'.join(tags_arg)
+        else:
+            tags = None
         functions.log(ctx.guild.name, ctx.author, ctx.command)
 
         room_json = functions.get_room_json(room)
         if room_json:
-            placement = functions.get_room_placement(room)
+            placement = functions.get_room_placement(room, tags)
+            print(placement)
             if not placement:
-                placement = "<1000"
-            embed = discord.Embed(
-                title=f"{room_json['Name']}'s placement on hot",
-                description=f"🔥 `#{placement}`",
-                url=f"https://rec.net/room/{room_json['Name']}",
-                colour=discord.Colour.orange()
-            )
+                embed = discord.Embed(
+                    title=f"{room_json['Name']}'s placement on hot",
+                    description=f"Room couldn't be found with tags!\nTags: `{', '.join(tags_arg)}`",
+                    url=f"https://rec.net/room/{room_json['Name']}",
+                    colour=discord.Colour.orange()
+                )
+            else:
+                if not tags:
+                    embed = discord.Embed(
+                        title=f"{room_json['Name']}'s placement on hot",
+                        description=f"🔥 `#{placement}`\nYou can include tags to filter out rooms!\n`.placement Paintball pvp 4v4`",
+                        url=f"https://rec.net/room/{room_json['Name']}",
+                        colour=discord.Colour.orange()
+                    )
+                else:
+                    embed = discord.Embed(
+                        title=f"{room_json['Name']}'s placement on hot",
+                        description=f"🔥 `#{placement}`\nTags: `{', '.join(tags_arg)}`",
+                        url=f"https://rec.net/room/{room_json['Name']}",
+                        colour=discord.Colour.orange()
+                    )
             embed.set_thumbnail(url=f"https://img.rec.net/{room_json['ImageName']}?width=720")
         else:
             embed = functions.error_msg(ctx, f"Room `{room}` doesn't exist!")
@@ -2008,11 +2115,11 @@ class Utility(commands.Cog):
     async def clear_error(self, ctx, error):
         await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in a room!")
+            embed = functions.error_msg(ctx, "Please include in a room and optional tags!")
 
             await ctx.send(embed=embed)
         else:
-            pass
+            raise error
 
     # CMD-FEATURED
     @commands.command()
@@ -2047,9 +2154,9 @@ class Utility(commands.Cog):
             count += 1
             embed.add_field(
                 name=f"{count}. ^{room['RoomName']}",
-                value=f"[🔗 RecNet link](https://rec.net/room/{room['RoomName']})\nHot placement: `#{functions.get_room_placement(room['RoomName'])}`", inline=False
+                value=f"[🔗 RecNet link](https://rec.net/room/{room['RoomName']})\nHot placement: `#{functions.get_room_placement(room['RoomName'])}`",
+                inline=False
             )
-
 
         functions.embed_footer(ctx, embed)
         await loading.delete()
@@ -2373,7 +2480,7 @@ class Utility(commands.Cog):
 
         success = False
         if account:
-            account_rooms = functions.id_to_rooms(account['account_id'])
+            account_rooms = functions.id_to_rooms_owned(account['account_id'])
             if account_rooms:
                 best_room = {}
                 worst_room = {}
@@ -2385,6 +2492,8 @@ class Utility(commands.Cog):
                 creator_score = 0
 
                 for room in account_rooms:
+                    if room['Name'] == "RecCenter":
+                        continue
                     cheers += room['Stats']['CheerCount']
                     favorites += room['Stats']['FavoriteCount']
                     visitors += room['Stats']['VisitorCount']
@@ -2393,7 +2502,7 @@ class Utility(commands.Cog):
 
                     temp_room_stats_sum = room['Stats']['CheerCount'] + room['Stats']['FavoriteCount'] + room['Stats'][
                         'VisitorCount'] + room['Stats']['VisitCount']
-                    creator_score += round((temp_room_stats_sum + room_count * 1000) / 5)
+                    creator_score += round((cheers + favorites) / visitors * visits)
 
                     if room_count == 1:
                         best_room = room
@@ -2472,6 +2581,11 @@ class Utility(commands.Cog):
             )
             await self.profile(ctx, profile)
 
+    @creatorstats.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        raise error
+
     @roomsby.error
     async def clear_error(self, ctx, error):
         await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
@@ -2483,7 +2597,7 @@ class Utility(commands.Cog):
             raise error
 
     # CMD-BOOKMARKED
-    @commands.command(aliases=["bookmark", "favorites", "favorite"])
+    @commands.command(aliases=["bookmark", "favorites", "favorite", "bm"])
     @commands.check(functions.beta_tester)
     async def bookmarked(self, ctx, profile):
         functions.log(ctx.guild.name, ctx.author, ctx.command)
@@ -2524,7 +2638,11 @@ class Utility(commands.Cog):
                                     count += 1
                                     if count > 25:
                                         break
-                                    embed.add_field(name=f"{count}. \"{comment['Comment'].replace('bookmark', '')}\"",
+                                    desc = comment['Comment'].replace('bookmark', '')
+                                    print(desc)
+                                    if len(desc) > 256:
+                                        desc = desc[0:200] + " ..."
+                                    embed.add_field(name=f"{count}. \"{desc}\"",
                                                     value=f"https://rec.net/image/{comment['SavedImageId']}",
                                                     inline=False)
 
@@ -2553,7 +2671,6 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
         else:
             pass
-
 
     # CMD-LATESTINBY
     @commands.command(aliases=["latestin"])
@@ -2584,7 +2701,12 @@ class Utility(commands.Cog):
 
         print("send")  # REMOVEME
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(f"Latest by `@{account['username']}`, in `^{room}`", embed=embed)
+        await ctx.send(f"Latest by `@{account['username']}`, in `^{room}`", embed=embed, components=[
+            [
+                Button(style=ButtonStyle.URL, label="Post", url=f"https://rec.net/image/{latestin['Id']}"),
+                Button(style=ButtonStyle.URL, label="Direct Link", url=f"https://img.rec.net/{latestin['ImageName']}")
+            ]
+        ])
 
     @latestinby.error
     async def clear_error(self, ctx, error):
@@ -2626,7 +2748,12 @@ class Utility(commands.Cog):
 
         print("send")  # REMOVEME
         functions.embed_footer(ctx, embed)  # get default footer from function
-        await ctx.send(f"Oldest by `@{account['username']}`, in `^{room}`", embed=embed)
+        await ctx.send(f"Oldest by `@{account['username']}`, in `^{room}`", embed=embed, components=[
+            [
+                Button(style=ButtonStyle.URL, label="Post", url=f"https://rec.net/image/{oldestin['Id']}"),
+                Button(style=ButtonStyle.URL, label="Direct Link", url=f"https://img.rec.net/{oldestin['ImageName']}")
+            ]
+        ])
 
     @oldestinby.error
     async def clear_error(self, ctx, error):
@@ -2668,7 +2795,13 @@ class Utility(commands.Cog):
         print("send")  # REMOVEME
         functions.embed_footer(ctx, embed)  # get default footer from function
         await ctx.send(f"Latest with both `@{user1_account['username']}` and `@{user2_account['username']}`",
-                       embed=embed)
+                       embed=embed, components=[
+                [
+                    Button(style=ButtonStyle.URL, label="Post", url=f"https://rec.net/image/{latestwith['Id']}"),
+                    Button(style=ButtonStyle.URL, label="Direct Link",
+                           url=f"https://img.rec.net/{latestwith['ImageName']}")
+                ]
+            ])
 
     @latestwith.error
     async def clear_error(self, ctx, error):
@@ -2710,7 +2843,13 @@ class Utility(commands.Cog):
         print("send")  # REMOVEME
         functions.embed_footer(ctx, embed)  # get default footer from function
         await ctx.send(f"Oldest with both `@{user1_account['username']}` and `@{user2_account['username']}`",
-                       embed=embed)
+                       embed=embed, components=[
+                [
+                    Button(style=ButtonStyle.URL, label="Post", url=f"https://rec.net/image/{oldestwith['Id']}"),
+                    Button(style=ButtonStyle.URL, label="Direct Link",
+                           url=f"https://img.rec.net/{oldestwith['ImageName']}")
+                ]
+            ])
 
     @oldestwith.error
     async def clear_error(self, ctx, error):
@@ -2857,7 +2996,6 @@ class Utility(commands.Cog):
         else:
             raise error
 
-
     # CMD-EVENTSBY
     @commands.command(aliases=["eb"])
     @commands.check(functions.beta_tester)
@@ -2899,7 +3037,8 @@ class Utility(commands.Cog):
         await ctx.send(
             embed=embed,
             components=[
-                Button(style=ButtonStyle.URL, label="User Events", url=f"https://rec.net/user/{account['username']}/events")
+                Button(style=ButtonStyle.URL, label="User Events",
+                       url=f"https://rec.net/user/{account['username']}/events")
             ]
         )
 
@@ -2912,7 +3051,6 @@ class Utility(commands.Cog):
             await ctx.send(embed=embed)
         else:
             raise error
-
 
     # CMD-EVENTSIN
     @commands.command(aliases=["ebi"])
@@ -2932,7 +3070,8 @@ class Utility(commands.Cog):
 
         events_found = functions.events_by(None, account['account_id'])
         if not events_found:
-            embed = functions.error_msg(ctx, f"No events found that were made by `@{account['username']}` in `^{room_data['Name']}`!")
+            embed = functions.error_msg(ctx,
+                                        f"No events found that were made by `@{account['username']}` in `^{room_data['Name']}`!")
             return await ctx.send(embed=embed)
 
         events_in_room = []
@@ -2966,7 +3105,8 @@ class Utility(commands.Cog):
         functions.embed_footer(ctx, embed)  # get default footer from function
 
         if not embed.fields:
-            embed = functions.error_msg(ctx, f"No events found made by `@{account['username']}` in `^{room_data['Name']}`!")
+            embed = functions.error_msg(ctx,
+                                        f"No events found made by `@{account['username']}` in `^{room_data['Name']}`!")
             return await ctx.send(embed=embed)
 
         await ctx.send(
@@ -2981,12 +3121,12 @@ class Utility(commands.Cog):
     async def clear_error(self, ctx, error):
         await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         if isinstance(error, commands.MissingRequiredArgument):
-            embed = functions.error_msg(ctx, "Please include in an username and room!\nExample: `.eventsbyin <username> <room>`")
+            embed = functions.error_msg(ctx,
+                                        "Please include in an username and room!\nExample: `.eventsbyin <username> <room>`")
 
             await ctx.send(embed=embed)
         else:
             raise error
-
 
     # CMD-EVENTSIN
     @commands.command(aliases=["ei"])
@@ -3078,6 +3218,115 @@ class Utility(commands.Cog):
         await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
         raise error
 
+    # CMD-gap
+    @commands.command()
+    @commands.check(functions.beta_tester)
+    async def gap(self, ctx, profile, mode):
+        functions.log(ctx.guild.name, ctx.author, ctx.command)
+
+        account = functions.check_account_existence_and_return(profile)
+        if not account:
+            embed = functions.error_msg(ctx, f"User `@{profile}` doesn't exist!")
+            return await ctx.send(embed=embed)
+        if mode.lower() == "photos":
+            photos = functions.id_to_photos(account['account_id'])
+        elif mode.lower() == "feed":
+            photos = functions.id_to_feed(account['account_id'])
+        else:
+            embed = functions.error_msg(ctx, f"Choose a mode! \n`.gap <username> <photos|feed>`")
+            return await ctx.send(embed=embed)
+        if not photos:
+            embed = functions.error_msg(ctx, f"User `@{account['username']}` hasn't shared any pictures!")
+            return await ctx.send(embed=embed)
+        if len(photos) < 2:
+            embed = functions.error_msg(ctx,
+                                        f"User `@{account['username']}` hasn't shared/appeared in enough pictures!")
+            return await ctx.send(embed=embed)
+
+        acc_creation_date = account['created_at'].split("T")[0].split("-")
+        acc_date = date(int(acc_creation_date[0]), int(acc_creation_date[1]), int(acc_creation_date[2]))
+        share_date = date(2017, 7, 21)
+        acc_created_after_sharing = acc_date > share_date and account['account_id'] != 8  # Cloud lol
+
+        # photos.reverse()
+
+        def group_photos(grouped_photos, photo_group, extra=None):
+            photo_group.reverse()
+            today = str(date.today())[0:10].split("-")
+            if extra:
+                photo_group = [
+                    extra,
+                    grouped_photos[-1][2],
+                ]
+            d0_date = photo_group[0]['CreatedAt'][0:10].split("-")
+            d1_date = photo_group[1]['CreatedAt'][0:10].split("-")
+            d0 = date(int(d0_date[0]), int(d0_date[1]), int(d0_date[2]))
+            d1 = date(int(d1_date[0]), int(d1_date[1]), int(d1_date[2]))
+            delta = d1 - d0
+            delta = delta.days
+            photo_group.insert(0, delta)
+            grouped_photos.append(photo_group)
+            return grouped_photos
+
+        grouped_photos = []
+        photo_group = []
+        if not acc_created_after_sharing:
+            photos.append({"Id": 1, "ImageName": "pNNQlbqMyUa7ialKQVviXw", "CreatedAt": "2017-07-22T02:33:40.9233333Z"})
+        for post in photos:
+            if len(photo_group) == 2:
+                grouped_photos = group_photos(grouped_photos, photo_group)
+                photo_group = []
+
+            photo_group.append(post)
+
+        if photo_group:
+            grouped_photos = group_photos(grouped_photos, photo_group, photos[-1])
+
+        grouped_photos = sorted(grouped_photos, key=lambda x: x[0], reverse=True)
+
+        #for post in grouped_photos:
+            #print(post[0], post[1]['Id'], post[2]['Id'])
+
+
+        # print(len(grouped_photos))
+        if not acc_created_after_sharing and grouped_photos[0][1]['Id'] == 1:
+            await ctx.send(
+                f"Longest gap between photos (`@{account['username']}`)\nMode: `{mode.lower().capitalize()}`\nGap: `{grouped_photos[0][0]} days`\nSince image sharing was introduced (`July 21st 2017`)\nhttps://rec.net/image/{grouped_photos[0][2]['Id']} (`{grouped_photos[0][2]['CreatedAt'][8:10]}. {functions.months[grouped_photos[0][2]['CreatedAt'][5:7]]} {grouped_photos[0][2]['CreatedAt'][0:4]}`)",
+                components=[
+                    [
+                        Button(style=ButtonStyle.URL, label="Profile Link",
+                               url=f"https://rec.net/user/{profile}"),
+                        Button(style=ButtonStyle.URL, label="2nd Post Link",
+                               url=f"https://rec.net/image/{grouped_photos[0][2]['Id']}")
+                    ]
+                ]
+            )
+        else:
+            await ctx.send(
+                f"Longest gap between photos (`@{account['username']}`)\nMode: `{mode.lower().capitalize()}`\nGap: `{grouped_photos[0][0]} days`\nhttps://rec.net/image/{grouped_photos[0][1]['Id']} (`{grouped_photos[0][1]['CreatedAt'][8:10]}. {functions.months[grouped_photos[0][1]['CreatedAt'][5:7]]} {grouped_photos[0][1]['CreatedAt'][0:4]}`)\nhttps://rec.net/image/{grouped_photos[0][2]['Id']} (`{grouped_photos[0][2]['CreatedAt'][8:10]}. {functions.months[grouped_photos[0][2]['CreatedAt'][5:7]]} {grouped_photos[0][2]['CreatedAt'][0:4]}`)",
+                components=[
+                    [
+                        Button(style=ButtonStyle.URL, label="Profile Link",
+                               url=f"https://rec.net/user/{profile}"),
+                        Button(style=ButtonStyle.URL, label="1st Post Link",
+                               url=f"https://rec.net/image/{grouped_photos[0][1]['Id']}"),
+                        Button(style=ButtonStyle.URL, label="2nd Post Link",
+                               url=f"https://rec.net/image/{grouped_photos[0][2]['Id']}")
+                    ]
+                ]
+            )
+
+    @gap.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        if isinstance(error, commands.MissingRequiredArgument):
+            embed = functions.error_msg(ctx,
+                                        "Shows the longest gap between images.\nPlease include in a username and mode!\n`.gap <usename> <photos|feed>`")
+
+            await ctx.send(embed=embed)
+        else:
+            raise error
+
 
 class ImageMenu(menus.ListPageSource):
     def __init__(self, data, images):
@@ -3098,8 +3347,8 @@ class ImageMenu(menus.ListPageSource):
         room_name = functions.id_to_room_name(post['RoomId'])
         embed = discord.Embed(
             colour=discord.Colour.orange(),
-            title=f"🔗 Post #{offset + 1}",
-            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][:10]}` ⏰ `{post['CreatedAt'][11:16]} UTC`\n{tagged}\n",
+            title=f"🔗 Post {offset + 1}/{len(self.images)}",
+            description=f"🚪 [`^{room_name}`](https://rec.net/room/{room_name})\n<:CheerGeneral:803244099510861885> `{post['CheerCount']}` 💬 `{post['CommentCount']}`{self_cheer_string}\n📆 `{post['CreatedAt'][8:10]}. {functions.months[post['CreatedAt'][5:7]]} {post['CreatedAt'][0:4]}`  ⏰ `{post['CreatedAt'][11:16]} UTC`\n{tagged}\n",
             url=f"https://rec.net/image/{post['Id']}"
         )
 
@@ -3137,6 +3386,30 @@ class ImageMenu(menus.ListPageSource):
         embed.set_image(url=f"http://img.rec.net/{post['ImageName']}?width=720")
 
         return embed
+
+
+class Confirm(menus.Menu):
+    def __init__(self, embed):
+        super().__init__(timeout=30.0, delete_message_after=True)
+        self.embed = embed
+        self.result = None
+
+    async def send_initial_message(self, ctx, channel):
+        return await channel.send(embed=self.embed)
+
+    @menus.button('\N{WHITE HEAVY CHECK MARK}')
+    async def do_confirm(self, payload):
+        self.result = True
+        self.stop()
+
+    @menus.button('\N{CROSS MARK}')
+    async def do_deny(self, payload):
+        self.result = False
+        self.stop()
+
+    async def prompt(self, ctx):
+        await self.start(ctx, wait=True)
+        return self.result
 
 
 def setup(client):

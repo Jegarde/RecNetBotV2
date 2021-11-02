@@ -88,7 +88,7 @@ class Help(commands.Cog):
                             value="`photos`, `feed`, `latest`, `latestinby`, `latestwith` `latestfeed`, `oldest`, "
                                   "`oldestinby`, `oldestwith`, `oldestfeed`, `frontpage`, `takenin`, `takenof`, "
                                   "`takenofin`, `together`, `cheers`, `comments`, `photostats`, `sortby`, "
-                                  "`bookmarked`, `infrontpage`",
+                                  "`bookmarked`, `infrontpage`, `gap`",
                             inline=False)
 
             embed.add_field(name="🚪 Rooms", value="`room`, `roles`, `roomsby`, `featured`, `placement`",
@@ -133,11 +133,10 @@ class Help(commands.Cog):
             )
             embed.add_field(name="👤 Accounts", value="`accountdata`, `accountid`", inline=False)
 
+            embed.add_field(name="🚪 Rooms", value="`roomdata`, `roomid`", inline=False)
+
             embed.add_field(name="🖼️ Images", value="`imageid`", inline=False)
 
-            embed.add_field(name="These commands are experimental!", value="They will probably all be combined into "
-                                                                           "one command eventually. As of now, "
-                                                                           "they're used to do simple API calls.")
         elif menu == "menus":
             embed = discord.Embed(
                 colour=discord.Colour.orange(),

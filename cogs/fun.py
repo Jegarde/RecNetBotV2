@@ -178,7 +178,11 @@ class Fun(commands.Cog):
         if account:
             embed = functions.default_embed()
 
-            cringe_check_list = functions.load("cringe_word_list.json")
+            cringe_check_list = requests.get("https://raw.githubusercontent.com/Jegarde/RecNetBotV2/master/cringe_word_list.json")
+            if cringe_check_list.ok:
+                cringe_check_list = cringe_check_list.json()
+            else:
+                cringe_check_list = functions.load("cringe_word_list.json")
             cringe_score = 0
             cringe_rating = {
                 0: "Not cringe!",

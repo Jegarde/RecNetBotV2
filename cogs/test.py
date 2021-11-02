@@ -1,13 +1,32 @@
 import functions
 import discord
 from discord.ext import commands
+from discord_components import DiscordComponents, Button, ButtonStyle, InteractionType
 from discord.ext import menus
+import matplotlib.pyplot as plt
+import pandas as pd
 
 
 class Test(commands.Cog):
     def __init__(self, client):
         self.client = client
+        DiscordComponents(client)
 
+    @commands.command()
+    async def button(self, ctx):
+        await ctx.send(
+            "buttonssss",
+            components=[
+                [
+                    Button(style=ButtonStyle.grey, label="EMOJI", emoji="😂"),
+                    Button(style=ButtonStyle.green, label="GREEN"),
+                    Button(style=ButtonStyle.red, label="RED"),
+                    Button(style=ButtonStyle.grey, label="GREY", disabled=True),
+                ],
+                Button(style=ButtonStyle.blue, label="BLUE"),
+                Button(style=ButtonStyle.URL, label="URL", url="https://www.example.com"),
+            ],
+        )
     @commands.command()
     @commands.check(functions.is_it_me)
     async def test(self, ctx, x, y):
@@ -15,6 +34,30 @@ class Test(commands.Cog):
         xy = [int(x),int(y)]
         m =  GameInstance()
         await m.start(ctx)
+
+    @commands.command()
+    @commands.check(functions.is_it_me)
+    async def graph(self, ctx, title):
+        data = {
+            "visits": [0, 10, 50, 100, 120, 200, 500, 520],
+            "cheers": [0, 5, 7, 20, 23, 35, 60, 65],
+            "date": [20, 21, 22, 23, 24, 25, 26, 27]
+        }
+
+        print(data)
+
+        df = pd.DataFrame(data, columns=['date', 'visits'])
+
+        plt.plot(df['date'], df['visits'], color='red', marker='o')
+        plt.title(title, fontsize=14)
+        plt.grid(True)
+        plt.savefig('graph.png')
+        await ctx.send(file=discord.File('graph.png'))
+
+    @graph.error
+    async def clear_error(self, ctx, error):
+        await functions.report_error(ctx, error, self.client.get_channel(functions.error_channel))
+        raise error
 
 
 class GameInstance(menus.Menu):
