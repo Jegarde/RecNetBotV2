@@ -4,6 +4,8 @@ from discord.ext import commands
 import arrow
 import random
 import json
+from datetime import date
+import os
 import asyncio
 
 img_quality = 720
@@ -202,7 +204,7 @@ def image_embed(image_data):
     embed = discord.Embed(
         colour=discord.Colour.orange(),
         title=f"Taken by @{username}",
-        description=f"🔗 **[RecNet post](https://rec.net/image/{image_data['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{image_data['CheerCount']}` 💬 `{image_data['CommentCount']}`\n📆 `{image_data['CreatedAt'][:10]}` ⏰ `{image_data['CreatedAt'][11:16]} UTC`\n{tagged}"
+        description=f"🔗 **[RecNet post](https://rec.net/image/{image_data['Id']})**{room_string}<:CheerGeneral:803244099510861885> `{image_data['CheerCount']}` 💬 `{image_data['CommentCount']}`\n📆 `{image_data['CreatedAt'][8:10]}. {months[image_data['CreatedAt'][5:7]]} {image_data['CreatedAt'][0:4]}` ⏰ `{image_data['CreatedAt'][11:16]} UTC`\n{tagged}"
     )
     embed.set_image(url=f"https://img.rec.net/{image_data['ImageName']}")
     embed.set_author(name=f"🔗 {username}'s profile", url=f"https://rec.net/user/{username}",
@@ -251,8 +253,12 @@ def get_room_json(room, is_id=False):
         return None
 
 
-def get_room_placement(room):
-    hot_rooms = requests.get("https://rooms.rec.net/rooms/hot?take=1000").json()["Results"]
+def get_room_placement(room, tags=None):
+    if tags:
+        hot_rooms = requests.get(f"https://rooms.rec.net/rooms/search?query={tags}").json()["Results"]
+        print(f"https://rooms.rec.net/rooms/search?query={tags}")
+    else:
+        hot_rooms = requests.get("https://rooms.rec.net/rooms/hot?take=1000").json()["Results"]
     print("get_room_placement")
 
     placement = 0
@@ -260,16 +266,19 @@ def get_room_placement(room):
         if x["Name"].casefold() == room.casefold():
             return placement + 1
         placement += 1
-    return "<1000"
+
+    if not tags:
+        return "<1000"
+    return False
 
 
 def id_to_username(account_id):
-    # Get and return account data based on id
+    # Get and return account player_data based on id
     return requests.get(f"https://accounts.rec.net/account/{account_id}").json()["username"]
 
 
 def id_to_account_data(account_id):
-    # Get and return account data based on id
+    # Get and return account player_data based on id
     # If account doesn't exist, return None
     return requests.get(f"https://accounts.rec.net/account/{account_id}").json()
 
@@ -440,10 +449,6 @@ def room_embed(room_name, is_json=False, ctx=None):
     if room:
         is_cached = False
         print("load")
-        cached = dict(load("cached_rinfo.json"))
-        if str(room['RoomId']) in cached:
-            is_cached = True
-
         r_name = room['Name']
 
         # Roles
@@ -516,10 +521,10 @@ def room_embed(room_name, is_json=False, ctx=None):
         score_string = f"{avg_score:,}"
         placement_string = str(placement)
         images_shared_string = ""
-        last_check = "\n\n**Last check:** `None!`"
+        last_check = "\nNo previous check by you!"
         # cached
         if is_cached:
-            cached_data = cached[str(room['RoomId'])]
+            cached_data = cached
 
             print("room photo count")
             try:
@@ -534,11 +539,90 @@ def room_embed(room_name, is_json=False, ctx=None):
 
             # Role count
             print("Role count")
+            role_count_string = role_count
+
+        else:
+            room_photo_count = len(get_photos_in_room(room['Name']))
+            if room_photo_count > 9999:
+                room_photo_count = ">10,000"
+
+        images_shared_string = str(room_photo_count)
+
+        print("embed")
+        embed = discord.Embed(
+            colour=discord.Colour.orange(),
+            title=f"Statistics for ^{r_name}, by @{owner_username}",
+            url=f"https://rec.net/room/{r_name}",
+            description=f"**Description**\n```{room['Description']}```{custom_warning}\n**Information**\n:calendar: `{room['CreatedAt'][8:10]}. {months[room['CreatedAt'][5:7]]} {room['CreatedAt'][0:4]}` ⏰ `{room['CreatedAt'][11:16]} UTC` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count_string}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n👥 `{room['MaxPlayers']}` *(MAX PLAYERS)*\n🏅 `{room['MinLevel']}` *(MINIMUM LEVEL)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheer_count_string}` *(CHEERS)*\n⭐ `{favorite_count_string}` *(FAVORITES)*\n👤 `{visitor_count_string}` *(VISITORS)*\n👥 `{visit_count_string}` *(ROOM VISITS)*\n🔥 `#{placement_string}` *(HOT PLACEMENT)*\n💯 `{score_string}` *(AVG SCORE)*\n🖼️ `{images_shared_string}` *(PICTURES SHARED IN ROOM)*\n\nHow many visitors have cheered: `{visitor_cheer_ratio}%`\nHow many visitors have favorited: `{visitor_favorite_ratio}%`\nAverage times a user has visited: `{visit_visitor_ratio}`\n{last_check}\n"
+        )
+        print("img")
+        embed.set_image(url=f"https://img.rec.net/{room['ImageName']}?width=720")
+
+        print("author")
+        embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}",
+                         icon_url=owner_pfp)
+
+        print("this codee is so fucked lamo")
+
+        return embed
+    else:
+        return None
+
+
+def room_embed_stats(room_name, is_json=False, ctx=None):
+    if is_json:
+        room = room_name
+    else:
+        room = get_room_json(room_name)
+
+    if room:
+        is_cached = False
+        print("load")
+        if os.path.exists(f"./RoomCache/Tracking/{room['RoomId']}.json"):
+            is_cached = True
+            cached = load(f"./RoomCache/Tracking/{room['RoomId']}.json")
+
+        r_name = room['Name']
+
+        # Placement
+        placement = get_room_placement(r_name)
+
+        visitor_cheer_ratio = round((room['Stats']['CheerCount'] / room['Stats']['VisitorCount']) * 100)
+        visitor_favorite_ratio = round((room['Stats']['FavoriteCount'] / room['Stats']['VisitorCount']) * 100)
+        visit_visitor_ratio = round((room['Stats']['VisitCount'] / room['Stats']['VisitorCount']), 2)
+
+        # Score
+        avg_score = 0
+        score_list = []
+        for i in room["Scores"]:
+            if not i["VisitType"] == 2:
+                score_list.append(i["Score"])
+                avg_score += i["Score"]
+        if score_list:
+            avg_score = round(avg_score / len(score_list), 5)
+
+        # stats
+        cheer_count_string = f"{room['Stats']['CheerCount']:,}"
+        favorite_count_string = f"{room['Stats']['FavoriteCount']:,}"
+        visitor_count_string = f"{room['Stats']['VisitorCount']:,}"
+        visit_count_string = f"{room['Stats']['VisitCount']:,}"
+        score_string = f"{avg_score:,}"
+        placement_string = str(placement)
+        images_shared_string = ""
+        # cached
+        if is_cached:
+            cached_data = cached
+
+            print("room photo count")
             try:
-                if len(cached_data['Roles']) < role_count:
-                    role_count_string += f" (+{role_count - cached_data['Roles']})"
+                if cached_data['ImagesShared'] == 10000:
+                    room_photo_count = ">10,000"
+                else:
+                    room_photo_count = len(get_photos_in_room(room['Name']))
+                    if room_photo_count > 9999:
+                        room_photo_count = ">10,000"
             except:
-                role_count_string = role_count
+                pass
 
             # Cheer count
             print("Cheer count")
@@ -587,20 +671,6 @@ def room_embed(room_name, is_json=False, ctx=None):
             except:
                 pass
 
-            # Last check
-            print("last check")
-            try:
-                if cached_data['LastCheck']:
-                    print("last check confrim")
-                    last_check = f"\n\n**Last check:** 📆 `{cached_data['LastCheck'][:10]}` ⏰ `{cached_data['LastCheck'][11:16]} UTC`"
-
-                if cached_data['LastCheckUserId'] == ctx.author.id:
-                    last_check += " by you!"
-                elif cached_data['LastCheckUserId'] != ctx.author.id:
-                    last_check += " by someone else!"
-            except:
-                pass
-
         else:
             room_photo_count = len(get_photos_in_room(room['Name']))
             if room_photo_count > 9999:
@@ -611,31 +681,24 @@ def room_embed(room_name, is_json=False, ctx=None):
         print("embed")
         embed = discord.Embed(
             colour=discord.Colour.orange(),
-            title=f"Statistics for ^{r_name}, by @{owner_username}",
-            description=f"[🔗 RecNet Page](https://rec.net/room/{r_name})\n\n**Description**\n```{room['Description']}```{custom_warning}\n**Information**\n:calendar: `{room['CreatedAt'][:10]}` ⏰ `{room['CreatedAt'][11:16]} UTC` *(CREATION DATE)*\n<:CheerHost:803753879497998386> `{role_count_string}` *(USERS WITH A ROLE)*\n🚪 `{subrooms}` *(SUBROOMS)*\n<:tag:803746052946919434> `{tags}` *(TAGS)*\n👥 `{room['MaxPlayers']}` *(MAX PLAYERS)*\n🏅 `{room['MinLevel']}` *(MINIMUM LEVEL)*\n\n**Supported modes**\n{supported}\n\n**Statistics**\n<:CheerGeneral:803244099510861885> `{cheer_count_string}` *(CHEERS)*\n⭐ `{favorite_count_string}` *(FAVORITES)*\n👤 `{visitor_count_string}` *(VISITORS)*\n👥 `{visit_count_string}` *(ROOM VISITS)*\n🔥 `#{placement_string}` *(HOT PLACEMENT)*\n💯 `{score_string}` *(AVG SCORE)*\n🖼️ `{images_shared_string}` *(PICTURES SHARED IN ROOM)*\n\nHow many visitors have cheered: `{visitor_cheer_ratio}%`\nHow many visitors have favorited: `{visitor_favorite_ratio}%`\nAverage times a user has visited: `{visit_visitor_ratio}`\n{last_check}\n"
+            title=f"Statistics for ^{r_name}",
+            url=f"https://rec.net/room/{r_name}",
+            description=f"**Statistics**\n<:CheerGeneral:803244099510861885> `{cheer_count_string}` *(CHEERS)*\n⭐ `{favorite_count_string}` *(FAVORITES)*\n👤 `{visitor_count_string}` *(VISITORS)*\n👥 `{visit_count_string}` *(ROOM VISITS)*\n🔥 `#{placement_string}` *(HOT PLACEMENT)*\n💯 `{score_string}` *(AVG SCORE)*\n🖼️ `{images_shared_string}` *(PICTURES SHARED IN ROOM)*\n\nHow many visitors have cheered: `{visitor_cheer_ratio}%`\nHow many visitors have favorited: `{visitor_favorite_ratio}%`\nAverage times a user has visited: `{visit_visitor_ratio}`"
         )
         print("img")
         embed.set_image(url=f"https://img.rec.net/{room['ImageName']}?width=720")
 
-        print("author")
-        embed.set_author(name=f"{owner_username}'s profile", url=f"https://rec.net/user/{owner_username}",
-                         icon_url=owner_pfp)
-
         print("update")
-        cached.pop(str(room['RoomId']), None)
-        room['Placement'] = placement
-        room['Score'] = avg_score
-        room['LastCheck'] = str(get_utc_time())
-        print(f"Last check: {room['LastCheck']}")
-        if ctx:
-            room['LastCheckUserId'] = ctx.author.id
-        else:
-            room['LastCheckUserId'] = None
-        print(f"Last check use id: {room['LastCheckUserId']}")
-        room['ImagesShared'] = room_photo_count
-        cached[str(room['RoomId'])] = room
+        save_cache = {
+            "Stats": room['Stats'],
+            "Placement": placement,
+            "Score": avg_score,
+            "ImagesShared": room_photo_count,
+            "LastCheck": str(get_utc_time()),
+        }
         print("save")
-        save("cached_rinfo.json", cached)
+        save(f"./RoomCache/Tracking/{room['RoomId']}.json", save_cache)
+        print("this codee is so fucked lamo")
 
         return embed
     else:
@@ -648,6 +711,21 @@ def id_to_room_name(room_id):
     except:
         room_name = None
     return room_name
+
+
+def id_to_room_data(room_id):
+    room = requests.get(f"https://rooms.rec.net/rooms/{room_id}?include=366")
+    if room.ok:
+        return room.json()
+    return
+
+
+def name_to_room_data(room_name):
+    room = requests.get(f"https://rooms.rec.net/rooms?name={room_name}&include=366")
+    if room.ok:
+        data = room.json()
+        return data
+    return
 
 
 def get_featured_rooms():
@@ -690,7 +768,7 @@ def get_tagged_accounts_string(post, usernames_only=False):
     return tagged
 
 
-def find_random_bio():
+async def find_random_bio():
     bio = None
     while bio == None:
         account_id = random.randint(1, 10000000)
@@ -783,6 +861,10 @@ def get_photos_in_room(room_name, amount=10000, return_photos=False):
 
 def id_to_rooms(account_id):
     return requests.get(f"https://rooms.rec.net/rooms/createdby/{account_id}").json()
+
+
+def id_to_rooms_owned(account_id):
+    return requests.get(f"https://rooms.rec.net/rooms/ownedby/{account_id}").json()
 
 
 def get_bio(account_id):
