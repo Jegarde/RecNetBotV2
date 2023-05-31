@@ -1,3 +1,8 @@
+# This is a legacy build!
+Visit the latest repository: https://github.com/RecNetBot-Development/RecNetBot
+
+Discord: https://discord.gg/S9meE83Xu2
+
 # RecNetBotV2
 A Discord bot that utilizes RecNet's API!
 
